@@ -140,6 +140,7 @@ namespace
         LOCALE_DA,
         LOCALE_DE,
         LOCALE_EL,
+        LOCALE_EO,
         LOCALE_ES,
         LOCALE_ET,
         LOCALE_EU,
@@ -199,6 +200,9 @@ namespace
                                                                                   // Greek
                                                                                   { "el", LocaleType::LOCALE_EL },
                                                                                   { "greek", LocaleType::LOCALE_EL },
+                                                                                  // Esperanto
+                                                                                  { "eo", LocaleType::LOCALE_EO },
+                                                                                  { "esperanto", LocaleType::LOCALE_EO },
                                                                                   // Spanish
                                                                                   { "es", LocaleType::LOCALE_ES },
                                                                                   { "spanish", LocaleType::LOCALE_ES },
@@ -634,6 +638,7 @@ const char * Translation::ngettext( const char * str, const char * plural, const
         case LocaleType::LOCALE_BG:
         case LocaleType::LOCALE_DA:
         case LocaleType::LOCALE_DE:
+        case LocaleType::LOCALE_EO:
         case LocaleType::LOCALE_ES:
         case LocaleType::LOCALE_ET:
         case LocaleType::LOCALE_EU:

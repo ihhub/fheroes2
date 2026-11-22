@@ -5,10 +5,10 @@ plugins {
 android {
     namespace 'com.github.stephenc.javaisotools'
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         minSdk 22
-        targetSdk 35
+        targetSdk 36
     }
 }

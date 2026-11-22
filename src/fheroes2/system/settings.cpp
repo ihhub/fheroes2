@@ -48,15 +48,12 @@
 #include "ui_language.h"
 #include "version.h"
 
-#define STRINGIFY( DEF ) #DEF
-#define EXPANDDEF( DEF ) STRINGIFY( DEF )
-
 namespace
 {
     enum GameOptions : uint32_t
     {
         GAME_FIRST_RUN = 0x00000001,
-        GAME_SHOW_INTRO = 0x00000002,
+        UNUSED_1 = 0x00000002,
         GAME_PRICELOYALTY = 0x00000004,
         GAME_RENDER_VSYNC = 0x00000008,
         GAME_TEXT_SUPPORT_MODE = 0x00000010,
@@ -73,7 +70,7 @@ namespace
         GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA = 0x00080000,
         GAME_HIDE_INTERFACE = 0x00100000,
         GAME_BATTLE_SHOW_DAMAGE = 0x00200000,
-        GAME_BATTLE_SHOW_TURN_ORDER = 0x00400000,
+        GAME_BATTLE_SHOW_HIT_POINTS_BAR = 0x00400000,
         GAME_BATTLE_SHOW_GRID = 0x00800000,
         GAME_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GAME_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -94,11 +91,6 @@ namespace
     const int defaultSpeedDelay{ 5 };
 }
 
-std::string Settings::GetVersion()
-{
-    return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
-}
-
 Settings::Settings()
     : _resolutionInfo( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _windowPos( -1, -1 )
@@ -115,7 +107,6 @@ Settings::Settings()
     , game_type( 0 )
 {
     _gameOptions.SetModes( GAME_FIRST_RUN );
-    _gameOptions.SetModes( GAME_SHOW_INTRO );
 
     _gameOptions.SetModes( GAME_SHOW_RADAR );
     _gameOptions.SetModes( GAME_SHOW_ICONS );
@@ -135,6 +126,9 @@ Settings::Settings()
 
         // Adventure Map scrolling is disabled by default for handheld devices as it is very hard to navigate on small screens. Use drag and move logic.
         scroll_speed = SCROLL_SPEED_NONE;
+
+        // Smooth scrolling (inertia) feels natural on touch devices and is enabled by default.
+        _isMapSmoothScrollingEnabled = true;
     }
 
     // The Price of Loyalty is not supported by default.
@@ -150,6 +144,7 @@ Settings & Settings::Get()
 
 bool Settings::Read( const std::string & filePath )
 {
+    // TODO: we shouldn't set any parameters for other classes as these class objects might not be initialized yet.
     TinyConfig config( '=', '#' );
 
     std::string sval;
@@ -207,6 +202,10 @@ bool Settings::Read( const std::string & filePath )
     // scroll speed
     SetScrollSpeed( config.IntParams( "scroll speed" ) );
 
+    if ( config.Exists( "map smooth scrolling" ) ) {
+        setMapSmoothScrolling( config.StrParams( "map smooth scrolling" ) != "off" );
+    }
+
     if ( config.Exists( "battle speed" ) ) {
         SetBattleSpeed( config.IntParams( "battle speed" ) );
     }
@@ -231,6 +230,10 @@ bool Settings::Read( const std::string & filePath )
         setBattleDamageInfo( config.StrParams( "battle show damage" ) == "on" );
     }
 
+    if ( config.Exists( "battle show hit points bar" ) ) {
+        setBattleHitPointsBar( config.StrParams( "battle show hit points bar" ) == "on" );
+    }
+
     if ( config.Exists( "auto resolve battles" ) ) {
         setBattleAutoResolve( config.StrParams( "auto resolve battles" ) == "on" );
     }
@@ -240,7 +243,17 @@ bool Settings::Read( const std::string & filePath )
     }
 
     if ( config.Exists( "battle turn order" ) ) {
-        setBattleShowTurnOrder( config.StrParams( "battle turn order" ) == "on" );
+        const std::string state = config.StrParams( "battle turn order" );
+        if ( ( state == "on" ) || ( state == "top" ) ) {
+            // "on" value is a legacy value and we fallback to top for it.
+            setBattleTurnOrderState( BattleTurnOrderState::TOP );
+        }
+        else if ( state == "bottom" ) {
+            setBattleTurnOrderState( BattleTurnOrderState::BOTTOM );
+        }
+        else {
+            setBattleTurnOrderState( BattleTurnOrderState::OFF );
+        }
     }
 
     // This code handles a configuration file's parameter made by older versions of the engine.
@@ -307,15 +320,6 @@ bool Settings::Read( const std::string & filePath )
         resetFirstGameRun();
     }
 
-    if ( config.Exists( "show game intro" ) ) {
-        if ( config.StrParams( "show game intro" ) == "on" ) {
-            _gameOptions.SetModes( GAME_SHOW_INTRO );
-        }
-        else {
-            _gameOptions.ResetModes( GAME_SHOW_INTRO );
-        }
-    }
-
     if ( config.Exists( "v-sync" ) ) {
         setVSync( config.StrParams( "v-sync" ) == "on" );
     }
@@ -351,11 +355,9 @@ bool Settings::Read( const std::string & filePath )
     if ( config.Exists( "cursor soft rendering" ) ) {
         if ( config.StrParams( "cursor soft rendering" ) == "on" ) {
             _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( true );
         }
         else {
             _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
-            fheroes2::cursor().enableSoftwareEmulation( false );
         }
     }
 
@@ -394,14 +396,14 @@ bool Settings::Save( const std::string_view fileName ) const
         return false;
     }
 
-    const std::string data = String();
+    const std::string data = getOptionsString();
 
     fileStream.putRaw( data.data(), data.size() );
 
     return true;
 }
 
-std::string Settings::String() const
+std::string Settings::getOptionsString() const
 {
     std::ostringstream os;
 
@@ -416,7 +418,7 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " ENGINE_VERSION ")" << std::endl;
     os << std::endl
        << "# !!! WARNING !!!" << std::endl
        << "# Only modify this file if you are absolutely sure of what you are doing!" << std::endl
@@ -457,6 +459,9 @@ std::string Settings::String() const
     os << std::endl << "# Adventure Map scrolling speed: 0 - 4. 0 means no scrolling" << std::endl;
     os << "scroll speed = " << scroll_speed << std::endl;
 
+    os << std::endl << "# Smooth scrolling when panning the Adventure Map by dragging: on/off" << std::endl;
+    os << "map smooth scrolling = " << ( _isMapSmoothScrollingEnabled ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# Toggle battle grid: on/off" << std::endl;
     os << "battle grid = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
@@ -472,6 +477,9 @@ std::string Settings::String() const
     os << std::endl << "# Show battle damage information: on/off" << std::endl;
     os << "battle show damage = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# Show hit points bar: on/off" << std::endl;
+    os << "battle show hit points bar = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_HIT_POINTS_BAR ) ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# Enable auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
@@ -479,7 +487,20 @@ std::string Settings::String() const
     os << "auto spell casting = " << ( _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Show turn order during battle: on/off" << std::endl;
-    os << "battle turn order = " << ( _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER ) ? "on" : "off" ) << std::endl;
+    switch ( _battleTurnOrderState ) {
+    case BattleTurnOrderState::OFF:
+        os << "battle turn order = off" << std::endl;
+        break;
+    case BattleTurnOrderState::TOP:
+        os << "battle turn order = top" << std::endl;
+        break;
+    case BattleTurnOrderState::BOTTOM:
+        os << "battle turn order = bottom" << std::endl;
+        break;
+    default:
+        assert( 0 );
+        break;
+    }
 
     os << std::endl << "# Interface type: good/evil/dynamic" << std::endl;
     switch ( _interfaceType ) {
@@ -520,9 +541,6 @@ std::string Settings::String() const
 
     os << std::endl << "# First time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( _gameOptions.Modes( GAME_FIRST_RUN ) ? "on" : "off" ) << std::endl;
-
-    os << std::endl << "# Show game intro (splash screen and video): on/off" << std::endl;
-    os << "show game intro = " << ( _gameOptions.Modes( GAME_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# Enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( _gameOptions.Modes( GAME_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
@@ -774,16 +792,6 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
-void Settings::setBattleShowTurnOrder( const bool enable )
-{
-    if ( enable ) {
-        _gameOptions.SetModes( GAME_BATTLE_SHOW_TURN_ORDER );
-    }
-    else {
-        _gameOptions.ResetModes( GAME_BATTLE_SHOW_TURN_ORDER );
-    }
-}
-
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -879,6 +887,16 @@ void Settings::setBattleDamageInfo( const bool enable )
     }
 }
 
+void Settings::setBattleHitPointsBar( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
+    }
+}
+
 void Settings::setHideInterface( const bool enable )
 {
     if ( enable ) {
@@ -923,6 +941,16 @@ void Settings::setHighlightBattleMovementArea( const bool enable )
     }
 }
 
+void Settings::setCursorSoftwareEmulation( const bool enable )
+{
+    if ( enable ) {
+        _gameOptions.SetModes( GAME_CURSOR_SOFT_EMULATION );
+    }
+    else {
+        _gameOptions.ResetModes( GAME_CURSOR_SOFT_EMULATION );
+    }
+}
+
 void Settings::SetScrollSpeed( int speed )
 {
     scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SPEED_NONE ), static_cast<int>( SCROLL_SPEED_VERY_FAST ) );
@@ -961,6 +989,11 @@ bool Settings::isAutoSaveAtBeginningOfTurnEnabled() const
 bool Settings::isBattleShowDamageInfoEnabled() const
 {
     return _gameOptions.Modes( GAME_BATTLE_SHOW_DAMAGE );
+}
+
+bool Settings::isBattleHitPointsBarEnabled() const
+{
+    return _gameOptions.Modes( GAME_BATTLE_SHOW_HIT_POINTS_BAR );
 }
 
 bool Settings::isHideInterfaceEnabled() const
@@ -1016,6 +1049,11 @@ bool Settings::isBattleMovementAreaHighlightEnabled() const
     return _gameOptions.Modes( GAME_BATTLE_HIGHLIGHT_MOVEMENT_AREA );
 }
 
+bool Settings::isCursorSoftwareEmulationEnabled() const
+{
+    return _gameOptions.Modes( GAME_CURSOR_SOFT_EMULATION );
+}
+
 void Settings::switchToNextInterfaceType()
 {
     switch ( _interfaceType ) {
@@ -1027,6 +1065,21 @@ void Settings::switchToNextInterfaceType()
         break;
     default:
         _interfaceType = InterfaceType::DYNAMIC;
+        break;
+    }
+}
+
+void Settings::switchToNextBattleTurnOrderState()
+{
+    switch ( _battleTurnOrderState ) {
+    case BattleTurnOrderState::OFF:
+        _battleTurnOrderState = BattleTurnOrderState::TOP;
+        break;
+    case BattleTurnOrderState::TOP:
+        _battleTurnOrderState = BattleTurnOrderState::BOTTOM;
+        break;
+    default:
+        _battleTurnOrderState = BattleTurnOrderState::OFF;
         break;
     }
 }
@@ -1089,11 +1142,6 @@ bool Settings::BattleAutoResolve() const
 bool Settings::BattleAutoSpellcast() const
 {
     return _gameOptions.Modes( GAME_BATTLE_AUTO_SPELLCAST );
-}
-
-bool Settings::BattleShowTurnOrder() const
-{
-    return _gameOptions.Modes( GAME_BATTLE_SHOW_TURN_ORDER );
 }
 
 void Settings::setDebug( int debug )
@@ -1226,11 +1274,6 @@ bool Settings::isVSyncEnabled() const
 bool Settings::isFirstGameRun() const
 {
     return _gameOptions.Modes( GAME_FIRST_RUN );
-}
-
-bool Settings::isShowIntro() const
-{
-    return _gameOptions.Modes( GAME_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()

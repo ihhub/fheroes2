@@ -108,6 +108,9 @@ namespace Maps
     bool setRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
     bool removeRoadFromTile( Map_Format::MapFormat & map, const int32_t tileIndex );
 
+    // Update road object on tile, if there is one, according to around tile objects.
+    bool updateRoadOnTile( Map_Format::MapFormat & map, const int32_t tileIndex );
+
     void updateAllRoads( Map_Format::MapFormat & map );
 
     bool doesContainRoad( const Map_Format::TileInfo & tile );

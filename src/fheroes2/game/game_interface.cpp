@@ -26,10 +26,11 @@
 #include <algorithm>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_assets.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -132,7 +133,9 @@ void Interface::AdventureMap::redraw( const uint32_t force )
     const bool hideInterface = conf.isHideInterfaceEnabled();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
-        _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        if ( !conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) || fheroes2::AutoPlaytest::instance().isAnimationEnabled() ) {
+            _gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+        }
 
         if ( hideInterface && conf.ShowControlPanel() ) {
             _controlPanel._redraw();
@@ -192,7 +195,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
             Dialog::FrameBorder::RenderRegular( radarRect );
         }
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
+        fheroes2::Blit( Assets::getImage( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
 
         buttonExit.draw();
     };
@@ -248,7 +251,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;
 
-    while ( le.HandleEvents( Game::isDelayNeeded( { Game::MAPS_DELAY } ) ) ) {
+    while ( le.HandleEvents( Game::isDelayNeeded( { Game::DelayType::MAPS_DELAY } ) ) ) {
         const fheroes2::Point & mp = le.getMouseCursorPos();
 
         if ( radarRect & mp ) {
@@ -283,7 +286,7 @@ int32_t Interface::AdventureMap::GetDimensionDoorDestination( const int32_t from
             cursor.SetThemes( Cursor::POINTER );
         }
 
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
 
             redraw( REDRAW_GAMEAREA );

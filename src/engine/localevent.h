@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Josh Matthews <josh@joshmatthews.net>           *
@@ -183,7 +183,7 @@ namespace fheroes2
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 }
 
-class LocalEvent
+class LocalEvent final
 {
 public:
     friend class EventProcessing::EventEngine;
@@ -360,6 +360,20 @@ public:
         _mouseButtonLongPressDelay.reset();
     }
 
+    void setQuitEventProcessingHook( std::function<bool()> hook )
+    {
+        _processQuitEventHook = std::move( hook );
+    }
+
+    bool processQuitEvent() const
+    {
+        if ( _processQuitEventHook ) {
+            return _processQuitEventHook();
+        }
+
+        return false;
+    }
+
 private:
     enum class MouseButtonType : uint8_t
     {
@@ -487,6 +501,8 @@ private:
     std::function<fheroes2::Rect( const int32_t, const int32_t )> _globalMouseMotionEventHook;
     std::function<void( const fheroes2::Key, const int32_t )> _globalKeyDownEventHook;
 
+    std::function<bool()> _processQuitEventHook;
+
     fheroes2::Rect _mouseCursorRenderArea;
 
     // used to convert user-friendly pointer speed values into more usable ones
@@ -516,6 +532,8 @@ private:
     static void onRenderDeviceResetEvent();
 
     LocalEvent();
+
+    ~LocalEvent() = default;
 
     void onMouseMotionEvent( fheroes2::Point position );
     void onMouseButtonEvent( const bool isPressed, const MouseButtonType buttonType, fheroes2::Point position );

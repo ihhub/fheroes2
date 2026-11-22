@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2024                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +25,6 @@
 #include <map>
 #include <set>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "serialize.h"
@@ -35,42 +34,68 @@ namespace fheroes2
     class Sprite;
 
     // Heroes 2 Data (H2D) file format used for storing files needed for the project. This format is not a part of original HoMM II.
-    class H2DReader
+    class H2DReader final
     {
     public:
+        struct EntryInfo final
+        {
+            uint32_t offset{ 0 };
+
+            uint32_t size{ 0 };
+
+            std::string info;
+        };
+
         // Returns true if file opening is successful.
         bool open( const std::string & path );
 
         // Returns non-empty vector if requested file exists.
         std::vector<uint8_t> getFile( const std::string & fileName );
 
+        const std::map<std::string, EntryInfo, std::less<>> & getAllEntries() const
+        {
+            return _fileNameVsInfo;
+        }
+
         std::set<std::string, std::less<>> getAllFileNames() const;
 
     private:
         // Relationship between file name in non-capital letters and its offset from the start of the archive.
-        std::map<std::string, std::pair<uint32_t, uint32_t>, std::less<>> _fileNameAndOffset;
+        std::map<std::string, EntryInfo, std::less<>> _fileNameVsInfo;
 
         // Stream for reading h2d file.
         StreamFile _fileStream;
     };
 
     // This class is not designed to be performance optimized as it will be used very rarely and out of game running session.
-    class H2DWriter
+    class H2DWriter final
     {
     public:
         // Returns true if file opening is successful.
         bool write( const std::string & path ) const;
 
-        bool add( const std::string & name, const std::vector<uint8_t> & data );
+        bool add( const std::string & name, const std::vector<uint8_t> & data, std::string extraInfo = {} );
 
         // Add all entries from a H2D reader.
         bool add( H2DReader & reader );
 
+        void remove( const std::string & path )
+        {
+            _fileData.erase( path );
+        }
+
     private:
-        std::map<std::string, std::vector<uint8_t>, std::less<>> _fileData;
+        struct FileInfo final
+        {
+            std::vector<uint8_t> data;
+
+            std::string extraInfo;
+        };
+
+        std::map<std::string, FileInfo, std::less<>> _fileData;
     };
 
     bool readImageFromH2D( H2DReader & reader, const std::string & name, Sprite & image );
 
-    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image );
+    bool writeImageToH2D( H2DWriter & writer, const std::string & name, const Sprite & image, std::string extraInfo = {} );
 }

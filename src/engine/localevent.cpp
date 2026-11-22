@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -60,6 +60,7 @@
 #endif
 
 #include "audio.h"
+#include "exception.h"
 #include "image.h"
 #include "logging.h"
 #include "render_processor.h"
@@ -382,7 +383,7 @@ namespace EventProcessing
             // On devices with touchpad/touchscreen the software-rendered mouse cursor is mandatory
             // to properly convert touch events to mouse events and render the cursor especially
             // if no hardware mouse device is present and the hardware cursor is disabled by OS.
-            fheroes2::cursor().enableSoftwareEmulation( true );
+            fheroes2::cursor().forceSoftwareEmulation();
         }
 
         void initController()
@@ -399,7 +400,7 @@ namespace EventProcessing
                     if ( _gameController != nullptr ) {
                         // We force enable the software-rendered mouse cursor to properly convert controller events to mouse events
                         // and render the cursor especially if no hardware mouse device is present and the hardware cursor is disabled by OS.
-                        fheroes2::cursor().enableSoftwareEmulation( true );
+                        fheroes2::cursor().forceSoftwareEmulation();
                         break;
                     }
 
@@ -441,13 +442,10 @@ namespace EventProcessing
                 switch ( event.type ) {
                 case SDL_WINDOWEVENT:
                     if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-                        if ( allowExit ) {
-                            // Try to perform clear exit to catch all memory leaks, for example.
-                            return false;
-                        }
-                        processImmediately = false;
-                        break;
+                        // This event will be handled by SDL_QUIT event.
+                        continue;
                     }
+
                     if ( onWindowEvent( event.window ) ) {
                         updateDisplay = true;
                     }
@@ -523,6 +521,10 @@ namespace EventProcessing
                     if ( allowExit ) {
                         // Try to perform clear exit to catch all memory leaks, for example.
                         return false;
+                    }
+
+                    if ( onQuitEvent() ) {
+                        throw ::fheroes2::UserRequestedApplicationClosure{};
                     }
                     processImmediately = false;
                     break;
@@ -1119,6 +1121,11 @@ namespace EventProcessing
             LocalEvent::onRenderDeviceResetEvent();
         }
 
+        static bool onQuitEvent()
+        {
+            return LocalEvent::Get().processQuitEvent();
+        }
+
         void onControllerRemovedEvent( const SDL_JoyDeviceEvent & event )
         {
             if ( _gameController == nullptr ) {
@@ -1145,7 +1152,7 @@ namespace EventProcessing
                 if ( _gameController != nullptr ) {
                     // We force enable the software-rendered mouse cursor to properly convert controller events to mouse events
                     // and render the cursor especially if no hardware mouse device is present and the hardware cursor is disabled by OS.
-                    fheroes2::cursor().enableSoftwareEmulation( true );
+                    fheroes2::cursor().forceSoftwareEmulation();
                 }
                 else {
                     ERROR_LOG( "Failed to open a controller with ID " << event.which << ". Error description: " << SDL_GetError() )

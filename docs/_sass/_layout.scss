@@ -199,6 +199,7 @@ $body-font: "Asul";
 
     h3 {
       font-size: 1.5em;
+      text-wrap: balance;
     }
 
     h4 {
@@ -435,6 +436,17 @@ $body-font: "Asul";
           }
         }
       }
+    }
+
+    hr {
+      border: none;
+      border-top: 0.125em solid rgba(map-get($theme-map, secondary-color), 0.4);
+      margin: 2em 0;
+    }
+
+    #main_content img {
+      max-width: 100%;
+      height: auto;
     }
 
     @media screen and (min-width: $tablet-width) {

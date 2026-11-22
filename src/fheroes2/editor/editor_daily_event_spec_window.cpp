@@ -34,6 +34,7 @@
 #include "dialog.h"
 #include "editor_ui_helper.h"
 #include "game_hotkeys.h"
+#include "game_tools.h"
 #include "image.h"
 #include "localevent.h"
 #include "map_format_info.h"
@@ -84,7 +85,7 @@ namespace Editor
 
         int32_t offsetY = dialogRoi.y + elementOffset;
 
-        const fheroes2::Text title( MP2::StringObject( MP2::OBJ_EVENT ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( std::string( MP2::StringObject( MP2::OBJ_EVENT ) ) + ':', fheroes2::FontType::normalYellow() );
         title.draw( dialogRoi.x + ( dialogRoi.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -178,7 +179,7 @@ namespace Editor
 
         fheroes2::ImageRestorer firstDateDescription( display, playerAreaOffsetX, offsetY, playerAreaWidth, 35 );
 
-        text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+        text.set( Game::getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
         text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, offsetY, text.width(), display );
 
         offsetY += 35;
@@ -223,7 +224,7 @@ namespace Editor
 
                 firstDateDescription.restore();
 
-                text.set( getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
+                text.set( Game::getDateDescription( firstDaySelection.getValue() ), fheroes2::FontType::normalWhite() );
                 text.draw( playerAreaOffsetX + ( playerAreaWidth - text.width() ) / 2, firstDateDescription.y(), text.width(), display );
 
                 isRedrawNeeded = true;
@@ -313,7 +314,7 @@ namespace Editor
 
                     const fheroes2::ResourceDialogElement resourceUI( resourceType, {} );
 
-                    std::string message = _( "Set %{resource-type} Count" );
+                    std::string message = _( "Set %{resource-type} Count:" );
                     StringReplace( message, "%{resource-type}", Resource::String( resourceType ) );
 
                     if ( Dialog::SelectCount( std::move( message ), -99999, 999999, temp, 1, &resourceUI ) ) {

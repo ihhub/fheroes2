@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2025                                                    *
+ *   Copyright (C) 2025 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,7 @@ class ThemeManager
 
         // Update button text and ARIA attributes
         if ( this.themeToggle ) {
-            this.themeToggle.textContent = theme === this.darkTheme ? "☀️ Light Mode" : "🌙 Dark Mode";
+            this.themeToggle.textContent = theme === this.darkTheme ? "☀️ Good Interface" : "🌙 Evil Interface";
 
             // Update ARIA attributes
             this.themeToggle.setAttribute( "aria-label", `Switch to ${theme === this.darkTheme ? this.lightTheme : this.darkTheme} mode` );

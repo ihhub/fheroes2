@@ -35,8 +35,10 @@ Or you can install the game using the installer, in this case, this package will
 installed automatically.
 
 --- License ---
-This project is under GNU General Public License v2.0. Refer to file LICENSE for more
-details.
+The project's source code is licensed under the GNU General Public License v2.0. Refer to
+the file LICENSE for more details. The project's art is licensed under 
+Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0). Refer to the
+file LICENSE-ART.
 
 --- Donation ---
 Currently we accept donations via Patreon at https://www.patreon.com/fheroes2,

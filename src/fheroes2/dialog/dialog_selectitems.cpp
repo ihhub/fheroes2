@@ -32,12 +32,12 @@
 #include <numeric>
 #include <utility>
 
-#include "agg_image.h"
 #include "army_troop.h"
 #include "castle.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_string.h"
 #include "ground.h"
@@ -67,11 +67,11 @@
 
 namespace
 {
-    const int32_t dialogHeightDeduction = 150;
+    constexpr int32_t dialogHeightDeduction{ 150 };
 
     fheroes2::Sprite renderMonsterOnBackground( const fheroes2::Sprite & monsterSprite )
     {
-        const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const fheroes2::Sprite & backgroundOriginal = Assets::getImage( ICN::SWAPWIN, 0 );
         fheroes2::Sprite image = fheroes2::Crop( backgroundOriginal, 36, 267, 43, 43 );
         image.setPosition( 0, 0 );
 
@@ -87,6 +87,46 @@ namespace
         // NOTICE: This calculation should be consistent with the number of KINGDOM_TOWNS objects.
         return townRace * 2 + ( isCastle ? 0 : 1 );
     }
+
+    class MultiItemSelectionBase
+    {
+    public:
+        std::vector<int32_t> getSelected() const
+        {
+            return { _selected.begin(), _selected.end() };
+        }
+
+    protected:
+        std::vector<int32_t> _ids;
+        std::set<int32_t> _selected;
+
+        void _setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _ids = std::move( allowed );
+
+            for ( const int32_t id : selected ) {
+                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
+                    _selected.emplace( id );
+                }
+            }
+
+            if ( _selected.empty() ) {
+                _selected.insert( _ids.begin(), _ids.end() );
+            }
+        }
+
+        void _updateSelected( const int32_t id )
+        {
+            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
+
+            if ( _selected.count( id ) == 0 ) {
+                _selected.emplace( id );
+            }
+            else {
+                _selected.erase( id );
+            }
+        }
+    };
 
     class SelectEnumMonster : public Dialog::ItemSelectionWindow
     {
@@ -121,12 +161,12 @@ namespace
         virtual fheroes2::Sprite getImage( const int index )
         {
             const Monster mons( index );
-            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            const fheroes2::Sprite & monsterSprite = Assets::getImage( ICN::MONS32, mons.GetSpriteIndex() );
             return renderMonsterOnBackground( monsterSprite );
         }
     };
 
-    class MultiMonsterSelection final : public SelectEnumMonster
+    class MultiMonsterSelection final : public SelectEnumMonster, public MultiItemSelectionBase
     {
     public:
         using SelectEnumMonster::SelectEnumMonster;
@@ -137,28 +177,13 @@ namespace
 
         void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
         {
-            _ids = std::move( allowed );
-
-            for ( const int32_t id : selected ) {
-                if ( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() ) {
-                    _selected.emplace( id );
-                }
-            }
-
-            if ( _selected.empty() ) {
-                _selected.insert( _ids.begin(), _ids.end() );
-            }
+            _setup( std::move( allowed ), selected );
 
             SetListContent( _ids );
             // For multi-selection we don't have any current item.
             SetCurrent( static_cast<int32_t>( 0 ) );
 
             enableToggleButtons();
-        }
-
-        std::vector<int32_t> getSelected() const
-        {
-            return { _selected.begin(), _selected.end() };
         }
 
         void ActionListSingleClick( int32_t & id ) override
@@ -191,19 +216,9 @@ namespace
         }
 
     private:
-        std::vector<int32_t> _ids;
-        std::set<int32_t> _selected;
-
         void updateStatus( const int32_t id )
         {
-            assert( std::find( _ids.begin(), _ids.end(), id ) != _ids.end() );
-
-            if ( _selected.count( id ) == 0 ) {
-                _selected.emplace( id );
-            }
-            else {
-                _selected.erase( id );
-            }
+            _updateSelected( id );
 
             setButtonOkayStatus( !_selected.empty() );
         }
@@ -216,8 +231,115 @@ namespace
         fheroes2::Sprite getImage( const int index ) override
         {
             const Monster mons( index );
-            const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+            const fheroes2::Sprite & monsterSprite = Assets::getImage( ICN::MONS32, mons.GetSpriteIndex() );
             fheroes2::Sprite image = renderMonsterOnBackground( monsterSprite );
+
+            if ( _selected.count( index ) == 0 ) {
+                fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            }
+
+            return image;
+        }
+    };
+
+    class SelectEnumArtifact : public Dialog::ItemSelectionWindow
+    {
+    public:
+        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
+            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
+        {
+            SetAreaMaxItems( rtAreaItems.height / _offsetY );
+        }
+
+        using Dialog::ItemSelectionWindow::ActionListPressRight;
+
+        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
+        {
+            renderItem( getImage( index ), Artifact( index ).GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
+        }
+
+        void ActionListPressRight( int32_t & index ) override
+        {
+            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
+        }
+
+    protected:
+        virtual fheroes2::Sprite getImage( const int index )
+        {
+            const Artifact art( index );
+            return Assets::getImage( ICN::ARTFX, art.IndexSprite32() );
+        }
+
+    private:
+        static const int32_t _offsetY{ 42 };
+    };
+
+    class MultiArtifactSelection final : public SelectEnumArtifact, public MultiItemSelectionBase
+    {
+    public:
+        using SelectEnumArtifact::SelectEnumArtifact;
+
+        using Interface::ListBox<int32_t>::ActionListDoubleClick;
+        using Interface::ListBox<int32_t>::ActionListSingleClick;
+        using Interface::ListBox<int32_t>::ActionListPressRight;
+
+        void setup( std::vector<int32_t> allowed, const std::vector<int32_t> & selected )
+        {
+            _setup( std::move( allowed ), selected );
+
+            SetListContent( _ids );
+            // For multi-selection we don't have any current item.
+            SetCurrent( static_cast<int32_t>( 0 ) );
+
+            enableToggleButtons();
+        }
+
+        void ActionListSingleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+        void ActionListDoubleClick( int32_t & id ) override
+        {
+            updateStatus( id );
+        }
+
+    protected:
+        void onToggleOn() override
+        {
+            _selected = {};
+
+            for ( const int32_t id : _ids ) {
+                _selected.emplace( id );
+            }
+
+            setButtonOkayStatus( true );
+        }
+
+        void onToggleOff() override
+        {
+            _selected = {};
+
+            setButtonOkayStatus( false );
+        }
+
+    private:
+        void updateStatus( const int32_t id )
+        {
+            _updateSelected( id );
+
+            setButtonOkayStatus( !_selected.empty() );
+        }
+
+        bool isDoubleClicked() override
+        {
+            return false;
+        }
+
+        fheroes2::Sprite getImage( const int index ) override
+        {
+            const Artifact art( index );
+            fheroes2::Sprite image = Assets::getImage( ICN::ARTFX, art.IndexSprite32() );
 
             if ( _selected.count( index ) == 0 ) {
                 fheroes2::ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -254,34 +376,6 @@ namespace
         static const int32_t _offsetY{ 35 };
     };
 
-    class SelectEnumArtifact final : public Dialog::ItemSelectionWindow
-    {
-    public:
-        explicit SelectEnumArtifact( const fheroes2::Size & rt, std::string title )
-            : Dialog::ItemSelectionWindow( rt, std::move( title ) )
-        {
-            SetAreaMaxItems( rtAreaItems.height / _offsetY );
-        }
-
-        using Dialog::ItemSelectionWindow::ActionListPressRight;
-
-        void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
-        {
-            const Artifact art( index );
-            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
-
-            renderItem( artifactSprite, art.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
-        }
-
-        void ActionListPressRight( int32_t & index ) override
-        {
-            fheroes2::ArtifactDialogElement( Artifact( index ) ).showPopup( Dialog::ZERO );
-        }
-
-    private:
-        static const int32_t _offsetY{ 42 };
-    };
-
     class SelectEnumSpell final : public Dialog::ItemSelectionWindow
     {
     public:
@@ -296,7 +390,7 @@ namespace
         void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const Spell spell( index );
-            const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+            const fheroes2::Sprite & spellSprite = Assets::getImage( ICN::SPELLS, spell.IndexSprite() );
 
             renderItem( spellSprite, spell.GetName(), { dstx, dsty }, 75 / 2, 80, _offsetY / 2, current );
         }
@@ -334,7 +428,7 @@ namespace
         void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override
         {
             const Skill::Secondary skill( getSkillFromListIndex( index ), getLevelFromListIndex( index ) );
-            const fheroes2::Sprite & skillSprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
+            const fheroes2::Sprite & skillSprite = Assets::getImage( ICN::MINISS, skill.GetIndexSprite2() );
 
             renderItem( skillSprite, skill.GetName(), { dstx, dsty }, 45 / 2, 50, _offsetY / 2, current );
         }
@@ -367,7 +461,7 @@ namespace
 
             assert( castle != nullptr );
 
-            fheroes2::Sprite castleIcon( fheroes2::AGG::GetICN( _townFrameIcnId, 23 ) );
+            fheroes2::Sprite castleIcon( Assets::getImage( _townFrameIcnId, 23 ) );
             fheroes2::drawCastleIcon( *castle, castleIcon, { 4, 4 } );
 
             renderItem( castleIcon, castle->GetName(), { dstx, dsty }, 35, 75, itemsOffsetY / 2, current );
@@ -723,11 +817,11 @@ namespace
             fheroes2::Blit( mineSprite, display, dstx + fheroes2::tileWidthPx * 5 + 5 - mineSprite.width(), dsty + 1 );
 
             // Mine type selection mark background.
-            const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
+            const fheroes2::Sprite & markBackground = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
             fheroes2::Blit( markBackground, display, dstx + 10, dsty + 24 );
 
             if ( current ) {
-                const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+                const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 5 );
                 fheroes2::Blit( mark, display, dstx + 13, dsty + 27 );
             }
         }
@@ -843,7 +937,7 @@ namespace Dialog
         SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX + 1, listRoi.y + 1 } );
         SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX + 1, listRoi.y + listRoi.height - 15 } );
         setScrollBarArea( { scrollbarOffsetX + 3, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
 
         // Render dialog buttons.
         _window->renderOkayCancelButtons( _buttonOk, _buttonCancel );
@@ -1169,6 +1263,17 @@ void Dialog::multiSelectMonsters( std::vector<int32_t> allowed, std::vector<int3
     }
 }
 
+void Dialog::multiSelectArtifact( std::vector<int32_t> allowed, std::vector<int32_t> & selected )
+{
+    MultiArtifactSelection artifactList( { 370, fheroes2::Display::instance().height() - dialogHeightDeduction }, _( "Select Artifacts:" ) );
+    artifactList.setup( std::move( allowed ), selected );
+
+    const int32_t result = artifactList.selectItemsEventProcessing();
+    if ( result == Dialog::OK ) {
+        selected = artifactList.getSelected();
+    }
+}
+
 int Dialog::selectHeroType( const int heroType )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -1183,15 +1288,15 @@ int Dialog::selectHeroType( const int heroType )
     const int32_t stepX = 70;
     const int32_t raceOffsetY = 80;
     fheroes2::Point pos( area.x + 20, area.y + 30 );
-    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
-    const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = Assets::getImage( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & raceShadow = Assets::getImage( ICN::NGEXTRA, 61 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
     const std::vector<uint8_t> darkGrayPalette = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
     fheroes2::ApplyPalette( colorSpriteBorder, darkGrayPalette );
 
     // Make race selection borders.
-    const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
+    const fheroes2::Sprite & randomRaceSprite = Assets::getImage( ICN::NGEXTRA, 58 );
     const int32_t raceBorderWidth = randomRaceSprite.width();
     const int32_t raceBorderHeight = randomRaceSprite.height();
     fheroes2::Image raceSpriteBorder( raceBorderWidth, raceBorderHeight );
@@ -1221,7 +1326,7 @@ int Dialog::selectHeroType( const int heroType )
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
-        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+        const fheroes2::Sprite & colorSprite = Assets::getImage( ICN::BRCREST, i );
 
         fheroes2::addGradientShadow( colorSpriteBorder, display, { pos.x - stepX / 2, pos.y }, { -5, 5 } );
         colorRect[i] = { pos.x - stepX / 2, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
@@ -1229,7 +1334,7 @@ int Dialog::selectHeroType( const int heroType )
         text.set( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
         text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 4, display );
 
-        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
+        const fheroes2::Sprite & raceSprite = Assets::getImage( ICN::NGEXTRA, 51U + i );
         raceRect[i] = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
         fheroes2::Copy( raceSprite, 4, 4, display, raceRect[i].x + 4, raceRect[i].y + 4, raceImageWidth, raceImageHeight );
         fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
@@ -1404,22 +1509,22 @@ void Dialog::selectTownType( int32_t & type, int32_t & color )
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Castle/town placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Castle/town placing:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color and race selection sprites.
     const int32_t stepX = 70;
     const int32_t raceOffsetY = 80;
     fheroes2::Point pos( area.x + 20, area.y + 30 );
-    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
-    const fheroes2::Sprite & raceShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = Assets::getImage( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & raceShadow = Assets::getImage( ICN::NGEXTRA, 61 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
     const std::vector<uint8_t> darkGrayPalette = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
     fheroes2::ApplyPalette( colorSpriteBorder, darkGrayPalette );
 
     // Make race selection borders.
-    const fheroes2::Sprite & randomRaceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 58 );
+    const fheroes2::Sprite & randomRaceSprite = Assets::getImage( ICN::NGEXTRA, 58 );
     const int32_t raceBorderWidth = randomRaceSprite.width();
     const int32_t raceBorderHeight = randomRaceSprite.height();
     fheroes2::Image raceSpriteBorder( raceBorderWidth, raceBorderHeight );
@@ -1441,7 +1546,7 @@ void Dialog::selectTownType( int32_t & type, int32_t & color )
 
     // Neutral color.
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
-    const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
+    const fheroes2::Sprite & neutralColorSprite = Assets::getImage( ICN::BRCREST, 7 );
     fheroes2::Rect & neutralColorRect = colorRect.back();
     neutralColorRect = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
     fheroes2::Copy( neutralColorSprite, 0, 0, display, neutralColorRect.x + 4, neutralColorRect.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
@@ -1458,7 +1563,7 @@ void Dialog::selectTownType( int32_t & type, int32_t & color )
 
     pos.x += stepX;
     for ( uint32_t i = 0; i < 6; ++i ) {
-        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+        const fheroes2::Sprite & colorSprite = Assets::getImage( ICN::BRCREST, i );
 
         fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
         colorRect[i] = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
@@ -1466,7 +1571,7 @@ void Dialog::selectTownType( int32_t & type, int32_t & color )
         text.set( Color::String( Color::IndexToColor( static_cast<int>( i ) ) ), fheroes2::FontType::smallWhite() );
         text.draw( colorRect[i].x + ( colorRect[i].width - text.width() ) / 2, colorRect[i].y + colorRect[i].height + 4, display );
 
-        const fheroes2::Sprite & raceSprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 51U + i );
+        const fheroes2::Sprite & raceSprite = Assets::getImage( ICN::NGEXTRA, 51U + i );
         raceRect[i] = { pos.x - 2, pos.y + raceOffsetY, raceBorderWidth, raceBorderHeight };
         fheroes2::Copy( raceSprite, 4, 4, display, raceRect[i].x + 4, raceRect[i].y + 4, raceImageWidth, raceImageHeight );
         fheroes2::Blit( raceShadow, display, pos.x - 5, pos.y + raceOffsetY + 2 );
@@ -1672,7 +1777,7 @@ int32_t Dialog::selectMineType( const int32_t type )
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Mine placing" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Mine placing:" ), fheroes2::FontType::normalYellow() );
     int32_t offsetY = area.y + 10;
     text.draw( area.x + ( area.width - text.width() ) / 2, offsetY, display );
 
@@ -1690,7 +1795,7 @@ int32_t Dialog::selectMineType( const int32_t type )
     std::array<fheroes2::Rect, resourceCount> resourceRoi;
 
     // Resource type selection mark background.
-    const fheroes2::Sprite & markBackground = fheroes2::AGG::GetICN( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
+    const fheroes2::Sprite & markBackground = Assets::getImage( isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN, 4 );
 
     // Resource icons.
     const int32_t iconOffsetX = 35;
@@ -1709,7 +1814,7 @@ int32_t Dialog::selectMineType( const int32_t type )
     }
 
     // Render ghosts to select Abandoned mine type.
-    const fheroes2::Sprite & ghostImage = fheroes2::AGG::GetICN( ICN::MONS32, 59 );
+    const fheroes2::Sprite & ghostImage = Assets::getImage( ICN::MONS32, 59 );
     const int32_t ghostsOnIcon = 4;
     const int32_t ghostsIconOverlap = 12;
     const int32_t ghostsStepX = ghostImage.width() - ghostsIconOverlap;
@@ -1722,7 +1827,7 @@ int32_t Dialog::selectMineType( const int32_t type )
     fheroes2::Blit( markBackground, display, resourceRoi[7].x + 2, resourceRoi[7].y + ( resourceRoi[7].height - markBackground.height() ) / 2 );
 
     // Resource type selection mark.
-    const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
+    const fheroes2::Sprite & mark = Assets::getImage( ICN::CELLWIN, 5 );
     uint32_t selectedResourceType = 0;
 
     const std::vector<Maps::ObjectInfo> & allObjectInfo = Maps::getObjectsByGroup( Maps::ObjectGroup::ADVENTURE_MINES );
@@ -1843,7 +1948,7 @@ int32_t Dialog::selectMineType( const int32_t type )
 
         listbox.SetListContent( objectInfo );
         // We need to reset the initial slider image to be able to reduce the current slider height.
-        listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listbox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listbox.updateScrollBarImage();
 
         if ( keepSelection ) {
@@ -2013,12 +2118,12 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
 
     const fheroes2::Rect & area = background.activeArea();
 
-    fheroes2::Text text( _( "Select color" ), fheroes2::FontType::normalYellow() );
+    fheroes2::Text text( _( "Select color:" ), fheroes2::FontType::normalYellow() );
     text.draw( area.x + ( area.width - text.width() ) / 2, area.y + 10, display );
 
     // Render color selection sprites.
     fheroes2::Point pos( area.x + 20 + ( area.width - colorsWidth ) / 2, area.y + 40 );
-    const fheroes2::Sprite & colorSpriteBorderSelected = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & colorSpriteBorderSelected = Assets::getImage( ICN::BRCREST, 6 );
     fheroes2::Sprite colorSpriteBorder( colorSpriteBorderSelected );
 
     const std::vector<uint8_t> darkGrayPalette = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -2028,7 +2133,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
 
     // Neutral color.
     fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
-    const fheroes2::Sprite & neutralColorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, 7 );
+    const fheroes2::Sprite & neutralColorSprite = Assets::getImage( ICN::BRCREST, 7 );
     fheroes2::Rect & neutralColorRect = colorRect.back();
     neutralColorRect = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };
     fheroes2::Copy( neutralColorSprite, 0, 0, display, neutralColorRect.x + 4, neutralColorRect.y + 4, neutralColorSprite.width(), neutralColorSprite.height() );
@@ -2043,7 +2148,7 @@ PlayerColor Dialog::selectPlayerColor( const PlayerColor color, const uint8_t av
             continue;
         }
 
-        const fheroes2::Sprite & colorSprite = fheroes2::AGG::GetICN( ICN::BRCREST, i );
+        const fheroes2::Sprite & colorSprite = Assets::getImage( ICN::BRCREST, i );
 
         fheroes2::addGradientShadow( colorSpriteBorder, display, pos, { -5, 5 } );
         colorRect[i] = { pos.x, pos.y, colorSpriteBorder.width(), colorSpriteBorder.height() };

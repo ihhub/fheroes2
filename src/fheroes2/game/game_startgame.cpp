@@ -34,7 +34,6 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "ai_planner.h"
 #include "army.h"
 #include "audio.h"
@@ -45,7 +44,10 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
+#include "game_assets.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h" // IWYU pragma: associated
 #include "game_io.h"
@@ -108,11 +110,7 @@ namespace
         // otherwise his revealed map will not be shown - instead of it we will show the revealed map by all human players.
         const bool isFriendlyAI = Players::isFriends( player->GetColor(), humanColors );
 
-#if defined( WITH_DEBUG )
         if ( isFriendlyAI || player->isAIAutoControlMode() ) {
-#else
-        if ( isFriendlyAI ) {
-#endif
             // Fully update fog directions for allied AI players in Hot Seat mode as the previous move could be done by opposing player.
             return player->GetFriends();
         }
@@ -255,27 +253,27 @@ void Game::DialogPlayers( const PlayerColor color, std::string title, std::strin
     const Player * player = Players::Get( color );
     StringReplace( message, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
-    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
+    const fheroes2::Sprite & border = Assets::getImage( ICN::BRCREST, 6 );
     fheroes2::Sprite sign = border;
 
     switch ( color ) {
     case PlayerColor::BLUE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 0 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 0 ), sign, 4, 4 );
         break;
     case PlayerColor::GREEN:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 1 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 1 ), sign, 4, 4 );
         break;
     case PlayerColor::RED:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 2 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 2 ), sign, 4, 4 );
         break;
     case PlayerColor::YELLOW:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 3 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 3 ), sign, 4, 4 );
         break;
     case PlayerColor::ORANGE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 4 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 4 ), sign, 4, 4 );
         break;
     case PlayerColor::PURPLE:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
+        fheroes2::Blit( Assets::getImage( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
         // Did you add a new color? Add the logic for it!
@@ -735,6 +733,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 {
     Settings & conf = Settings::Get();
 
+    const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
+    const bool isAutoPlaytestAnimationEnabled{ fheroes2::AutoPlaytest::instance().isAnimationEnabled() };
+
     const bool isHotSeatGame = conf.IsGameType( Game::TYPE_HOTSEAT );
     if ( !isHotSeatGame ) {
         // It is not a Hot Seat (multiplayer) game so we set current color to the only human player.
@@ -764,14 +765,26 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
     if ( !isLoadedFromSave || world.CountDay() == 1 ) {
         // Clear fog around heroes, castles and mines for all players when starting a new map or if the save was done at the first day.
-        for ( const Player * player : sortedPlayers ) {
+        for ( Player * player : sortedPlayers ) {
             world.ClearFog( player->GetColor() );
+
+            if ( isAutoPlaytest ) {
+                // Every player for auto playtest mode is set as human player controlled by AI.
+                player->SetControl( CONTROL_HUMAN );
+                player->setAIAutoControlMode( true );
+            }
         }
     }
 
     if ( !isHotSeatGame ) {
         // Fully update fog directions if there will be only one human player.
         Interface::GameArea::updateMapFogDirections();
+    }
+
+    if ( isAutoPlaytest && !isAutoPlaytestAnimationEnabled ) {
+        // Move the game area to the center of the map and render it once only. We don't need to render the fog again.
+        _gameArea.SetCenter( fheroes2::Point{ world.w() / 2, world.h() / 2 } );
+        _gameArea.redrawOnlyFog( fheroes2::Display::instance() );
     }
 
     while ( res == fheroes2::GameMode::END_TURN ) {
@@ -784,6 +797,17 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
         if ( res != fheroes2::GameMode::CANCEL ) {
             break;
+        }
+
+        if ( isAutoPlaytest ) {
+            auto & autoPlaytest = fheroes2::AutoPlaytest::instance();
+            if ( static_cast<int32_t>( world.CountDay() ) > autoPlaytest.getMaxDaysInPlaythrough() ) {
+                autoPlaytest.markTimeLimit();
+                res = fheroes2::GameMode::MAIN_MENU;
+                break;
+            }
+
+            Game::SetUpdateSoundsOnFocusUpdate( autoPlaytest.areEnvironmentSoundsEnabled() );
         }
 
         res = fheroes2::GameMode::END_TURN;
@@ -875,21 +899,26 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     conf.SetCurrentColor( playerColor );
 
                     _statusPanel.Reset();
-                    _statusPanel.SetState( StatusType::STATUS_AITURN );
 
-#if defined( WITH_DEBUG )
-                    if ( player->isAIAutoControlMode() ) {
+                    if ( player->isAIAutoControlMode() && ( !isAutoPlaytest || isAutoPlaytestAnimationEnabled ) ) {
                         // If player gave control to AI we show the radar image and update it fully at the start of player's turn.
                         _radar.SetHide( false );
                         _radar.SetRedraw( REDRAW_RADAR );
+
+                        // We also update the state of castles and heroes to have better visibility of the kingdom state.
+                        _iconsPanel.resetIcons( ICON_ANY );
+                        _iconsPanel.showIcons( ICON_ANY );
+                        _iconsPanel.setRedraw();
                     }
-#endif
+                    else {
+                        _statusPanel.SetState( StatusType::STATUS_AITURN );
+                    }
 
                     redraw( 0 );
                     validateFadeInAndRender();
 
                     // In Hot Seat mode there could be different alliances so we have to update fog directions for some cases.
-                    if ( isHotSeatGame ) {
+                    if ( isHotSeatGame || ( isAutoPlaytest && isAutoPlaytestAnimationEnabled ) ) {
                         Maps::updateFogDirectionsInArea( { 0, 0 }, { world.w(), world.h() }, hotSeatAIFogColors( player ) );
                     }
 
@@ -900,7 +929,7 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     kingdom.ActionBeforeTurn();
 
 #if defined( WITH_DEBUG )
-                    if ( !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoPlaytest && !isLoadedFromSave && player->isAIAutoControlMode() && conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }
@@ -911,11 +940,15 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
                     assert( res != fheroes2::GameMode::CANCEL );
 
 #if defined( WITH_DEBUG )
-                    if ( !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
+                    if ( !isAutoPlaytest && !isLoadedFromSave && player->isAIAutoControlMode() && !conf.isAutoSaveAtBeginningOfTurnEnabled() ) {
                         // This is a human player which gave control to AI so we need to do autosave here.
                         Game::AutoSave();
                     }
 #endif
+                    if ( isAutoPlaytest && kingdom.GetControl() != CONTROL_AI ) {
+                        res = fheroes2::GameMode::MAIN_MENU;
+                        break;
+                    }
 
                     break;
                 default:
@@ -962,8 +995,9 @@ fheroes2::GameMode Interface::AdventureMap::StartGame()
 
     Game::setDisplayFadeIn();
 
-    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next.
-    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD ) {
+    // Do not use fade-out effect when exiting to Highscores screen as in this case name input dialog will be rendered next
+    // or when running in auto playtest mode.
+    if ( res != fheroes2::GameMode::HIGHSCORES_STANDARD && !isAutoPlaytest ) {
         fheroes2::fadeOutDisplay();
     }
 
@@ -1045,7 +1079,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
     fheroes2::Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
-    const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
+    const std::vector<Game::DelayType> delayTypes = { Game::DelayType::CURRENT_HERO_DELAY, Game::DelayType::MAPS_DELAY };
 
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
@@ -1069,7 +1103,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
     while ( res == fheroes2::GameMode::CANCEL ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-            if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                 res = fheroes2::GameMode::QUIT_GAME;
 
                 break;
@@ -1106,8 +1140,8 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
             // Hotkeys
             if ( le.isAnyKeyPressed() ) {
                 // Adventure map control
-                if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
-                    res = EventExit();
+                if ( HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) || HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                    res = Game::processExitEvent();
                 }
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::WORLD_END_TURN ) ) {
                     res = EventEndTurn();
@@ -1290,7 +1324,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                 _gameArea.QueueEventProcessing();
             }
             else {
-                if ( fheroes2::cursor().isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
+                if ( fheroes2::Cursor::isFocusActive() && conf.ScrollSpeed() != SCROLL_SPEED_NONE ) {
                     int scrollDirection = SCROLL_NONE;
 
                     if ( isScrollLeft( le.getMouseCursorPos() ) ) {
@@ -1307,7 +1341,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
                     }
 
                     if ( scrollDirection != SCROLL_NONE && _gameArea.isFastScrollEnabled() ) {
-                        if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
+                        if ( Game::validateAnimationDelay( Game::DelayType::SCROLL_START_DELAY ) && fastScrollRepeatCount < fastScrollStartThreshold ) {
                             ++fastScrollRepeatCount;
                         }
 
@@ -1376,7 +1410,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
         }
 
         // Animation of the hero's movement
-        if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
@@ -1503,7 +1537,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
         // Scrolling the game area
         if ( !isHeroMoving ) {
-            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
+            if ( _gameArea.NeedScroll() && Game::validateAnimationDelay( Game::DelayType::SCROLL_DELAY ) ) {
                 assert( !_gameArea.isDragScroll() );
 
                 if ( isScrollLeft( le.getMouseCursorPos() ) || isScrollRight( le.getMouseCursorPos() ) || isScrollTop( le.getMouseCursorPos() )
@@ -1515,7 +1549,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
 
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
-            else if ( _gameArea.needDragScrollRedraw() ) {
+            else if ( _gameArea.needDragScrollRedraw() || _gameArea.updateInertia() ) {
                 setRedraw( REDRAW_GAMEAREA | REDRAW_RADAR_CURSOR );
             }
         }
@@ -1531,7 +1565,7 @@ fheroes2::GameMode Interface::AdventureMap::HumanTurn( const bool isLoadedFromSa
         }
 
         // Map objects animation
-        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
             Game::updateAdventureMapAnimationIndex();
 
             _gameArea.SetRedraw();

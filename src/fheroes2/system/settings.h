@@ -79,6 +79,13 @@ enum class SaveFileSortingMethod : uint8_t
     TIMESTAMP,
 };
 
+enum class BattleTurnOrderState : uint8_t
+{
+    OFF = 0,
+    TOP = 1,
+    BOTTOM = 2
+};
+
 class Settings
 {
 public:
@@ -95,7 +102,7 @@ public:
     bool Read( const std::string & filePath );
     bool Save( const std::string_view fileName ) const;
 
-    std::string String() const;
+    std::string getOptionsString() const;
 
     void setCurrentMapInfo( Maps::FileInfo fi );
 
@@ -127,6 +134,11 @@ public:
     int ScrollSpeed() const
     {
         return scroll_speed;
+    }
+
+    bool isMapSmoothScrollingEnabled() const
+    {
+        return _isMapSmoothScrollingEnabled;
     }
 
     int GameDifficulty() const
@@ -195,7 +207,6 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool BattleShowTurnOrder() const;
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
@@ -208,8 +219,10 @@ public:
     bool isScreenScalingTypeNearest() const;
     bool isEvilInterfaceEnabled() const;
     bool isBattleMovementAreaHighlightEnabled() const;
+    bool isBattleHitPointsBarEnabled() const;
+    bool isCursorSoftwareEmulationEnabled() const;
 
-    void setInterfaceType( InterfaceType type )
+    void setInterfaceType( const InterfaceType type )
     {
         _interfaceType = type;
     }
@@ -235,8 +248,6 @@ public:
     {
         return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
     }
-
-    bool isShowIntro() const;
 
     bool isVSyncEnabled() const;
 
@@ -276,13 +287,18 @@ public:
     // Sets the speed of AI-controlled heroes in the range 0 - 10, 0 means "don't show"
     void SetAIMoveSpeed( int );
     void SetScrollSpeed( int );
+
+    void setMapSmoothScrolling( const bool enable )
+    {
+        _isMapSmoothScrollingEnabled = enable;
+    }
+
     // Sets the speed of human-controlled heroes in the range 1 - 10
     void SetHeroesMoveSpeed( int );
     // Sets the animation speed during combat in the range 1 - 10
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
-    void setBattleShowTurnOrder( const bool enable );
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
@@ -295,6 +311,8 @@ public:
     void setNumericArmyEstimationView( const bool enable );
     void setScreenScalingTypeNearest( const bool enable );
     void setHighlightBattleMovementArea( const bool enable );
+    void setBattleHitPointsBar( const bool enable );
+    void setCursorSoftwareEmulation( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -372,10 +390,22 @@ public:
         return _viewWorldZoomLevel;
     }
 
-    void SetViewWorldZoomLevel( ZoomLevel zoomLevel )
+    void SetViewWorldZoomLevel( const ZoomLevel zoomLevel )
     {
         _viewWorldZoomLevel = zoomLevel;
     }
+
+    void setBattleTurnOrderState( const BattleTurnOrderState state )
+    {
+        _battleTurnOrderState = state;
+    }
+
+    BattleTurnOrderState getBattleTurnOrderState() const
+    {
+        return _battleTurnOrderState;
+    }
+
+    void switchToNextBattleTurnOrderState();
 
     SaveFileSortingMethod getSaveFileSortingMethod() const
     {
@@ -388,8 +418,6 @@ public:
     }
 
     void SetProgramPath( const char * path );
-
-    static std::string GetVersion();
 
     static const std::vector<std::string> & GetRootDirs();
 
@@ -438,6 +466,8 @@ private:
     int32_t game_type;
     ZoomLevel _viewWorldZoomLevel{ ZoomLevel::ZoomLevel1 };
     InterfaceType _interfaceType{ InterfaceType::GOOD };
+    BattleTurnOrderState _battleTurnOrderState{ BattleTurnOrderState::OFF };
+    bool _isMapSmoothScrollingEnabled{ false };
 
     fheroes2::Point pos_radr{ -1, -1 };
     fheroes2::Point pos_bttn{ -1, -1 };

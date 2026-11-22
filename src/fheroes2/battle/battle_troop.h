@@ -113,6 +113,11 @@ namespace Battle
         uint32_t GetSpeed() const override;
         int GetMorale() const override;
 
+        Unit * GetMirror() const
+        {
+            return _mirrorUnit;
+        }
+
         Unit * GetMirror()
         {
             return _mirrorUnit;

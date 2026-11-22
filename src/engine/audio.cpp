@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -624,7 +624,7 @@ void Audio::Init()
         return;
     }
 
-    if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
+    if ( !System::isComponentInitialized( System::SystemInitializationComponent::Audio ) ) {
         ERROR_LOG( "The audio subsystem was not initialized." )
         return;
     }
@@ -716,7 +716,7 @@ void Audio::Quit()
             return;
         }
 
-        if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
+        if ( !System::isComponentInitialized( System::SystemInitializationComponent::Audio ) ) {
             // Something wrong with the logic! The component must be initialized.
             assert( 0 );
             return;

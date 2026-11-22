@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -82,6 +82,8 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
+
+    bool hasNearbyObject( const int32_t center, const MP2::MapObjectType objectType );
 
     bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster

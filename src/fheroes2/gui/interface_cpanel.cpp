@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -25,7 +25,7 @@
 
 #include <cassert>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"
@@ -57,8 +57,8 @@ void Interface::ControlPanel::ResetTheme()
 {
     const int icn = Settings::Get().isEvilInterfaceEnabled() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
-                                 fheroes2::AGG::GetICN( icn, 8 ) ) );
+    _buttons = std::make_unique<Buttons>( Assets::getImage( icn, 4 ), Assets::getImage( icn, 0 ), Assets::getImage( icn, 12 ), Assets::getImage( icn, 10 ),
+                                          Assets::getImage( icn, 8 ) );
 }
 
 void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )

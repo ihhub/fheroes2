@@ -169,6 +169,8 @@ namespace Dialog
 
     void multiSelectMonsters( std::vector<int32_t> allowed, std::vector<int32_t> & selected );
 
+    void multiSelectArtifact( std::vector<int32_t> allowed, std::vector<int32_t> & selected );
+
     // These functions should be called only from the Editor as they rely on Maps::ObjectInfo structures that are not the same as in-game items.
     int selectHeroType( const int heroType );
 

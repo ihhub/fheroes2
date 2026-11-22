@@ -36,7 +36,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Install dependencies
       run: |
         script/windows/install_packages.bat
@@ -94,6 +94,7 @@ jobs:
                                .\\"$BUILD_DIR"\\fheroes2.exe \
                                .\\"$BUILD_DIR"\\*.dll \
                                LICENSE \
+                               LICENSE-ART \
                                changelog.txt \
                                .\\docs\\README.txt \
                                files\\data\\*.h2d \

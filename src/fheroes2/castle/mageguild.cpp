@@ -46,7 +46,7 @@ namespace
 
     Spell getGuaranteedDamageSpell()
     {
-        const uint32_t rand = Rand::Get( 0, 100 );
+        const uint32_t rand = Rand::Get( 0, 99 );
 
         if ( rand < 20 ) {
             return Spell::ARROW;
@@ -69,7 +69,7 @@ namespace
 
     Spell getGuaranteedCancellationSpell()
     {
-        const uint32_t rand = Rand::Get( 0, 100 );
+        const uint32_t rand = Rand::Get( 0, 99 );
 
         if ( rand < 25 ) {
             return Spell::DISPEL;

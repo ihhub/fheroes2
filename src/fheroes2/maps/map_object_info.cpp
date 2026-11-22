@@ -4584,7 +4584,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 62U, fheroes2::Point{ 0, 0 }, MP2::OBJ_GAZEBO, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 61U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 60U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 60U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_GAZEBO );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4596,7 +4596,7 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 68U, fheroes2::Point{ -1, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 67U, fheroes2::Point{ -2, 0 }, MP2::OBJ_NONE, Maps::SHADOW_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 66U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 66U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_WITCH_DOCTORS_HUT );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -4663,8 +4663,8 @@ namespace
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 88U, fheroes2::Point{ 0, 0 }, MP2::OBJ_TEMPLE, Maps::OBJECT_LAYER );
             object.groundLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 89U, fheroes2::Point{ 1, 0 }, MP2::OBJ_NON_ACTION_TEMPLE, Maps::OBJECT_LAYER );
 
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 87U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_FORT );
-            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 86U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_FORT );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 87U, fheroes2::Point{ 1, -1 }, MP2::OBJ_NON_ACTION_TEMPLE );
+            object.topLevelParts.emplace_back( MP2::OBJ_ICN_TYPE_OBJNMULT, 86U, fheroes2::Point{ 0, -1 }, MP2::OBJ_NON_ACTION_TEMPLE );
 
             objects.emplace_back( std::move( object ) );
         }
@@ -6156,24 +6156,45 @@ namespace
         }
 
         // Calculate the maximum possible dimensions of the area occupied by the parts of multi-tile action objects and verify them.
+        fheroes2::Size maxActionObjDim{ 1, 1 };
         fheroes2::Size maxObjDim{ 1, 1 };
 
         for ( const auto & objects : objectData ) {
             for ( const auto & objectInfo : objects ) {
-                if ( !MP2::isOffGameActionObject( objectInfo.objectType ) ) {
-                    continue;
+                if ( MP2::isOffGameActionObject( objectInfo.objectType ) ) {
+                    fheroes2::Point minOffset;
+                    fheroes2::Point maxOffset;
+
+                    for ( const auto & info : objectInfo.groundLevelParts ) {
+                        if ( info.objectType == objectInfo.objectType ) {
+                            minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                            minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                            maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                            maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
+                        }
+                    }
+
+                    const fheroes2::Size objDim{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
+
+                    maxActionObjDim.width = std::max( maxActionObjDim.width, objDim.width );
+                    maxActionObjDim.height = std::max( maxActionObjDim.height, objDim.height );
                 }
 
                 fheroes2::Point minOffset;
                 fheroes2::Point maxOffset;
 
                 for ( const auto & info : objectInfo.groundLevelParts ) {
-                    if ( info.objectType == objectInfo.objectType ) {
-                        minOffset.x = std::min( minOffset.x, info.tileOffset.x );
-                        minOffset.y = std::min( minOffset.y, info.tileOffset.y );
-                        maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
-                        maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
-                    }
+                    minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                    minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                    maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                    maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
+                }
+
+                for ( const auto & info : objectInfo.topLevelParts ) {
+                    minOffset.x = std::min( minOffset.x, info.tileOffset.x );
+                    minOffset.y = std::min( minOffset.y, info.tileOffset.y );
+                    maxOffset.x = std::max( maxOffset.x, info.tileOffset.x );
+                    maxOffset.y = std::max( maxOffset.y, info.tileOffset.y );
                 }
 
                 const fheroes2::Size objDim{ maxOffset.x - minOffset.x + 1, maxOffset.y - minOffset.y + 1 };
@@ -6185,7 +6206,8 @@ namespace
 
         // If this assertion blows up then some in-game logic might break. If a new object of a non-standard
         // size has been added, consider updating the maximum action object dimensions.
-        assert( maxObjDim == Maps::maxActionObjectDimensions );
+        assert( maxActionObjDim == Maps::maxActionGroundObjectDimensions );
+        assert( maxObjDim == Maps::maxObjectDimensions );
 #endif
 
         isPopulated = true;

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -137,11 +137,11 @@ namespace Dialog
     // Displays a dialog box informing that an artifact set has been assembled
     void ArtifactSetAssembled( const ArtifactSetData & artifactSetData );
 
-    class NonFixedFrameBox
+    class ResizableFrameBox
     {
     public:
-        explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
-        virtual ~NonFixedFrameBox();
+        explicit ResizableFrameBox( int width, int height, int startYPos, const bool showButtons );
+        virtual ~ResizableFrameBox();
 
         const fheroes2::Rect & GetArea() const
         {
@@ -162,11 +162,11 @@ namespace Dialog
         int32_t _middleFragmentHeight;
     };
 
-    class FrameBox : public NonFixedFrameBox
+    class FrameBox final : public ResizableFrameBox
     {
     public:
         explicit FrameBox( int height, bool buttons = false )
-            : Dialog::NonFixedFrameBox( height, -1, buttons )
+            : Dialog::ResizableFrameBox( fheroes2::boxAreaWidthPx, height, -1, buttons )
         {
             // Do nothing.
         }

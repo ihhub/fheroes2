@@ -32,10 +32,10 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "game_string.h"
@@ -142,11 +142,11 @@ namespace
         fileNameText.draw( posX + 44, posY + 2, display );
 
         const uint32_t racesCountIcnIndex = static_cast<uint32_t>( Color::Count( info.kingdomColors ) + 19 );
-        const fheroes2::Sprite & racesCount = fheroes2::AGG::GetICN( ICN::REQUESTS, racesCountIcnIndex );
+        const fheroes2::Sprite & racesCount = Assets::getImage( ICN::REQUESTS, racesCountIcnIndex );
         fheroes2::Copy( racesCount, 0, 0, display, posX + 6, posY, racesCount.width(), racesCount.height() );
 
         const uint32_t mapSizeIcnIndex = static_cast<uint32_t>( info.width / Maps::SMALL + 25 );
-        const fheroes2::Sprite & mapSize = fheroes2::AGG::GetICN( ICN::REQUESTS, mapSizeIcnIndex );
+        const fheroes2::Sprite & mapSize = Assets::getImage( ICN::REQUESTS, mapSizeIcnIndex );
         fheroes2::Copy( mapSize, 0, 0, display, posX + 25, posY, mapSize.width(), mapSize.height() );
     }
 
@@ -182,7 +182,7 @@ namespace Editor
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        MapsFileInfoList lists = Maps::getResurrectionMapFileInfos( true, 0 );
+        MapsFileInfoList lists = Maps::getEditorMapFileInfos();
 
         const int32_t listWidth = maxFileNameWidth + 9;
         const int32_t listHeightDeduction = 112 + 17;
@@ -256,7 +256,7 @@ namespace Editor
         listbox.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, listRoi.y + 1 } );
         listbox.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, listRoi.y + listRoi.height - 15 } );
         listbox.setScrollBarArea( { scrollbarOffsetX + 2, listRoi.y + topPartHeight, 10, listRoi.height - 2 * topPartHeight } );
-        listbox.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        listbox.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         listbox.SetAreaMaxItems( listItems );
         listbox.SetListContent( lists );
         listbox.updateScrollBarImage();
@@ -335,7 +335,7 @@ namespace Editor
                 {
                     // TODO: allow to use other languages once we add support of filesystem language support.
                     const fheroes2::LanguageSwitcher switcher( fheroes2::SupportedLanguage::English );
-                    fheroes2::openVirtualKeyboard( fileName, maxFileNameLength );
+                    fheroes2::openVirtualKeyboard( fileName, maxFileNameLength, false );
                 }
 
                 charInsertPos = fileName.size();
@@ -362,7 +362,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( mapNameRoi ) ) {
                 std::string editableMapName = mapName;
-                const fheroes2::Text body{ _( "Change Map Name" ), fheroes2::FontType::normalWhite() };
+                const fheroes2::Text body{ _( "Change Map Name:" ), fheroes2::FontType::normalWhite() };
                 if ( Dialog::inputString( fheroes2::Text{}, body, editableMapName, maxMapNameLength, false, language ) ) {
                     if ( editableMapName.empty() ) {
                         // Map should have a non empty name.
@@ -380,7 +380,7 @@ namespace Editor
                     continue;
                 }
             }
-            else if ( isListboxSelected && le.isKeyPressed( fheroes2::Key::KEY_DELETE ) ) {
+            else if ( isListboxSelected && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_DELETE ) ) {
                 listbox.SetCurrent( listId );
                 listbox.Redraw();
 

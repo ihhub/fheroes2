@@ -8,13 +8,13 @@ plugins {
 android {
     namespace 'org.fheroes2'
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId 'org.fheroes2'
 
         minSdk 22
-        targetSdk 35
+        targetSdk 36
 
         // These paths are set relative to the android project directory
         versionCode((new File('../version_code.txt')).getText('UTF-8').trim().toInteger())
@@ -91,6 +91,8 @@ dependencies {
     implementation project(':sdl2')
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
+
+    implementation 'org.tukaani:xz:1.10'
 
     implementation 'com.google.android.material:material:1.13.0'
 }

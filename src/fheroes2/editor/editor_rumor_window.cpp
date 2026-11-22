@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,9 +28,9 @@
 #include <optional>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -148,7 +148,7 @@ namespace Editor
 
         int32_t offsetY = windowArea.y + elementOffset;
 
-        const fheroes2::Text title( _( "Rumors" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( _( "Rumors:" ), fheroes2::FontType::normalYellow() );
         title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -173,7 +173,7 @@ namespace Editor
         rumorList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, rumorsRoi.y + 1 } );
         rumorList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, rumorsRoi.y + rumorsRoi.height - 15 } );
         rumorList.setScrollBarArea( { scrollbarOffsetX + 2, rumorsRoi.y + topPartHeight, 10, rumorsRoi.height - 2 * topPartHeight } );
-        rumorList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        rumorList.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         rumorList.SetAreaMaxItems( 10 );
         rumorList.SetListContent( rumors );
         rumorList.updateScrollBarImage();
@@ -182,7 +182,7 @@ namespace Editor
 
         const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
+        const fheroes2::Sprite & buttonImage = Assets::getImage( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( rumorArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 

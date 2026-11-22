@@ -29,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
 #include "game.h"
+#include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_io.h"
@@ -135,6 +136,7 @@ namespace
             else if ( le.MouseClickLeft( saveGameButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::WORLD_SAVE_GAME ) ) {
                 // Special case: since we show a window about file saving we don't want to display the current dialog anymore.
                 background.hideWindow();
+                display.updateNextRenderRoi( background.totalArea() );
 
                 return Interface::AdventureMap::Get().EventSaveGame();
             }
@@ -147,8 +149,8 @@ namespace
                 break;
             }
 
-            if ( le.MouseClickLeft( quitButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_QUIT ) ) {
-                if ( Interface::AdventureMap::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+            if ( le.MouseClickLeft( quitButton.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::GLOBAL_APP_QUIT ) ) {
+                if ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ) {
                     result = fheroes2::GameMode::QUIT_GAME;
                     break;
                 }

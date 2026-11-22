@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,10 +28,10 @@
 #include <string>
 #include <utility>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "editor_daily_event_spec_window.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "icn.h"
 #include "image.h"
@@ -169,7 +169,7 @@ namespace Editor
 
         int32_t offsetY = windowArea.y + elementOffset;
 
-        const fheroes2::Text title( _( "Daily Events" ), fheroes2::FontType::normalYellow() );
+        const fheroes2::Text title( _( "Daily events:" ), fheroes2::FontType::normalYellow() );
         title.draw( windowArea.x + ( windowArea.width - title.width() ) / 2, offsetY, display );
 
         offsetY += title.height() + elementOffset;
@@ -194,7 +194,7 @@ namespace Editor
         eventList.SetScrollButtonUp( listIcnId, 0, 1, { scrollbarOffsetX, eventsRoi.y + 1 } );
         eventList.SetScrollButtonDn( listIcnId, 2, 3, { scrollbarOffsetX, eventsRoi.y + eventsRoi.height - 15 } );
         eventList.setScrollBarArea( { scrollbarOffsetX + 2, eventsRoi.y + topPartHeight, 10, eventsRoi.height - 2 * topPartHeight } );
-        eventList.setScrollBarImage( fheroes2::AGG::GetICN( listIcnId, 4 ) );
+        eventList.setScrollBarImage( Assets::getImage( listIcnId, 4 ) );
         eventList.SetAreaMaxItems( 10 );
         eventList.SetListContent( dailyEvents );
         eventList.updateScrollBarImage();
@@ -203,7 +203,7 @@ namespace Editor
 
         const int minibuttonIcnId = isEvilInterface ? ICN::CELLWIN_EVIL : ICN::CELLWIN;
 
-        const fheroes2::Sprite & buttonImage = fheroes2::AGG::GetICN( minibuttonIcnId, 13 );
+        const fheroes2::Sprite & buttonImage = Assets::getImage( minibuttonIcnId, 13 );
         const int32_t buttonWidth = buttonImage.width();
         const int32_t buttonOffset = ( eventsArea.width - 3 * buttonWidth ) / 2 + buttonWidth;
 

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,22 +39,20 @@
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
+#include "maps_tiles_helper.h"
+#include "mp2.h"
 #include "payment.h"
 #include "players.h"
 #include "puzzle.h"
 #include "resource.h"
 #include "resource_trading.h"
 #include "world.h"
-
-namespace MP2
-{
-    enum MapObjectType : uint16_t;
-}
 
 bool AI::BuildIfPossible( Castle & castle, const BuildingType building )
 {
@@ -435,4 +433,93 @@ bool AI::isUltimateArtifactAvailableToHero( const UltimateArtifact & art, const 
     const int32_t idx = art.getPosition();
 
     return Maps::isValidAbsIndex( idx ) && world.getTile( idx ).isSuitableForUltimateArtifact();
+}
+
+bool AI::isValuableAdventureMapObject( const Kingdom & kingdom, const MP2::MapObjectType objectType, const int32_t tileIndex )
+{
+    if ( !MP2::isInGameActionObject( objectType ) ) {
+        // Only action objects have any value.
+        return false;
+    }
+
+    switch ( objectType ) {
+    case MP2::OBJ_CASTLE: {
+        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( tileIndex ) );
+        if ( castle == nullptr ) {
+            // How is it possible that a castle does not exist?
+            assert( 0 );
+            return false;
+        }
+
+        if ( kingdom.GetColor() == castle->GetColor() ) {
+            return true;
+        }
+
+        // We can interact only with enemy castles.
+        return !Players::isFriends( kingdom.GetColor(), static_cast<PlayerColorsSet>( castle->GetColor() ) );
+    }
+    case MP2::OBJ_HERO: {
+        const Heroes * otherHero = world.getTile( tileIndex ).getHero();
+        if ( otherHero == nullptr ) {
+            // It could happen when adding new heroes at the start of game.
+            return false;
+        }
+
+        if ( kingdom.GetColor() == otherHero->GetColor() ) {
+            return true;
+        }
+
+        // We can interact only with enemy heroes.
+        return !Players::isFriends( kingdom.GetColor(), static_cast<PlayerColorsSet>( otherHero->GetColor() ) );
+    }
+    case MP2::OBJ_MAGELLANS_MAPS:
+        // Magellan's Maps object should be visited only once.
+        return !kingdom.isVisited( objectType );
+    case MP2::OBJ_ALCHEMIST_LAB:
+    case MP2::OBJ_LIGHTHOUSE:
+    case MP2::OBJ_MINE:
+    case MP2::OBJ_SAWMILL:
+        // Heroes cannot re-capture their own or ally's objects.
+        return !Players::isFriends( kingdom.GetColor(), static_cast<PlayerColorsSet>( Maps::getColorFromTile( world.getTile( tileIndex ) ) ) );
+    case MP2::OBJ_DAEMON_CAVE:
+    case MP2::OBJ_LEAN_TO:
+    case MP2::OBJ_SKELETON:
+    case MP2::OBJ_WAGON:
+        // Single visit objects with no resources have no value.
+        return Maps::doesTileContainValuableItems( world.getTile( tileIndex ) );
+    case MP2::OBJ_OBSERVATION_TOWER: {
+        // If Observation Tower uncovers nothing, then we skip it.
+        const int32_t fogCountToUncoverByTower
+            = Maps::getFogTileCountToBeRevealed( tileIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), kingdom.GetColor() );
+
+        return fogCountToUncoverByTower > 0;
+    }
+    case MP2::OBJ_OBELISK:
+        // An obelisk should be visited only once.
+        return !kingdom.isVisited( tileIndex, objectType );
+    case MP2::OBJ_TRAVELLER_TENT:
+        // Traveller's Tent should be visited only once.
+        return !kingdom.isTravellerTentVisited( Maps::getBarrierColorFromTile( world.getTile( tileIndex ) ) );
+    case MP2::OBJ_DERELICT_SHIP:
+    case MP2::OBJ_GRAVEYARD:
+    case MP2::OBJ_PYRAMID:
+    case MP2::OBJ_SHIPWRECK:
+        // Single visit objects with no resources have no value.
+        return !kingdom.isVisited( tileIndex, objectType ) && Maps::doesTileContainValuableItems( world.getTile( tileIndex ) );
+    case MP2::OBJ_HUT_OF_MAGI:
+        // A Hut of Magi should uncover all areas at once so visiting any other similar object makes no sense.
+        return !kingdom.isVisited( objectType ) && Maps::doesObjectExistOnMap( MP2::OBJ_EYE_OF_MAGI );
+    case MP2::OBJ_BOAT:
+    case MP2::OBJ_EYE_OF_MAGI:
+    case MP2::OBJ_ORACLE:
+    case MP2::OBJ_SIGN:
+    case MP2::OBJ_STONE_LITHS:
+    case MP2::OBJ_WHIRLPOOL:
+        // These objects aren't considered valuable.
+        return false;
+    default:
+        break;
+    }
+
+    return true;
 }

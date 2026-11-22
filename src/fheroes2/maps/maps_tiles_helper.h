@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2023 - 2025                                             *
+ *   Copyright (C) 2023 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -150,9 +150,11 @@ namespace Maps
 
     void updateDwellingPopulationOnTile( Tile & tile, const bool isFirstLoad );
 
-    void updateObjectInfoTile( Tile & tile, const bool isFirstLoad );
+    void setInitialObjectInfo( Tile & tile );
 
-    void updateMonsterInfoOnTile( Tile & tile );
+    void updateObjectInfoTile( Tile & tile );
+
+    void updateMonstersOnTile( Tile & tile, const uint32_t monsterLimit );
 
     void setMonsterOnTile( Tile & tile, const Monster & mons, const uint32_t count );
 

@@ -23,5 +23,5 @@
 namespace Battle
 {
     // Returns true if configuration file requires saving.
-    bool showBattleInterfaceDialog();
+    bool showBattleInterfaceDialog( const bool isTurnOrderInsideWindow );
 }

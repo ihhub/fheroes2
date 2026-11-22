@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"
@@ -34,6 +33,7 @@
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "editor_interface.h"
+#include "game_assets.h"
 #include "game_hotkeys.h"
 #include "game_language.h"
 #include "icn.h"
@@ -93,20 +93,20 @@ namespace
     void drawAnimationOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorAnimationEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 1 ), _( "Animation" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::ESPANEL, 1 ), _( "Animation" ), _( "On" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 0 ), _( "Animation" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::ESPANEL, 0 ), _( "Animation" ), _( "Off" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
     void drawPassabilityOptions( const fheroes2::Rect & optionRoi )
     {
         if ( Settings::Get().isEditorPassabilityEnabled() ) {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 5 ), _( "Passability" ), _( "Show" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::ESPANEL, 5 ), _( "Passability" ), _( "Show" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
         else {
-            fheroes2::drawOption( optionRoi, fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ), _( "Passability" ), _( "Hide" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
+            fheroes2::drawOption( optionRoi, Assets::getImage( ICN::ESPANEL, 4 ), _( "Passability" ), _( "Hide" ), fheroes2::UiOptionTextWidth::THREE_ELEMENTS_ROW );
         }
     }
 
@@ -271,7 +271,14 @@ namespace Editor
                 const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
-                    selectLanguage( supportedLanguages, fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ), true );
+                    const fheroes2::SupportedLanguage languageBefore = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+                    const fheroes2::SupportedLanguage languageAfter = selectLanguage( supportedLanguages, languageBefore, true );
+
+                    if ( languageAfter != languageBefore ) {
+                        Interface::EditorInterface::Get().clearWarningMessage();
+                        redrawEditor();
+                        saveConfiguration = true;
+                    }
                 }
                 else {
                     assert( supportedLanguages.front() == fheroes2::SupportedLanguage::English );
@@ -282,8 +289,6 @@ namespace Editor
                                                        Dialog::OK );
                 }
 
-                redrawEditor();
-                saveConfiguration = true;
                 action = DialogAction::Configuration;
                 break;
             }

@@ -1,6 +1,6 @@
 ###########################################################################
 #   fheroes2: https://github.com/ihhub/fheroes2                           #
-#   Copyright (C) 2021 - 2023                                             #
+#   Copyright (C) 2021 - 2026                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -26,7 +26,7 @@ try {
             [string]$Path
         )
 
-        if ((Test-Path -Path "$Path\DATA\HEROES2.AGG" -PathType Leaf) -And
+        if ((Test-Path -Path "$Path\DATA\HEROES2.AGG" -PathType Leaf) -and
             (Test-Path -Path "$Path\MAPS" -PathType Container)) {
             return $true
         }
@@ -48,14 +48,14 @@ try {
     }
 
     try {
-        if ($null -Eq $destPath) {
+        if ($null -eq $destPath) {
             throw
         }
 
         while ($true) {
             $randName = [System.IO.Path]::GetRandomFileName()
 
-            if (-Not (Test-Path -Path "$destPath\$randName")) {
+            if (-not (Test-Path -Path "$destPath\$randName")) {
                 [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
                 Remove-Item -Path "$destPath\$randName"
 
@@ -63,7 +63,7 @@ try {
             }
         }
     } catch {
-        if ($null -Eq $Env:APPDATA) {
+        if ($null -eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
@@ -71,12 +71,12 @@ try {
 
         $destPath = "$Env:APPDATA\fheroes2"
 
-        if (-Not (Test-Path -Path $destPath -PathType Container)) {
+        if (-not (Test-Path -Path $destPath -PathType Container)) {
             [void](New-Item -Path $destPath -ItemType "directory")
         }
     }
 
-    Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
+    Write-Host -ForegroundColor Green (-join("Destination directory: ", (Resolve-Path $destPath).Path))
 
     Write-Host "[2/3] determining the HoMM2 directory"
 
@@ -91,19 +91,19 @@ try {
                        # Legacy HoMM2 installation
                        "HKEY_LOCAL_MACHINE\SOFTWARE\New World Computing\Heroes of Might and Magic 2",
                        "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\New World Computing\Heroes of Might and Magic 2")) {
-        if (-Not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
+        if (-not (Test-Path -Path "Microsoft.PowerShell.Core\Registry::$key" -PathType Container)) {
             continue
         }
 
         foreach ($subkey in (Get-ChildItem -Path "Microsoft.PowerShell.Core\Registry::$key")) {
             $path = $subkey.GetValue("InstallLocation")
 
-            if ($null -Eq $path) {
+            if ($null -eq $path) {
                 # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
             	$path = $subkey.GetValue("AppPath")
             }
 
-            if ($null -Ne $path) {
+            if ($null -ne $path) {
                 $path = $path.TrimEnd("\")
 
                 if (Test-HoMM2DirectoryPath -Path $path) {
@@ -112,7 +112,7 @@ try {
                     # From HKLM\SOFTWARE\New World Computing\Heroes of Might and Magic 2
                     $cdDrive = $subkey.GetValue("CDDrive")
 
-                    if ($null -Ne $cdDrive) {
+                    if ($null -ne $cdDrive) {
                         # If CDDrive is not a regular disk name (e.g. F:), then it is some path (absolute or relative), we need to try to resolve it
                         if ($cdDrive -notmatch '^[A-Za-z]:$') {
                             $currentPath = (Get-Location).Path
@@ -126,7 +126,7 @@ try {
 
                                 # If CDDrive eventually resolves to the HoMM2 installation directory, then ignore it, because there is no need to copy
                                 # the same files twice
-                                if ((Resolve-Path $homm2Path).Path -Eq $cdDrive) {
+                                if ((Resolve-Path $homm2Path).Path -eq $cdDrive) {
                                     throw
                                 }
                             } catch {
@@ -136,7 +136,7 @@ try {
                             }
                         }
 
-                        if ($null -Ne $cdDrive) {
+                        if ($null -ne $cdDrive) {
                             $homm2CD = $cdDrive.TrimEnd("\")
                         }
                     }
@@ -147,21 +147,21 @@ try {
         }
     }
 
-    if ($null -Eq $homm2Path) {
+    if ($null -eq $homm2Path) {
         Write-Host -ForegroundColor Yellow "WARNING: Unable to determine the HoMM2 directory"
 
         $homm2Path = Read-Host -Prompt "Please enter the full path to the HoMM2 directory (e.g. C:\GOG Games\HoMM 2 Gold)"
 
-        if (-Not (Test-HoMM2DirectoryPath -Path $homm2Path)) {
+        if (-not (Test-HoMM2DirectoryPath -Path $homm2Path)) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to find the HoMM2 directory"
 
             return
         }
     }
 
-    Write-Host -ForegroundColor Green (-Join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
+    Write-Host -ForegroundColor Green (-join("HoMM2 directory: ", (Resolve-Path $homm2Path).Path))
 
-    if ($null -Ne $homm2CD) {
+    if ($null -ne $homm2CD) {
         Write-Host -ForegroundColor Green "HoMM2 CD drive: $homm2CD"
     }
 
@@ -170,27 +170,27 @@ try {
     $shell = New-Object -ComObject "Shell.Application"
 
     foreach ($homm2Dir in @($homm2Path, $homm2CD)) {
-        if ($null -Eq $homm2Dir) {
+        if ($null -eq $homm2Dir) {
             continue
         }
 
-        if (-Not (Test-Path -Path "$homm2Dir\" -PathType Container)) {
+        if (-not (Test-Path -Path "$homm2Dir\" -PathType Container)) {
             continue
         }
 
         # fheroes2 can be installed to the HoMM2 directory, there is no need to copy files in this case
-        if ((Resolve-Path $homm2Dir).Path -Eq (Resolve-Path $destPath).Path) {
+        if ((Resolve-Path $homm2Dir).Path -eq (Resolve-Path $destPath).Path) {
             continue
         }
 
         foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
-            if (-Not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
+            if (-not (Test-Path -Path "$homm2Dir\$srcDir" -PathType Container)) {
                 continue
             }
 
             $destDir = (Split-Path $srcDir -Leaf).ToLower()
 
-            if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
+            if (-not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
                 [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
             }
 
@@ -205,11 +205,11 @@ try {
     # Special case - CD image from GOG
     if (Test-Path -Path "$homm2Path\homm2.gog" -PathType Leaf) {
         foreach ($dosboxExe in @("DOSBox.exe", "DOSBOX\DOSBox.exe")) {
-            if (-Not (Test-Path -Path "$homm2Path\$dosboxExe" -PathType Leaf)) {
+            if (-not (Test-Path -Path "$homm2Path\$dosboxExe" -PathType Leaf)) {
                 continue
             }
 
-            if (-Not (Test-Path -Path "$destPath\anim" -PathType Container)) {
+            if (-not (Test-Path -Path "$destPath\anim" -PathType Container)) {
                 [void](New-Item -Path "$destPath\anim" -ItemType "directory")
             }
 
@@ -225,7 +225,7 @@ try {
         }
     }
 } catch {
-    Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
+    Write-Host -ForegroundColor Red (-join("FATAL ERROR: ", ($_ | Out-String)))
 } finally {
     Write-Host "Press any key to exit..."
 

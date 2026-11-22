@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2024                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -90,7 +90,7 @@ bool TinyConfig::Load( const std::string & cfile )
             continue;
         }
 
-        size_t pos = str.find( separator );
+        const size_t pos = str.find( separator );
         if ( pos == std::string::npos ) {
             continue;
         }
@@ -108,7 +108,7 @@ bool TinyConfig::Load( const std::string & cfile )
 
 int TinyConfig::IntParams( const std::string & key ) const
 {
-    const_iterator it = find( ModifyKey( key ) );
+    const auto it = find( ModifyKey( key ) );
     if ( it == end() ) {
         return 0;
     }
@@ -124,13 +124,13 @@ int TinyConfig::IntParams( const std::string & key ) const
 
 std::string TinyConfig::StrParams( const std::string & key ) const
 {
-    const_iterator it = find( ModifyKey( key ) );
+    const auto it = find( ModifyKey( key ) );
     return it != end() ? it->second : "";
 }
 
 fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2::Point & fallbackValue ) const
 {
-    const const_iterator it = find( ModifyKey( key ) );
+    const auto it = find( ModifyKey( key ) );
     if ( it == end() ) {
         return fallbackValue;
     }
@@ -162,7 +162,7 @@ fheroes2::Point TinyConfig::PointParams( const std::string & key, const fheroes2
 
 fheroes2::ResolutionInfo TinyConfig::ResolutionParams( const std::string & key, const fheroes2::ResolutionInfo & fallbackValue ) const
 {
-    const const_iterator it = find( ModifyKey( key ) );
+    const auto it = find( ModifyKey( key ) );
     if ( it == end() ) {
         return fallbackValue;
     }

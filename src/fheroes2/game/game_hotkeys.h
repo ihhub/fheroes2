@@ -32,6 +32,8 @@ namespace fheroes2
 
 namespace Game
 {
+    constexpr const char * hotkeyFileName{ "fheroes2.key" };
+
     enum class HotKeyEvent : int32_t
     {
         NONE,
@@ -42,6 +44,7 @@ namespace Game
         DEFAULT_RIGHT,
         DEFAULT_UP,
         DEFAULT_DOWN,
+        DEFAULT_DELETE,
 
         GLOBAL_TOGGLE_FULLSCREEN,
         GLOBAL_TOGGLE_TEXT_SUPPORT_MODE,
@@ -51,6 +54,8 @@ namespace Game
         GLOBAL_TOGGLE_DEVELOPER_MODE,
 #endif
 
+        GLOBAL_APP_QUIT,
+
         MAIN_MENU_NEW_GAME,
         MAIN_MENU_LOAD_GAME,
         MAIN_MENU_HIGHSCORES,
@@ -59,7 +64,6 @@ namespace Game
         MAIN_MENU_CAMPAIGN,
         MAIN_MENU_MULTI,
         MAIN_MENU_SETTINGS,
-        MAIN_MENU_QUIT,
         MAIN_MENU_SELECT_MAP,
         MAIN_MENU_MAP_SIZE_SMALL,
         MAIN_MENU_MAP_SIZE_MEDIUM,
@@ -80,6 +84,7 @@ namespace Game
         EDITOR_REDO_LAST_ACTION,
         EDITOR_TO_GAME_MAIN_MENU,
         EDITOR_TOGGLE_PASSABILITY,
+        EDITOR_AUTO_PLAYTEST,
 
 #if defined( WITH_DEBUG )
         // These hotkeys are temporary and going to be removed once random map generator is good enough.
@@ -173,6 +178,8 @@ namespace Game
         // Also used to build a castle in the town.
         TOWN_CONSTRUCTION,
         TOWN_WELL_BUY_ALL,
+        TOWN_MERGE_TROOPS_WITH_HERO,
+        TOWN_MERGE_TROOPS_WITH_GARRISON,
 
         ARMY_SPLIT_STACK_BY_HALF,
         ARMY_SPLIT_STACK_BY_ONE,
@@ -221,5 +228,6 @@ namespace Game
 
     void HotKeySave();
 
+    // The returned string is not translated.
     const char * getHotKeyCategoryName( const HotKeyCategory category );
 }

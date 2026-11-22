@@ -34,6 +34,8 @@
 #include "army.h"
 #include "color.h"
 #include "direction.h"
+#include "game.h"
+#include "game_auto_playtest.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -43,6 +45,7 @@
 #include "players.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "translations.h"
 #include "world.h"
 
@@ -468,7 +471,8 @@ void Maps::ClearFog( const int32_t tileIndex, const int32_t scoutingDistance, co
     const Kingdom & kingdom = world.GetKingdom( playerColor );
 
     const bool isAIPlayer = kingdom.isControlAI();
-    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() );
+    const bool isHumanOrHumanFriend = !isAIPlayer || Players::isFriends( playerColor, Players::HumanColors() )
+                                      || ( Settings::Get().IsGameType( Game::TYPE_AUTO_PLAYTEST ) && fheroes2::AutoPlaytest::instance().isAnimationEnabled() );
 
     const fheroes2::Point center = Maps::GetPoint( tileIndex );
     const int32_t squaredScoutingRadiusLimit = getSquaredScoutingRadiusLimit( scoutingDistance );
@@ -565,8 +569,14 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int32_
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
-    Indexes results = getAroundIndexes( center );
+    const Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType, ignoreHeroes );
+}
+
+bool Maps::hasNearbyObject( const int32_t center, const MP2::MapObjectType objectType )
+{
+    const Indexes results = getAroundIndexes( center );
+    return std::any_of( results.cbegin(), results.cend(), [objectType]( const int32_t index ) { return world.getTile( index ).getMainObjectType() == objectType; } );
 }
 
 bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
@@ -577,7 +587,7 @@ bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
-    Indexes results = getAroundIndexes( center );
+    const Indexes results = getAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType );
 }
 

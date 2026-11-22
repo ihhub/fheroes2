@@ -46,6 +46,7 @@
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
+#include "game_auto_playtest.h"
 #include "game_delays.h"
 #include "game_interface.h"
 #include "game_mode.h"
@@ -332,6 +333,9 @@ namespace
         if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
+        }
+        else {
+            hero.setAlphaValue( 255 );
         }
 
         AI::Planner::Get().HeroesActionComplete( hero, targetIndex, hero.getObjectTypeUnderHero() );
@@ -1013,6 +1017,9 @@ namespace
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
         }
+        else {
+            hero.setAlphaValue( 255 );
+        }
 
         hero.ActionNewPosition( false );
     }
@@ -1080,6 +1087,9 @@ namespace
         if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
             Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
+        }
+        else {
+            hero.setAlphaValue( 255 );
         }
 
         hero.ActionNewPosition( false );
@@ -1706,7 +1716,7 @@ namespace
         Maps::Tile & tile = world.getTile( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
 
-        if ( kingdom.IsVisitTravelersTent( getBarrierColorFromTile( tile ) ) ) {
+        if ( kingdom.isTravellerTentVisited( getBarrierColorFromTile( tile ) ) ) {
             removeMainObjectFromTile( tile );
             resetObjectMetadata( tile );
         }
@@ -1719,7 +1729,7 @@ namespace
         const Maps::Tile & tile = world.getTile( dst_index );
         Kingdom & kingdom = hero.GetKingdom();
 
-        kingdom.SetVisitTravelersTent( getBarrierColorFromTile( tile ) );
+        kingdom.markTravellerTentVisited( getBarrierColorFromTile( tile ) );
     }
 
     void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
@@ -1813,6 +1823,7 @@ namespace
         hero.Move2Dest( dst_index );
         hero.ResetMovePoints();
         hero.GetPath().Reset();
+        hero.setAlphaValue( 255 );
 
         // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
         hero.setDirection( boatDirection );
@@ -1931,6 +1942,10 @@ namespace
         if ( hero.isObjectTypeVisited( objectType ) ) {
             return;
         }
+
+        // A hero might have stepped on the object by accident.
+        // We need to minimize the damage being made by this object.
+        // TODO: add logic to avoid extensive army loss.
 
         const uint32_t experience = hero.GetArmy().ActionToSirens();
 
@@ -2255,6 +2270,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     Interface::GameArea & gameArea = adventureMapInterface.getGameArea();
 
     const Settings & conf = Settings::Get();
+    const bool isAutoPlaytest{ conf.IsGameType( Game::TYPE_AUTO_PLAYTEST ) };
 
     const PlayerColorsSet colors = AIGetAllianceColors();
     bool recenterNeeded = true;
@@ -2266,12 +2282,16 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
     const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
     const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-    const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY, Game::MAPS_DELAY };
+    const std::vector<Game::DelayType> delayTypes = { Game::DelayType::CURRENT_AI_DELAY, Game::DelayType::MAPS_DELAY };
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+        if ( isAutoPlaytest && le.isMouseLeftButtonPressed() ) {
+            fheroes2::interruptAutoPlaytest();
+        }
+
         if ( !hero.isActive() || !hero.isMoveEnabled() ) {
             break;
         }
@@ -2297,7 +2317,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
             }
 
             // Render a frame only if there is a need to show one.
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
 
@@ -2309,7 +2329,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
                 display.render();
             }
         }
-        else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
+        else if ( Game::validateAnimationDelay( Game::DelayType::CURRENT_AI_DELAY ) ) {
             // re-center in case hero appears from the fog
             if ( recenterNeeded ) {
                 gameArea.SetCenter( hero.GetCenter() );
@@ -2379,7 +2399,7 @@ fheroes2::GameMode AI::HeroesMove( Heroes & hero )
                 }
             }
 
-            if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::DelayType::MAPS_DELAY ) ) {
                 // Update Adventure Map objects' animation.
                 Game::updateAdventureMapAnimationIndex();
 
@@ -2428,6 +2448,9 @@ void AI::HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     if ( AIIsShowAnimationForHero( hero, allianceColors ) ) {
         Interface::AdventureMap::Get().getGameArea().SetCenter( hero.GetCenter() );
         hero.FadeIn( Game::AIHeroAnimSpeedMultiplier() );
+    }
+    else {
+        hero.setAlphaValue( 255 );
     }
 
     hero.ActionNewPosition( false );

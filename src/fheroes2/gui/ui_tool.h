@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,7 +173,7 @@ namespace fheroes2
 
         size_t getCursorInTextPosition( const Point & pos ) const
         {
-            return _text.getCursorPosition( pos, _textInputArea, _isSingleLineTextCenterAligned );
+            return _text.getCursorPosition( { pos.x, pos.y + _verticalTextOffset }, _textInputArea, _isSingleLineTextCenterAligned );
         }
 
         size_t getCursorPositionInAdjacentLine( const size_t currentPos, const bool moveUp )
@@ -194,6 +194,8 @@ namespace fheroes2
         MovableSprite _cursor;
         ImageRestorer _background;
         Rect _textInputArea;
+        int32_t _verticalTextOffset{ 0 };
+        bool _isMultiLineText{ false };
         bool _isSingleLineTextCenterAligned{ false };
     };
 
@@ -268,7 +270,21 @@ namespace fheroes2
 
         ScreenPaletteRestorer & operator=( const ScreenPaletteRestorer & ) = delete;
 
-        void changePalette( const uint8_t * palette ) const;
+        void changePalette( const uint8_t * palette );
+
+    private:
+        bool _paletteChanged{ false };
+    };
+
+    struct ApplicationClosureRestorer final
+    {
+        ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer( const ApplicationClosureRestorer & ) = delete;
+
+        ~ApplicationClosureRestorer();
+
+        ApplicationClosureRestorer & operator=( const ApplicationClosureRestorer & ) = delete;
     };
 
     struct GameInterfaceTypeRestorer
@@ -328,4 +344,65 @@ namespace fheroes2
     std::unique_ptr<TextBase> getLocalizedText( std::vector<LocalizedString> texts, const FontType font );
 
     std::unique_ptr<TextBase> getLocalizedText( std::vector<std::pair<LocalizedString, FontType>> texts );
+
+    // Handles inertial (smooth) scrolling for a UI element. Records movement steps
+    // while the user is dragging, then on release computes a decaying velocity.
+    // Fully decoupled from any concrete UI element via std::function callbacks.
+    class UIScrollInertia final
+    {
+    public:
+        // Returns true if inertial scrolling is currently active.
+        bool isActive() const
+        {
+            return _active;
+        }
+
+        // Resets all state: stops any active inertia and clears all recorded movement steps.
+        // Call this at the beginning of a new drag.
+        void reset();
+
+        // Records one movement step with the given displacement. The class manages
+        // its own drag timer internally. Call this each frame while the user is dragging.
+        void addMovementStep( const fheroes2::Point & delta );
+
+        // Called when the user releases the drag. Evaluates the accumulated movement
+        // steps and activates inertia if the release velocity exceeds the threshold.
+        void commitRelease();
+
+        // Advances the inertia by one frame. The two callbacks are used to read and
+        // write the current scroll position, fully decoupling this class from any
+        // specific UI element. Returns true if a redraw is needed, false if inertia
+        // has stopped or is inactive.
+        bool update( const std::function<fheroes2::Point()> & getPosition, const std::function<void( const fheroes2::Point & )> & setPosition );
+
+    private:
+        struct MovementStep final
+        {
+            MovementStep( const fheroes2::Point & d, const uint64_t t )
+                : delta( d )
+                , timeMs( t )
+            {
+                // Do nothing.
+            }
+
+            fheroes2::Point delta;
+            uint64_t timeMs{ 0 };
+        };
+
+        // All movement steps recorded within the last 100 ms window (minimum 2 kept).
+        std::deque<MovementStep> _movementSteps;
+
+        fheroes2::Time _dragTimer;
+
+        // Velocity in fixed-point 1/256 px/ms units (e.g. 256 = 1 px/ms).
+        int32_t _velX{ 0 };
+        int32_t _velY{ 0 };
+        // Sub-pixel accumulator in 1/256-pixel fixed-point units.
+        int32_t _subpixelShiftX{ 0 };
+        int32_t _subpixelShiftY{ 0 };
+        bool _active{ false };
+        fheroes2::Time _timer;
+
+        void _deactivate();
+    };
 }

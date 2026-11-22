@@ -80,7 +80,7 @@ namespace Maps::Random_Generator
     bool canPlaceAllObjects( const MapStateManager & data, const std::vector<ObjectPlacement> & objects, const fheroes2::Point & position, const int32_t ground );
     bool canFitObjectSet( const MapStateManager & data, const ObjectSet & set, const fheroes2::Point & position, const int32_t ground );
     void markObjectPlacement( MapStateManager & data, const ObjectInfo & info, const fheroes2::Point & position );
-    void forceTempRoadOnTile( Map_Format::MapFormat & mapFormat, const int32_t tileIndex );
+    void forceTempRoadOnTile( Maps::Random_Generator::MapStateManager & data, Map_Format::MapFormat & mapFormat, const int32_t tileIndex );
 
     bool putObjectOnMap( Map_Format::MapFormat & mapFormat, Tile & tile, const ObjectGroup groupType, const int32_t objectIndex );
     bool placeActionObject( Map_Format::MapFormat & mapFormat, MapStateManager & data, Tile & tile, const ObjectGroup groupType, const int32_t type );
@@ -97,7 +97,7 @@ namespace Maps::Random_Generator
                                                                     std::vector<ObjectSet> objectSets, Rand::PCG32 & randomGenerator );
     void placeObjectSet( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, std::vector<ObjectSet> objectSets,
                          const MonsterStrength monsterStrength, const uint8_t expectedCount, Rand::PCG32 & randomGenerator );
-    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, Region & region, const std::vector<DecorationSet> & decorations,
+    void placeDecorations( Map_Format::MapFormat & mapFormat, MapStateManager & data, const Region & region, const std::vector<DecorationSet> & decorations,
                            Rand::PCG32 & randomGenerator );
 
     // This function expects a valid tileIndex that will fit the set. Plan first before calling

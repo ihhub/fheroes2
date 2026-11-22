@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -31,7 +31,7 @@
 #include <utility>
 #include <vector>
 
-#include "agg_image.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
@@ -278,6 +278,23 @@ Funds Funds::operator*( uint32_t mul ) const
     res.crystal = crystal * mul;
     res.gems = gems * mul;
     res.gold = gold * mul;
+
+    return res;
+}
+
+Funds Funds::operator/( const int32_t div ) const
+{
+    assert( div > 0 );
+
+    Funds res;
+
+    res.wood = wood / div;
+    res.mercury = mercury / div;
+    res.ore = ore / div;
+    res.sulfur = sulfur / div;
+    res.crystal = crystal / div;
+    res.gems = gems / div;
+    res.gold = gold / div;
 
     return res;
 }
@@ -613,9 +630,9 @@ void Resource::BoxSprite::Redraw() const
 
     while ( valueVsSprite.size() - id > 2 ) {
         const uint32_t width_ = width / 3;
-        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
-        const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
-        const fheroes2::Sprite & res3 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 2].second );
+        const fheroes2::Sprite & res1 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id].second );
+        const fheroes2::Sprite & res2 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id + 1].second );
+        const fheroes2::Sprite & res3 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id + 2].second );
 
         RedrawResourceSprite( res1, { x, y }, 0, width_, offsetY, valueVsSprite[id].first );
         RedrawResourceSprite( res2, { x, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
@@ -628,8 +645,8 @@ void Resource::BoxSprite::Redraw() const
     const bool isManyResources = valueVsSprite.size() > 2;
 
     if ( valueVsSprite.size() - id == 2 ) {
-        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
-        const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
+        const fheroes2::Sprite & res1 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id].second );
+        const fheroes2::Sprite & res2 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id + 1].second );
 
         const uint32_t width_ = isManyResources ? width / 3 : width / 2;
         const int32_t offsetX = isManyResources ? width_ / 2 : 0;
@@ -638,7 +655,7 @@ void Resource::BoxSprite::Redraw() const
         RedrawResourceSprite( res2, { x + offsetX, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
     }
     else if ( valueVsSprite.size() - id == 1 ) {
-        const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
+        const fheroes2::Sprite & res1 = Assets::getImage( ICN::RESOURCE, valueVsSprite[id].second );
 
         const int32_t width_ = isManyResources ? width / 3 : width;
 

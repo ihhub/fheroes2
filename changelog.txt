@@ -1,3 +1,179 @@
+version 1.1.18 (08 November 2026)
+- add "Eternal Winter" map to the fheroes2 bundle
+- add a dedicated hotkey for item deletion
+- add marketplace icon and counter to the dialogs
+- update Victory and Loss conditions while switching languages in the Editor
+- update the bundled "Apocalypse" map to 3.9
+- add multiline text editing support to the Virtual Keyboard
+- add HP bar option for monsters during battles
+- add "Dhalsivia Pirenaica" map into the fheroes2 bundle
+- do not let the AI cast Berserker when the target's nearest unit is not an enemy
+- resize the hotkey dialog width based on the current resolution
+- fix an assertion being hit while re-running Auto Playtest
+- update the Swedish translation
+- remove the confusing "Rate" value in the diplomacy dialog
+- update the Brazilian Portuguese translation
+- add category filtering for hotkeys in settings window
+- add small improvements to the High Scores dialog
+- fix an extra frame being rendered while clicking on the Save Game button
+- rework Auto-playtest dialog
+- add extra logic to prevent AI heroes from visiting shrines if they have all spells
+- improve the Summon Boat spell description
+- make sure the AI doesn't value the 3rd level shrine higher than everything
+- update the Hungarian translation
+- hide Editor's system message if the game's language has been changed
+- reduce perks the AI gets on higher difficulties
+- use the forced Software Cursor Emulation state for touchscreen and gamepad systems
+- fix adventure non-action objects being set as fort
+- adapt campaign's difficulty dialog per language
+- update the Russian translation
+- fix transparent pixels in empty movement and mana bars
+- update the Czech translation
+- improve the Bloodlust spell description
+- make the Campaign Difficulty Names More Accurate
+- disable "Sound Effects" in the Auto-playtest window if animation is off
+- add "Tetra Conflict" v1.2 map into the fheroes2 bundle
+- allow placing heroes on water
+- add "Utopeia" map to the fheroes2 bundle
+- add "Good Titans, Bad Titans" map to the fheroes2 bundle
+- explicitly state that an object was moved in the Editor
+- update the bundled "Final Invasion" map to version 8.1
+- update the bundled "Ravenhold" map to version 1.9
+- update the bundled "Eruption" map to version 3.2
+- fix incorrect offset for evil empty button
+- fix an empty army for the surrendered hero
+- update the Spanish translation
+- make all buttons in the Main Menu and Editor Menu engine-generated for German game resources
+- fix invalid ranges of spell occurrence in Mage Guild
+- use the in-engine image scaling type according to the scaling type option
+- fix rendering delay after closing Auto Playtesting window
+- add Lost Temple (1.1.17) to the fheroes2 bundle
+- fix subpixel resize on bottom and right borders and near-transparent pixels
+- allow to quit the application at any time by closing the application window
+- prevent an assertion hit while loading a Resurrection map
+- speed up rendering on PS Vita
+- add neutral monster limit growth on original maps
+- generate all buttons for Editor's File Option dialog
+- make the "Visions" spell and the "Crystal Ball" artifact much more user-friendly and useful
+- update "New Game" button popup for the Editor
+- do not do extra rendering for the same radar position on the popup window
+- allow the use of the mouse wheel to navigate through the Magic Book
+- make AI heroes future predict more objects
+- do not predict future object value for AI heroes on Easy difficulty
+- fix the castle's well's "Available" text position for some languages
+- fix an invalid assertion for battle troops
+- improve battle logic so Ghosts and Vampire Lords utilize their unique abilities
+
+version 1.1.17 (30 June 2026)
+- update the Russian translation
+- greatly speed up application startup
+- update the German translation
+- update the Ukrainian translation
+- fix terrain reset on exit for the Battle Only mode
+- fix New Creature Week right-click delay
+- fix status window layout alignment on the Adventure Map
+- swap Archery Range Building sprites to match the colors of units
+- match castle's hero/building fade animation delay to classic H2
+- fix assertion hit for AI battle during Teleport spell evaluation
+- make AI heroes stay in castles if they get a movement bonus the next day
+- fix the title alignment in the resolution window
+- add an initial version of the Auto Playtest feature for the Editor
+- fix validation issue when updating enemy army in Battle Only mode
+- update the Swedish translation
+- remove assertion as it leads to a crash while loading a map
+- do not allow to start a battle in Battle Only mode if the START button is disabled
+- update the application exiting confirmation dialog in the Editor to include potential unsaved map changes
+- allow scrolling among all objects in a group using the mouse wheel in the Editor
+- fix spell sprite position in the first spell animation frame on the battlefield
+- improve AI decision making when using damage spells for Mirror Image monsters
+- speed up object evaluation for AI on the Adventure Map
+- do not allow placing Adventure Map Events on other objects
+- add "?" to the random terrain icon in Battle Only mode
+- show object highlighted area while moving or copying it
+- update the Hungarian translation
+- do not place roads under the obstacles in Random Map Generator
+- keep hero sprite invisible after hero fade-out animation
+- add Adventure Map smooth scrolling option
+- add the ability to directly extract all assets from the GOG installer on Android
+
+version 1.1.16 (17 May 2026)
+- update the Brazilian Portuguese translation
+- update the Russian translation
+- update the Polish translation
+- update castle mound after new terrain being placed in the Editor
+- fix missing tile passability update while removing objects in the Editor
+- allow to select certain artifacts to be buried as Ultimate Artifact in the Editor
+- fix the first editing of the hero when cancelling in the Editor
+- expand detail mode in the Editor to support editing, moving and copying brushes
+- add separate hotkeys to merge troops in castle
+- display all maps, even duplicates for both the game and the Editor
+- sort maps alphabetically by file name in the Editor
+- make hero turning animation depend on the animation speed
+- reduce application resources usage for object update actions in the Editor
+- make Eraser tool in the Editor more granular
+- fix castle entrance road update on placing/erasing a castle in the Editor
+- speed up eraser functionality in case of no objects to be erased in the Editor
+- add a popup dialog to confirm unsaved changes for hero in the Editor
+- allow placement of non-action objects over the edges of the map in the Editor
+- add ability to move an object in the Editor
+- update the Ukrainian translation
+- add drag-to-draw ability to Roads and Streams in the Editor
+- add a confirmation window while exiting castle's window in the Editor
+- add application exiting logic for the Editor's Main Menu
+- reduce the application startup time
+- add Esperanto translation
+
+version 1.1.15 (12 April 2026)
+- fix inconsistency in the Editor's window titles
+- add "Ravenhold" map to the fheroes2 bundle
+- add "Apocalypse" map to the fheroes2 bundle
+- add "Final Invasion" map to the fheroes2 bundle
+- update the Ukrainian translation
+- update the Russian translation
+- consolidate all translated versions of the "Eruption" map into a single map file
+- add ability to show Turn Order window below the battlefield
+- add popup windows for all buttons for the Virtual Keyboard
+- rework Battle Only interface
+- add ability to select artifacts for Random Artifact objects in the Editor
+- fix rendering deadlock for vertical text when a character width is bigger than the maximum width
+- fix issues for the text input window
+- consolidate all translated versions of the "7 deserts" map into a single map file
+- add NBSP character to all fonts
+- update the Greek translation
+- update the Belarusian translation
+- make the ABOUT button available from the scenario info during gameplay
+- speed up engine loading and language switching
+- recalculate hero path after "Dimension Door" spell usage
+- fix rendering of dead monsters during Resurrection spell animation
+- make AI heroes sort artifacts from worst to best to minimize losses on defeat
+- separate battle animation Speed string from monster Speed
+- add Brazilian Portuguese language support for the Virtual Keyboard
+- remove death monster animation in the castle's well dialog
+- adjust castle image and castle name in Town's dialog
+- add Norwegian language support for the Virtual Keyboard
+- add Swedish language support for the Virtual Keyboard
+- add Hungarian language support for the Virtual Keyboard
+- add Spanish language support to Virtual Keyboard
+- add Bulgarian language support for the Virtual Keyboard
+- update CP-1253 fonts for the Greek language
+- loosen the conditions for action object placement in the Editor
+- improve adventure map spells message order
+- move scrollbar only to discrete positions corresponding to the list items
+- avoid terrain objects being placed under road objects in the Random Map Generator
+- update object passabilities after the Random Map Generator finishes generating map
+- compress fheroes2 assets data in h2d file
+- add Timidity PAT files to PS Vita package
+- generate new sprites for diagonal road crossings
+- update the Portuguese Translation
+- adjust morale and luck descriptions
+- update the Polish translation
+- show water percentage limit in Random Generator
+- fix vertical offset for small monster images
+- make it possible to change terrain type in the Battle Only mode with the mouse wheel
+- fix animation freezing while playing the sound of Petrification spell
+- set 'exchange all troops' default hotkey to 'X' to avoid conflicting with Mage Guild
+- update the Swedish translation
+
 version 1.1.14 (24 February 2026)
 - fix hero removal leftovers from the map in the Editor
 - add new variants of Abandoned Mines

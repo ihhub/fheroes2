@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2025                                             *
+ *   Copyright (C) 2020 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 
 namespace fheroes2
 {
-    class AGGFile
+    class AGGFile final
     {
     public:
         bool isGood() const
@@ -51,7 +51,7 @@ namespace fheroes2
         std::map<std::string, std::pair<uint32_t, uint32_t>, std::less<>> _files;
     };
 
-    struct ICNHeader
+    struct ICNHeader final
     {
         int16_t offsetX{ 0 };
         int16_t offsetY{ 0 };

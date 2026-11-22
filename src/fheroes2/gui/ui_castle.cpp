@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2021 - 2025                                             *
+ *   Copyright (C) 2021 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,9 +25,9 @@
 #include <string>
 #include <vector>
 
-#include "agg_image.h"
 #include "castle.h"
 #include "color.h"
+#include "game_assets.h"
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
@@ -90,7 +90,7 @@ namespace
                 return { fheroes2::Rect( 76, 7, 3, 3 ), fheroes2::Rect( 96, 7, 3, 3 ), fheroes2::Rect( 178, 11, 3, 3 ) };
             }
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            const fheroes2::Sprite & image = Assets::getImage( icnId, icnIndex );
             return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
         }
         case ICN::TWNKCSTL: {
@@ -98,7 +98,7 @@ namespace
                 return { fheroes2::Rect( 127, 36, 3, 3 ), fheroes2::Rect( 287, 6, 3, 3 ) };
             }
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            const fheroes2::Sprite & image = Assets::getImage( icnId, icnIndex );
             return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
         }
         case ICN::TWNKDW_4:
@@ -113,7 +113,7 @@ namespace
                 return { fheroes2::Rect( 5, 6, 3, 3 ) };
             }
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            const fheroes2::Sprite & image = Assets::getImage( icnId, icnIndex );
             return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
         }
         case ICN::TWNKRTUR: {
@@ -121,7 +121,7 @@ namespace
                 return { fheroes2::Rect( 55, 6, 3, 3 ) };
             }
 
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+            const fheroes2::Sprite & image = Assets::getImage( icnId, icnIndex );
             return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
         }
         default:
@@ -138,7 +138,7 @@ namespace
         const std::vector<fheroes2::Rect> regions = getColorEffectiveAreas( icnId, icnIndex );
         const std::vector<uint8_t> palette = getModifiedPaletteByPlayerColor( originalCastleFlagStartColorId, originalCastleFlagColorLength, colorId );
 
-        fheroes2::Sprite temp = fheroes2::AGG::GetICN( icnId, icnIndex );
+        fheroes2::Sprite temp = Assets::getImage( icnId, icnIndex );
 
         for ( const fheroes2::Rect & roi : regions ) {
             fheroes2::ApplyPalette( temp, roi.x, roi.y, temp, roi.x, roi.y, roi.width, roi.height, palette );
@@ -223,16 +223,16 @@ namespace fheroes2
     {
         const uint32_t icnIndex = getCastleIcnIndex( castle.GetRace(), castle.isCastle() );
 
-        const Sprite & castleImage = AGG::GetICN( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
+        const Sprite & castleImage = Assets::getImage( Settings::Get().isEvilInterfaceEnabled() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
         Copy( castleImage, 0, 0, output, offset.x, offset.y, castleImage.width(), castleImage.height() );
 
         // Draw castle's marker.
         switch ( Castle::GetAllBuildingStatus( castle ) ) {
         case BuildingStatus::NOT_TODAY:
-            Blit( AGG::GetICN( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
+            Blit( Assets::getImage( ICN::CSLMARKER, 0 ), output, offset.x + 40, offset.y );
             break;
         case BuildingStatus::REQUIRES_BUILD:
-            Blit( AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
+            Blit( Assets::getImage( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
         default:
             break;
@@ -255,13 +255,13 @@ namespace fheroes2
 
         const std::array<int32_t, 4> offsetY = { 0, maxHeight + fontHeight + 2, ( maxHeight + fontHeight ) * 2 - 1, ( maxHeight + fontHeight ) * 3 + 1 };
 
-        const fheroes2::Sprite & woodImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-        const fheroes2::Sprite & mercuryImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-        const fheroes2::Sprite & oreImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-        const fheroes2::Sprite & sulfurImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-        const fheroes2::Sprite & crystalImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-        const fheroes2::Sprite & gemsImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-        const fheroes2::Sprite & goldImage = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
+        const fheroes2::Sprite & woodImage = Assets::getImage( ICN::RESOURCE, 0 );
+        const fheroes2::Sprite & mercuryImage = Assets::getImage( ICN::RESOURCE, 1 );
+        const fheroes2::Sprite & oreImage = Assets::getImage( ICN::RESOURCE, 2 );
+        const fheroes2::Sprite & sulfurImage = Assets::getImage( ICN::RESOURCE, 3 );
+        const fheroes2::Sprite & crystalImage = Assets::getImage( ICN::RESOURCE, 4 );
+        const fheroes2::Sprite & gemsImage = Assets::getImage( ICN::RESOURCE, 5 );
+        const fheroes2::Sprite & goldImage = Assets::getImage( ICN::RESOURCE, 6 );
 
         fheroes2::Blit( woodImage, output, leftColumnOffset + ( maxWidth - woodImage.width() ) / 2, roi.y + offsetY[0] + maxHeight - woodImage.height() );
         fheroes2::Blit( sulfurImage, output, rightColumnOffset + ( maxWidth - sulfurImage.width() ) / 2, roi.y + offsetY[0] + maxHeight - sulfurImage.height() );
@@ -295,14 +295,14 @@ namespace fheroes2
         text.set( std::to_string( kingdomTreasures.gold ), fontType );
         text.draw( roi.x + ( roi.width - text.width() ) / 2, roi.y + offsetY[3] + goldImage.height() + 1, output );
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BUTTON_EXIT_TOWN, 0 ), output, roi.x + 1, roi.y + 166 );
+        fheroes2::Blit( Assets::getImage( ICN::BUTTON_EXIT_TOWN, 0 ), output, roi.x + 1, roi.y + 166 );
 
         return roi;
     }
 
     void drawCastleName( const Castle & castle, Image & output, const Point & offset )
     {
-        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
+        const fheroes2::Sprite & background = Assets::getImage( ICN::TOWNNAME, 0 );
         fheroes2::Blit( background, fheroes2::Display::instance(), offset.x + 320 - background.width() / 2, offset.y + 248 );
 
         const fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
@@ -313,7 +313,7 @@ namespace fheroes2
                                    const uint8_t alpha )
     {
         const fheroes2::Sprite & image
-            = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : AGG::GetICN( icnId, icnIndex );
+            = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : Assets::getImage( icnId, icnIndex );
 
         const fheroes2::Rect imageRoi{ offset.x + image.x(), offset.y + image.y(), image.width(), image.height() };
         const fheroes2::Rect overlappedRoi = renderArea ^ imageRoi;

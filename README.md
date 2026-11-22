@@ -32,13 +32,16 @@ free demo version of the game. Please refer to the [**installation guide**](docs
 
 ## License
 
-This project is licensed under the [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
+The project's source code is licensed under the [**GNU General Public License v2.0**](LICENSE).
+
+The project's art is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)**](LICENSE-ART).
+More details about each artwork can be found by opening [resurrection.h2d](files/data/resurrection.h2d) in a text editor.
 
 Initially, the project was developed on [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
 
 ## Contribution and Development
 
-This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more to learn [**how you can contribute**](docs/FAQ.md#q-how-can-i-contribute-to-the-project).
 
 ### Developing fheroes2 engine
 
@@ -78,4 +81,4 @@ We also have a [**Discord**](https://discord.gg/xF85vbZ) server to discuss the d
 
 ## Frequently Asked Questions (FAQ)
 
-You can find answers to the most commonly asked questions on our [**F.A.Q. page**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.).
+You can find answers to the most commonly asked questions on our [**F.A.Q. page**](docs/FAQ.md).

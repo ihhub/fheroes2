@@ -265,6 +265,8 @@ public:
 
     static int32_t CalculateDimensionDoorDistance();
 
+    static uint32_t getTotalSpellsPerLevel( const int32_t level );
+
 private:
     friend OStreamBase & operator<<( OStreamBase & stream, const Spell & spell );
     friend IStreamBase & operator>>( IStreamBase & stream, Spell & spell );

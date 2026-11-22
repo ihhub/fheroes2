@@ -31,7 +31,6 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <string_view>
 #include <type_traits>
 #include <utility>
 
@@ -49,6 +48,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "version.h"
 
 namespace
 {
@@ -100,6 +100,8 @@ namespace
             = { Game::HotKeyCategory::DEFAULT, gettext_noop( "hotkey|default up" ), fheroes2::Key::KEY_UP };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_DOWN )]
             = { Game::HotKeyCategory::DEFAULT, gettext_noop( "hotkey|default down" ), fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_DELETE )]
+            = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|default delete" ), fheroes2::Key::KEY_DELETE };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_FULLSCREEN )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle fullscreen" ), fheroes2::Key::KEY_F4 };
@@ -110,6 +112,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_TOGGLE_DEVELOPER_MODE )]
             = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|toggle developer mode" ), fheroes2::Key::KEY_BACKQUOTE };
 #endif
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::GLOBAL_APP_QUIT )] = { Game::HotKeyCategory::GLOBAL, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|new game" ), fheroes2::Key::KEY_N };
@@ -127,7 +131,6 @@ namespace
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|multi-player game" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SETTINGS )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|settings" ), fheroes2::Key::KEY_T };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_QUIT )] = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|quit" ), fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP )]
             = { Game::HotKeyCategory::MAIN_MENU, gettext_noop( "hotkey|select map" ), fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )]
@@ -167,6 +170,8 @@ namespace
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|open game main menu" ), fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_TOGGLE_PASSABILITY )]
             = { Game::HotKeyCategory::EDITOR, gettext_noop( "hotkey|toggle passability" ), fheroes2::Key::KEY_P };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_AUTO_PLAYTEST )]
+            = { Game::HotKeyCategory::WORLD_MAP, gettext_noop( "hotkey|auto playtest" ), fheroes2::Key::KEY_A };
 
 #if defined( WITH_DEBUG )
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::EDITOR_RANDOM_MAP_REGENERATE )]
@@ -324,6 +329,10 @@ namespace
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|construction screen" ), fheroes2::Key::KEY_B };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL_BUY_ALL )]
             = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|buy all monsters in well" ), fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_HERO )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with hero" ), fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MERGE_TROOPS_WITH_GARRISON )]
+            = { Game::HotKeyCategory::TOWN, gettext_noop( "hotkey|merge troops with garrison" ), fheroes2::Key::KEY_UP };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::ARMY_SPLIT_STACK_BY_HALF )]
             = { Game::HotKeyCategory::ARMY, gettext_noop( "hotkey|split stack by half" ), fheroes2::Key::KEY_LEFT_SHIFT };
@@ -342,7 +351,7 @@ namespace
     std::string getHotKeyFileContent()
     {
         std::ostringstream os;
-        os << "# fheroes2 hotkey file (saved by version " << Settings::GetVersion() << ")" << std::endl;
+        os << "# fheroes2 hotkey file (saved by version " ENGINE_VERSION ")" << std::endl;
         os << std::endl;
 
         Game::HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
@@ -449,22 +458,7 @@ void Game::HotKeysLoad( const std::string & filename )
                 const char * eventName = Translation::getNonTranslated( hotKeyEventInfo[eventId].name );
                 std::string value = config.StrParams( eventName );
                 if ( value.empty() ) {
-                    // TODO: remove this temporary workaround
-                    if ( eventName == std::string_view( "toggle auto combat mode" ) ) {
-                        value = config.StrParams( "toggle battle auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else if ( eventName == std::string_view( "quick combat" ) ) {
-                        value = config.StrParams( "finish the battle in auto mode" );
-                        if ( value.empty() ) {
-                            continue;
-                        }
-                    }
-                    else {
-                        continue;
-                    }
+                    continue;
                 }
 
                 value = StringUpper( value );
@@ -479,12 +473,13 @@ void Game::HotKeysLoad( const std::string & filename )
         }
     }
 
+    // TODO: do not save this file if no changes are present.
     HotKeySave();
 }
 
 void Game::HotKeySave()
 {
-    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    const std::string filename = System::concatPath( System::GetConfigDirectory( "fheroes2" ), hotkeyFileName );
 
     StreamFile fileStream;
     if ( !fileStream.open( filename, "w" ) ) {
@@ -545,7 +540,7 @@ void Game::globalKeyDownEvent( const fheroes2::Key key, const int32_t modifier )
 
             const RecursionGuard recursionGuard( recursiveCall );
 
-            Player * player = Settings::Get().GetPlayers().GetCurrent();
+            Player * player = conf.GetPlayers().GetCurrent();
 
             // Do not allow to transfer control to/from AI during battle
             if ( player && ( player->isControlHuman() || player->isAIAutoControlMode() ) && Battle::GetArena() == nullptr ) {

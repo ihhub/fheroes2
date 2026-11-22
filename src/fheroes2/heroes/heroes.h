@@ -438,6 +438,7 @@ public:
     // Returns the maximum number of hero movement points, depending on the specified surface type (water or land)
     uint32_t GetMaxMovePoints( const bool onWater ) const;
 
+    // Returns the movement points for the current turn.
     uint32_t GetMovePoints() const
     {
         return _movePoints;
@@ -700,6 +701,11 @@ public:
         return static_cast<uint8_t>( _alphaValue );
     }
 
+    void setAlphaValue( const uint8_t alphaValue )
+    {
+        _alphaValue = alphaValue;
+    }
+
     double getAIMinimumJoiningArmyStrength() const;
 
     uint32_t getDailyRestoredSpellPoints() const;
@@ -743,8 +749,8 @@ private:
     };
 
     HeroSeedsForLevelUp _getSeedsForLevelUp() const;
-    void _levelUp( const bool skipSecondary, const bool autoselect = false );
-    void _levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect = false );
+    void _levelUp( const bool skipSecondary, const bool autoselect, const bool isMapLoading );
+    void _levelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, const int primary, const bool autoselect, const bool isMapLoading );
     void _angleStep( const int targetDirection );
     void _applyMovementPenalty( const uint32_t penalty );
     bool _moveStep( const bool jumpToNextTile );
@@ -804,6 +810,9 @@ private:
 
     // This value should NOT be saved in save file as it's dynamically set during AI turn.
     Role _aiRole{ Role::HUNTER };
+
+    // Used to freeze the rotation animation for N frames to match the rotation animation with movement speed.
+    int8_t _skippedFramesForAngleStep{ 0 };
 };
 
 struct VecHeroes final : public std::vector<Heroes *>

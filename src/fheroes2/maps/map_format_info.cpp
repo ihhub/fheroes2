@@ -496,7 +496,7 @@ namespace
                    << map.adventureMapEventMetadata << map.selectionObjectMetadata << map.capturableObjectsMetadata << map.monsterMetadata << map.artifactMetadata
                    << map.resourceMetadata << map.translationInfo;
 
-        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size() );
+        const std::vector<uint8_t> temp = Compression::zipData( compressed.data(), compressed.size(), false );
 
         stream.putRaw( temp.data(), temp.size() );
 

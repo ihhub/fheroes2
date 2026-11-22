@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2024 - 2025                                             *
+ *   Copyright (C) 2024 - 2026                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,6 @@
 
 #include <cstdint>
 
-#include "game_mode.h"
 #include "interface_gamearea.h"
 #include "interface_radar.h"
 #include "math_base.h"
@@ -122,8 +121,6 @@ namespace Interface
         {
             return _radar;
         }
-
-        static fheroes2::GameMode EventExit();
 
         virtual bool useMouseDragMovement() const
         {

@@ -30,9 +30,11 @@
 #include <string>
 #include <type_traits>
 
-#include "agg_image.h"
 #include "cursor.h"
+#include "game_assets.h"
 #include "game_delays.h"
+#include "game_exit.h"
+#include "game_mode.h"
 #include "icn.h"
 #include "image_palette.h"
 #include "localevent.h"
@@ -211,6 +213,7 @@ namespace fheroes2
         // We enlarge background to have space for cursor at text edges and space for diacritics.
         , _background( output, textArea.x - 1, textArea.y - 2, textArea.width + 2, textArea.height + 2 )
         , _textInputArea( textArea )
+        , _isMultiLineText( isMultiLine )
         , _isSingleLineTextCenterAligned( !isMultiLine && isCenterAligned )
     {
         // Do nothing.
@@ -239,11 +242,37 @@ namespace fheroes2
 
         _text.set( newText, cursorPositionInText );
 
+        if ( _isMultiLineText ) {
+            const Rect cursorArea = _text.cursorArea();
+            const int32_t visibleTextHeight = _textInputArea.height - 2;
+
+            if ( cursorArea.y < _verticalTextOffset ) {
+                _verticalTextOffset = cursorArea.y;
+            }
+            else {
+                const int32_t cursorBottom = cursorArea.y + cursorArea.height;
+                const int32_t visibleBottom = _verticalTextOffset + visibleTextHeight;
+
+                if ( cursorBottom > visibleBottom ) {
+                    const int32_t lineHeight = _text.height();
+                    assert( lineHeight > 0 );
+
+                    const int32_t overflow = cursorBottom - visibleBottom;
+                    _verticalTextOffset += ( overflow + lineHeight - 1 ) / lineHeight * lineHeight;
+                }
+            }
+        }
+        else {
+            _verticalTextOffset = 0;
+        }
+
         // Multi-line text is currently always automatically center-aligned.
         const int32_t offsetX = _isSingleLineTextCenterAligned ? _textInputArea.x + ( _textInputArea.width - _text.width() ) / 2 : _textInputArea.x;
-        const int32_t offsetY = _textInputArea.y + 2;
+        const int32_t offsetY = _textInputArea.y + 2 - _verticalTextOffset;
 
-        _text.drawInRoi( offsetX, offsetY, _output, _background.rect() );
+        const Rect & textRoi = _isMultiLineText ? _textInputArea : _background.rect();
+
+        _text.drawInRoi( offsetX, offsetY, _output, textRoi );
 
         _cursor.setPosition( _text.cursorArea().x + offsetX, _text.cursorArea().y + offsetY );
         _cursor.show();
@@ -324,13 +353,27 @@ namespace fheroes2
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
-        Display::instance().changePalette( nullptr );
+        if ( _paletteChanged ) {
+            Display::instance().changePalette( nullptr );
+        }
+
         RenderProcessor::instance().startColorCycling();
     }
 
-    void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const
+    void ScreenPaletteRestorer::changePalette( const uint8_t * palette )
     {
-        Display::instance().changePalette( palette );
+        Display::instance().changePalette( reinterpret_cast<const RGB *>( palette ) );
+        _paletteChanged = true;
+    }
+
+    ApplicationClosureRestorer::ApplicationClosureRestorer()
+    {
+        LocalEvent::Get().setQuitEventProcessingHook( []() { return false; } );
+    }
+
+    ApplicationClosureRestorer::~ApplicationClosureRestorer()
+    {
+        LocalEvent::Get().setQuitEventProcessingHook( []() { return ( Game::processExitEvent() == fheroes2::GameMode::QUIT_GAME ); } );
     }
 
     GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const InterfaceType interfaceType_ )
@@ -349,16 +392,16 @@ namespace fheroes2
         }
     }
 
-    void colorFade( const std::vector<uint8_t> & palette, const fheroes2::Rect & frameRoi, const uint32_t durationMs, const double fps )
+    void colorFade( const std::vector<uint8_t> & palette, const Rect & frameRoi, const uint32_t durationMs, const double fps )
     {
         assert( fps > 0 );
 
-        // Game palette has 256 values for red, green and blue, so its size is: 256 * 3 = 768.
-        const int32_t paletteSize = 768;
         // Do a color fade only for valid palette.
-        if ( palette.size() != paletteSize ) {
+        if ( palette.size() != paletteSizeBytes ) {
             return;
         }
+
+        const auto * paletteRGB = reinterpret_cast<const RGB *>( palette.data() );
 
         // The biggest problem here is that the palette could be different from the one in the game.
         // Since we want to do color fading to grayscale colors we take the original palette and
@@ -366,44 +409,38 @@ namespace fheroes2
         // Then we gradually change the current palette to be only grayscale and after reaching the
         // last frame change all colors of the frame to be only grayscale colors of the original palette.
 
-        const uint8_t * originalPalette = fheroes2::getGamePalette();
+        std::array<RGB, paletteSize> normalizedPalette = getNormalizedRGBGamePalette();
 
-        // Yes, these values are hardcoded. There are ways to do it programmatically.
-        const int32_t startGrayScaleColorId = 10;
-        const int32_t endGrayScaleColorId = 36;
+        std::vector<uint8_t> assignedValue( paletteSize );
 
-        // The game's palette has 256 color indexes.
-        const int32_t paletteIndexes = 256;
-
-        std::vector<uint8_t> assignedValue( paletteIndexes );
-
-        for ( size_t id = 0; id < paletteIndexes; ++id ) {
+        for ( size_t id = 0; id < paletteSize; ++id ) {
             int32_t nearestDistance = INT32_MAX;
 
+            // Yes, these values are hardcoded. There are ways to do it programmatically.
+            constexpr uint8_t startGrayScaleColorId = 10;
+            constexpr uint8_t endGrayScaleColorId = 36;
+
             for ( uint8_t colorId = startGrayScaleColorId; colorId <= endGrayScaleColorId; ++colorId ) {
-                const int32_t redDiff = static_cast<int32_t>( palette[id * 3] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3] ) * 4;
-                const int32_t greenDiff
-                    = static_cast<int32_t>( palette[id * 3 + 1] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 1] ) * 4;
-                const int32_t blueDiff
-                    = static_cast<int32_t>( palette[id * 3 + 2] ) - static_cast<int32_t>( originalPalette[static_cast<size_t>( colorId ) * 3 + 2] ) * 4;
+                const int32_t redDiff = static_cast<int32_t>( paletteRGB[id].r ) - static_cast<int32_t>( normalizedPalette[colorId].r );
+                const int32_t greenDiff = static_cast<int32_t>( paletteRGB[id].g ) - static_cast<int32_t>( normalizedPalette[colorId].g );
+                const int32_t blueDiff = static_cast<int32_t>( paletteRGB[id].b ) - static_cast<int32_t>( normalizedPalette[colorId].b );
 
                 const int32_t distance = redDiff * redDiff + greenDiff * greenDiff + blueDiff * blueDiff;
                 if ( nearestDistance > distance ) {
                     nearestDistance = distance;
                     assignedValue[id] = colorId;
+
+                    if ( distance == 0 ) {
+                        break;
+                    }
                 }
             }
         }
 
-        std::array<uint8_t, paletteSize> endPalette{ 0 };
-        for ( size_t i = 0; i < paletteIndexes; ++i ) {
-            const uint8_t valuePosition = assignedValue[i] * 3;
-            // Red color.
-            endPalette[i * 3] = originalPalette[valuePosition] * 4;
-            // Green color.
-            endPalette[i * 3 + 1] = originalPalette[valuePosition + 1] * 4;
-            // Blue color.
-            endPalette[i * 3 + 2] = originalPalette[valuePosition + 2] * 4;
+        std::array<uint8_t, paletteSizeBytes> endPalette{ 0 };
+        auto * endPaletteRGB = reinterpret_cast<RGB *>( endPalette.data() );
+        for ( size_t i = 0; i < paletteSize; ++i ) {
+            endPaletteRGB[i] = normalizedPalette[assignedValue[i]];
         }
 
         const uint32_t delay = static_cast<uint32_t>( std::round( 1000.0 / fps ) );
@@ -411,11 +448,11 @@ namespace fheroes2
         // Gradually fade the palette.
         const uint32_t gradingSteps = durationMs / delay;
         uint32_t gradingId = 1;
-        std::vector<uint8_t> gradingPalette( paletteSize );
-        std::vector<uint8_t> prevPalette( paletteSize );
+        std::vector<uint8_t> gradingPalette( paletteSizeBytes );
+        std::vector<uint8_t> prevPalette( paletteSizeBytes );
 
-        const fheroes2::ScreenPaletteRestorer screenRestorer;
-        fheroes2::Display & display = fheroes2::Display::instance();
+        ScreenPaletteRestorer screenRestorer;
+        Display & display = Display::instance();
         LocalEvent & le = LocalEvent::Get();
 
         Game::passCustomAnimationDelay( delay );
@@ -426,7 +463,7 @@ namespace fheroes2
                     break;
                 }
 
-                for ( int32_t i = 0; i < paletteSize; ++i ) {
+                for ( size_t i = 0; i < paletteSizeBytes; ++i ) {
                     gradingPalette[i] = static_cast<uint8_t>( ( palette[i] * ( gradingSteps - gradingId ) + endPalette[i] * gradingId ) / gradingSteps );
                 }
 
@@ -442,8 +479,7 @@ namespace fheroes2
         }
 
         // Convert all video frame colors to original game palette colors.
-        fheroes2::ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
-        screenRestorer.changePalette( originalPalette );
+        ApplyPalette( display, frameRoi.x, frameRoi.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, assignedValue );
     }
 
     void CreateDeathWaveEffect( Image & out, const Image & in, const int32_t x, const std::vector<int32_t> & deathWaveCurve )
@@ -531,7 +567,7 @@ namespace fheroes2
         uint8_t * imageOutX = out.image();
         const uint8_t * imageIn = in.image();
 
-        const uint8_t * gamePalette = getGamePalette();
+        const RGB * gamePalette = getRGBGamePalette();
 
         // The spell effect represents as a blurry image. The blur algorithm should blur only horizontally and vertically from current pixel.
         // So the color data is averaged in a "cross" around the current pixel (not a square or circle like other blur algorithms).
@@ -553,11 +589,11 @@ namespace fheroes2
                 const uint8_t * imageInXEnd = imageInX + rangeX;
 
                 for ( ; imageInX != imageInXEnd; ++imageInX ) {
-                    const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInX ) * 3;
+                    const RGB & palette = gamePalette[*imageInX];
 
-                    sumRed += *palette;
-                    sumGreen += *( palette + 1 );
-                    sumBlue += *( palette + 2 );
+                    sumRed += palette.r;
+                    sumGreen += palette.g;
+                    sumBlue += palette.b;
                 }
 
                 const uint8_t * imageInY = imageInYStart + x;
@@ -566,11 +602,11 @@ namespace fheroes2
 
                 for ( ; imageInY != imageInYEnd; imageInY += width ) {
                     if ( imageInY != currentPixel ) {
-                        const uint8_t * palette = gamePalette + static_cast<ptrdiff_t>( *imageInY ) * 3;
+                        const RGB & palette = gamePalette[*imageInY];
 
-                        sumRed += *palette;
-                        sumGreen += *( palette + 1 );
-                        sumBlue += *( palette + 2 );
+                        sumRed += palette.r;
+                        sumGreen += palette.g;
+                        sumBlue += palette.b;
                     }
                 }
 
@@ -807,8 +843,8 @@ namespace fheroes2
         fheroes2::Image racePortrait( portPos.width, portPos.height );
 
         auto preparePortrait = [&racePortrait, &portPos]( const int icnId, const int bkgIndex, const bool applyRandomPalette ) {
-            fheroes2::SubpixelResize( fheroes2::AGG::GetICN( ICN::STRIP, bkgIndex ), racePortrait );
-            const fheroes2::Sprite & heroSprite = fheroes2::AGG::GetICN( icnId, 1 );
+            fheroes2::SubpixelResize( Assets::getImage( ICN::STRIP, bkgIndex ), racePortrait );
+            const fheroes2::Sprite & heroSprite = Assets::getImage( icnId, 1 );
             if ( applyRandomPalette ) {
                 fheroes2::Sprite tmp = heroSprite;
                 fheroes2::ApplyPalette( tmp, PAL::GetPalette( PAL::PaletteType::PURPLE ) );
@@ -909,5 +945,133 @@ namespace fheroes2
         }
 
         return multiFontText;
+    }
+
+    void UIScrollInertia::reset()
+    {
+        _movementSteps.clear();
+        _dragTimer.reset();
+        _active = false;
+        _velX = 0;
+        _velY = 0;
+        _subpixelShiftX = 0;
+        _subpixelShiftY = 0;
+    }
+
+    void UIScrollInertia::addMovementStep( const fheroes2::Point & delta )
+    {
+        _movementSteps.emplace_back( delta, _dragTimer.getMs() );
+        while ( _movementSteps.size() > 2 && _movementSteps.back().timeMs - _movementSteps.front().timeMs > 100 ) {
+            _movementSteps.pop_front();
+        }
+    }
+
+    void UIScrollInertia::commitRelease()
+    {
+        if ( _movementSteps.size() >= 2 ) {
+            const uint64_t now = _dragTimer.getMs();
+            const uint64_t lastSampleAge = now - _movementSteps.back().timeMs;
+
+            if ( lastSampleAge < 50 ) {
+                const uint64_t dt = _movementSteps.back().timeMs - _movementSteps.front().timeMs;
+                if ( dt > 0 ) {
+                    int64_t sumX = 0;
+                    int64_t sumY = 0;
+                    for ( const auto & step : _movementSteps ) {
+                        sumX += step.delta.x;
+                        sumY += step.delta.y;
+                    }
+                    // Threshold: 0.3 px/ms = 77 in 1/256 units, 77*77=5929
+                    _velX = static_cast<int32_t>( sumX * 256 / static_cast<int64_t>( dt ) );
+                    _velY = static_cast<int32_t>( sumY * 256 / static_cast<int64_t>( dt ) );
+                    if ( _velX * _velX + _velY * _velY > 5929 ) {
+                        _active = true;
+                        _subpixelShiftX = 0;
+                        _subpixelShiftY = 0;
+                        _timer.reset();
+                    }
+                    else {
+                        _velX = 0;
+                        _velY = 0;
+                    }
+                }
+            }
+        }
+        _movementSteps.clear();
+    }
+
+    bool UIScrollInertia::update( const std::function<fheroes2::Point()> & getPosition, const std::function<void( const fheroes2::Point & )> & setPosition )
+    {
+        if ( !_active ) {
+            return false;
+        }
+
+        const uint64_t elapsedTimeMs = _timer.getMs();
+        if ( elapsedTimeMs == 0 ) {
+            return false;
+        }
+        _timer.reset();
+
+        // Exponential velocity decay approximated as vel *= (200 - dt) / 200.
+        // The time constant of 200 ms was chosen empirically to feel natural:
+        // fast enough to stop within a second, slow enough to feel smooth.
+        if ( elapsedTimeMs >= 200 ) {
+            _deactivate();
+            return false;
+        }
+        const int32_t dtMs = static_cast<int32_t>( elapsedTimeMs );
+        _velX = _velX * ( 200 - dtMs ) / 200;
+        _velY = _velY * ( 200 - dtMs ) / 200;
+
+        // Stop threshold: 0.05 px/ms = 13 in 1/256 units, 13*13=169.
+        if ( _velX * _velX + _velY * _velY < 169 ) {
+            _deactivate();
+            return false;
+        }
+
+        // Accumulate in 1/256-pixel fixed-point units for half-pixel precision.
+        _subpixelShiftX += _velX * dtMs;
+        _subpixelShiftY += _velY * dtMs;
+
+        const fheroes2::Point viewShift( _subpixelShiftX / 256, _subpixelShiftY / 256 );
+        _subpixelShiftX -= viewShift.x * 256;
+        _subpixelShiftY -= viewShift.y * 256;
+
+        if ( viewShift.x == 0 && viewShift.y == 0 ) {
+            return true;
+        }
+
+        const fheroes2::Point beforeCenter = getPosition();
+        setPosition( beforeCenter + viewShift );
+        const fheroes2::Point afterCenter = getPosition();
+
+        // If both axes are blocked by the map boundary, stop inertia immediately.
+        if ( beforeCenter == afterCenter ) {
+            _deactivate();
+            return false;
+        }
+
+        // Zero out the velocity for any axis that hit a boundary, so the other axis can continue.
+        // We only do this when the shift was non-zero; a zero shift means the subpixel
+        // accumulation has not reached a full pixel yet, so we keep decaying normally.
+        if ( viewShift.x != 0 && afterCenter.x == beforeCenter.x ) {
+            _velX = 0;
+            _subpixelShiftX = 0;
+        }
+        if ( viewShift.y != 0 && afterCenter.y == beforeCenter.y ) {
+            _velY = 0;
+            _subpixelShiftY = 0;
+        }
+        if ( _velX == 0 && _velY == 0 ) {
+            _deactivate();
+        }
+
+        return true;
+    }
+
+    void UIScrollInertia::_deactivate()
+    {
+        _active = false;
+        _movementSteps.clear();
     }
 }

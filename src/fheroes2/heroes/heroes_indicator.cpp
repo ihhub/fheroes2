@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -28,9 +28,9 @@
 #include <cstdlib>
 #include <utility>
 
-#include "agg_image.h"
 #include "army.h"
 #include "dialog.h"
+#include "game_assets.h"
 #include "heroes.h"
 #include "icn.h"
 #include "image.h"
@@ -93,7 +93,7 @@ void LuckIndicator::Redraw()
     _description.append( _( "Current Luck Modifiers:" ) );
     _description.append( "\n\n" );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > _luck ? 3 : ( 0 < _luck ? 2 : 6 ) ) );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::HSICONS, ( 0 > _luck ? 3 : ( 0 < _luck ? 2 : 6 ) ) );
     const int32_t inter = 6;
     int32_t count = ( 0 == _luck ? 1 : std::abs( _luck ) );
     int32_t cx = _area.x + ( _area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
@@ -154,7 +154,7 @@ void MoraleIndicator::Redraw()
         spriteInx = 4;
     }
 
-    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( ICN::HSICONS, spriteInx );
+    fheroes2::Sprite sprite = Assets::getImage( ICN::HSICONS, spriteInx );
     if ( _hero->GetArmy().AllTroopsAreUndead() ) {
         _description.append( "\n\n" );
         _description.append( _( "Entire army is undead, so morale does not apply." ) );
@@ -208,7 +208,7 @@ void ExperienceIndicator::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & experienceImage = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
+    const fheroes2::Sprite & experienceImage = Assets::getImage( ICN::HSICONS, 1 );
     fheroes2::Blit( experienceImage, display, _area.x, _area.y );
 
     const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 24, 33, 9 };
@@ -282,7 +282,7 @@ void SpellPointsIndicator::Redraw()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
+    const fheroes2::Sprite & sprite = Assets::getImage( ICN::HSICONS, 8 );
 
     const fheroes2::Rect renderRoi{ _area.x + 1, _area.y + 22, 33, 9 };
 

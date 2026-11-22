@@ -40,9 +40,9 @@ namespace Campaign
 
     enum CampaignDifficulty : int32_t
     {
-        Easy = -1,
-        Normal = 0,
-        Hard = 1
+        Decreased = -1,
+        Default = 0,
+        Increased = 1
     };
 
     class CampaignSaveData
@@ -144,8 +144,8 @@ namespace Campaign
         ScenarioInfoId _currentScenarioInfoId;
         int32_t _currentScenarioBonusId{ -1 };
 
-        int32_t _difficulty{ CampaignDifficulty::Normal };
-        int32_t _minDifficulty{ CampaignDifficulty::Normal };
+        int32_t _difficulty{ CampaignDifficulty::Default };
+        int32_t _minDifficulty{ CampaignDifficulty::Default };
     };
 
     // Call this function only when playing campaign scenario.
