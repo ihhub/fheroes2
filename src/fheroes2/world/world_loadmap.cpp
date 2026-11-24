@@ -74,7 +74,7 @@
 
 namespace
 {
-    const int32_t ultimateArtifactOffset = 9;
+    constexpr int32_t ultimateArtifactOffset{ 9 };
 
     Artifact getUltimateArtifact()
     {
@@ -1449,7 +1449,7 @@ bool World::ProcessNewMP2Map( const std::string & filename, const bool checkPoLO
     }
 
     // Set up Ultimate Artifact.
-    setUltimateArtifact();
+    setUltimateArtifact( true );
 
     PostLoad( true, false );
 
@@ -1478,7 +1478,7 @@ bool World::_processNewResurrectionMap( const std::string & filename )
     }
 
     // Set up Ultimate Artifact.
-    setUltimateArtifact();
+    setUltimateArtifact( false );
 
     PostLoad( true, false );
 
@@ -1624,7 +1624,7 @@ bool World::updateTileMetadata( Maps::Tile & tile, const MP2::MapObjectType obje
     return true;
 }
 
-void World::setUltimateArtifact()
+void World::setUltimateArtifact( const bool isOriginalMap )
 {
     int32_t tileId = -1;
     int32_t radius = 0;
@@ -1678,11 +1678,22 @@ void World::setUltimateArtifact()
         std::vector<int32_t> pool;
         pool.reserve( vec_tiles.size() / 2 );
 
-        for ( const Maps::Tile & tile : vec_tiles ) {
-            const int32_t idx = tile.GetIndex();
+        if ( isOriginalMap ) {
+            for ( const Maps::Tile & tile : vec_tiles ) {
+                const int32_t idx = tile.GetIndex();
 
-            if ( checkTileForSuitabilityForUltArt( idx ) ) {
-                pool.push_back( idx );
+                if ( checkTileForSuitabilityForUltArt( idx ) ) {
+                    pool.push_back( idx );
+                }
+            }
+        }
+        else {
+            for ( const Maps::Tile & tile : vec_tiles ) {
+                const int32_t idx = tile.GetIndex();
+
+                if ( getTile( idx ).isSuitableForUltimateArtifact() ) {
+                    pool.push_back( idx );
+                }
             }
         }
 
@@ -1712,9 +1723,11 @@ void World::setUltimateArtifact()
         assert( std::find( pool.begin(), pool.end(), tileId ) == pool.end() );
         pool.push_back( tileId );
 
-        pool.erase( std::remove_if( pool.begin(), pool.end(),
-                                    [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
-                    pool.end() );
+        if ( isOriginalMap ) {
+            pool.erase( std::remove_if( pool.begin(), pool.end(),
+                                        [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
+                        pool.end() );
+        }
 
         // If this assertion blows up then the map is corrupted.
         // The Editor has the same Ultimate Artifact placement conditions as the game.

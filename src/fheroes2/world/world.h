@@ -538,7 +538,7 @@ private:
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
-    void setUltimateArtifact();
+    void setUltimateArtifact( const bool isOriginalMap );
 
     void tryAddDebugHero();
 
