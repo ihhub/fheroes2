@@ -343,27 +343,27 @@ namespace
     public:
         MOFile() = default;
 
-        const char * ngettext( const char * str, const size_t plural ) const
+        const char * ngettext( const char * str, const char * untranslated, const size_t plural ) const
         {
             if ( !_isValid ) {
                 assert( 0 );
 
-                return stripContext( str );
+                return stripContext( untranslated );
             }
 
             const auto iter = std::as_const( _translations ).find( crc32b( str ) );
             if ( iter == _translations.cend() ) {
-                return stripContext( str );
+                return stripContext( untranslated );
             }
 
             const auto & [dummy, pluralFormTranslations] = *iter;
             if ( plural >= pluralFormTranslations.size() ) {
-                return stripContext( str );
+                return stripContext( untranslated );
             }
 
             const std::string & translatedStr = pluralFormTranslations[plural];
             if ( translatedStr.empty() ) {
-                return stripContext( str );
+                return stripContext( untranslated );
             }
 
             return translatedStr.c_str();
@@ -617,12 +617,12 @@ void Translation::reset()
 
 const char * Translation::gettext( const std::string & str )
 {
-    return current ? current->ngettext( str.c_str(), 0 ) : stripContext( str.c_str() );
+    return current ? current->ngettext( str.c_str(), str.c_str(), 0 ) : stripContext( str.c_str() );
 }
 
 const char * Translation::gettext( const char * str )
 {
-    return current ? current->ngettext( str, 0 ) : stripContext( str );
+    return current ? current->ngettext( str, str, 0 ) : stripContext( str );
 }
 
 const char * Translation::getNonTranslated( const char * str )
@@ -633,6 +633,9 @@ const char * Translation::getNonTranslated( const char * str )
 const char * Translation::ngettext( const char * str, const char * plural, const size_t n )
 {
     if ( current ) {
+        // Like GNU gettext, fall back to the English singular or plural form when there is no translation.
+        const char * untranslated = ( n == 1 ? str : plural );
+
         switch ( current->getLocale() ) {
         case LocaleType::LOCALE_AF:
         case LocaleType::LOCALE_BG:
@@ -653,35 +656,45 @@ const char * Translation::ngettext( const char * str, const char * plural, const
         case LocaleType::LOCALE_NL:
         case LocaleType::LOCALE_SV:
         case LocaleType::LOCALE_TR:
-            return current->ngettext( str, ( n != 1 ) );
+            return current->ngettext( str, untranslated, ( n != 1 ) );
         case LocaleType::LOCALE_EL:
         case LocaleType::LOCALE_FR:
         case LocaleType::LOCALE_PT:
-            return current->ngettext( str, ( n > 1 ) );
+            return current->ngettext( str, untranslated, ( n > 1 ) );
         case LocaleType::LOCALE_AR:
-            return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
+            return current->ngettext( str, untranslated,
+                                      ( n == 0                           ? 0
+                                        : n == 1                         ? 1
+                                        : n == 2                         ? 2
+                                        : n % 100 >= 3 && n % 100 <= 10  ? 3
+                                        : n % 100 >= 11 && n % 100 <= 99 ? 4
+                                                                         : 5 ) );
         case LocaleType::LOCALE_RO:
-            return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
         case LocaleType::LOCALE_SL:
-            return current->ngettext( str, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
+            return current->ngettext( str, untranslated, ( n % 100 == 1 ? 0 : n % 100 == 2 ? 1 : n % 100 == 3 || n % 100 == 4 ? 2 : 3 ) );
         case LocaleType::LOCALE_SR:
-            return current->ngettext( str, ( n == 1 ? 3 : n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated,
+                                      ( n == 1                                                            ? 3
+                                        : n % 10 == 1 && n % 100 != 11                                    ? 0
+                                        : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1
+                                                                                                          : 2 ) );
         case LocaleType::LOCALE_CS:
         case LocaleType::LOCALE_SK:
-            return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
         case LocaleType::LOCALE_HR:
         case LocaleType::LOCALE_LV:
         case LocaleType::LOCALE_RU:
-            return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
         case LocaleType::LOCALE_LT:
-            return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
         case LocaleType::LOCALE_MK:
-            return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
+            return current->ngettext( str, untranslated, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
         case LocaleType::LOCALE_PL:
-            return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
         case LocaleType::LOCALE_BE:
         case LocaleType::LOCALE_UK:
-            return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
+            return current->ngettext( str, untranslated, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
         default:
             break;
         }
