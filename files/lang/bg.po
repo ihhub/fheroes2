@@ -9049,6 +9049,16 @@ msgstr "Магия"
 msgid "View Spell Points Info"
 msgstr "Виж информация за магическите точките"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Режим на предаване"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr ""
 
@@ -12997,10 +13007,10 @@ msgstr "Призови кораб"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Извиква най-близката незаета, приятелска лодка до съседно място на брега. "
 "Приятелска лодка е тази, която току-що си построил или си бил последният "
@@ -13226,36 +13236,3 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Оценка: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Увеличава умението за атака на единица."
-
-#~ msgid "Easy"
-#~ msgstr "Лесно"
-
-#~ msgid "Hard"
-#~ msgstr "Трудно"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr "ЕКСПАНЗИЯ"
-
-#, fuzzy
-#~ msgid "Create a new map from scratch."
-#~ msgstr "нова карта от начало"
-
-#, fuzzy
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "и много-много други поддръжници!"
-
-#~ msgid "AI"
-#~ msgstr "ИИ"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Кликни тук, за да избереш кой сценарий да играеш."

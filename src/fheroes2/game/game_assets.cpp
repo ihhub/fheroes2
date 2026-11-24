@@ -5671,6 +5671,12 @@ namespace
             fheroes2::h2d::readImage( "market_icon_good.image", _icnVsSprite[id][0] );
             fheroes2::h2d::readImage( "market_icon_evil.image", _icnVsSprite[id][1] );
             break;
+        case ICN::SLEEPING_HERO_ICON:
+            _icnVsSprite[id].resize( 3 );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_normal.image", _icnVsSprite[id][0] );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_small_good.image", _icnVsSprite[id][1] );
+            fheroes2::h2d::readImage( "sleeping_hero_icon_small_evil.image", _icnVsSprite[id][2] );
+            break;
         default:
             break;
         }

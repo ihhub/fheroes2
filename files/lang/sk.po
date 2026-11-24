@@ -8991,6 +8991,16 @@ msgstr "Body kúziel"
 msgid "View Spell Points Info"
 msgstr "Zobraz info o bodoch kúziel"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Režim tokov"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr ""
 
@@ -12896,10 +12906,10 @@ msgstr "Vyvolaj loď"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Privolá najbližšiu neobsadenú priateľskú loď na priľahlé miesto na pobreží. "
 "Priateľská loď je loď, ktorú si práve postavil alebo si ju obsadil ako "
@@ -13129,38 +13139,3 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "%{percent}% všetkých bojovníkov"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Zvyšuje útočné schopnosti jednotky."
-
-#~ msgid "Easy"
-#~ msgstr "Ľahká"
-
-#~ msgid "Hard"
-#~ msgstr "Ťažká"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "KAMPAŇ\n"
-#~ "EXPANZIE"
-
-#, fuzzy
-#~ msgid "Create a new map from scratch."
-#~ msgstr "nová mapa, od nuly"
-
-#, fuzzy
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "a mnoho ďalších podporovateľov!"
-
-#~ msgid "AI"
-#~ msgstr "UI"
-
-#, fuzzy
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klikni sem a vyber scenár, ktorý chceš hrať."

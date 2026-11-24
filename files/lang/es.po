@@ -8915,6 +8915,16 @@ msgstr "Establecer valor de puntos de hechizo:"
 msgid "View Spell Points Info"
 msgstr "Ver información sobre maná"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Modo arroyo"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Establecer el radio de patrulla en casillas:"
 
@@ -12846,10 +12856,10 @@ msgstr "Llamar barco"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Llama a un barco amigo desocupado al punto de costa más cercano. Un barco "
 "amigo es aquel que has construido o has sido el último jugador en ocupar."
@@ -13081,27 +13091,3 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Tasa: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Incrementa la habilidad de ataque de una unidad."
-
-#~ msgid "Easy"
-#~ msgstr "Fácil"
-
-#~ msgid "Hard"
-#~ msgstr "Difícil"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "CAMPAÑA\n"
-#~ "DE EXPAN-\n"
-#~ "SIÓN"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Crea un nuevo mapa desde cero."

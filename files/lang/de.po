@@ -9015,6 +9015,16 @@ msgid "View Spell Points Info"
 msgstr "Infos zu Zauberpunkten anzeigen"
 
 #, fuzzy
+msgid "Sleep Mode"
+msgstr "Wasserlauf-Modus"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
+#, fuzzy
 msgid "Set patrol radius in tiles:"
 msgstr "Legt den Radius in Feldern fest, innerhalb dessen der Held angreift."
 
@@ -12924,10 +12934,10 @@ msgstr "Boot herbeirufen"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Ruft das nächstgelegene unbesetzte, eigene Boot an ein dem Helden "
 "angrenzendes Ufer. Ein eigenes Boot ist eines, das Ihr gerade gebaut oder "
@@ -13159,26 +13169,3 @@ msgstr "Er sagte ihr: Yada yada yada... und dann sagte sie: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Eine unbekannte Macht wird wiederbelebt..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Grad: %{percent})"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Erhöht die Angriffsfertigkeit einer Einheit."
-
-#~ msgid "Easy"
-#~ msgstr "Leicht"
-
-#~ msgid "Hard"
-#~ msgstr "Schwer"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "ZUSATZ\n"
-#~ "FELDZUG"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Komplett neue Karte erstellen."

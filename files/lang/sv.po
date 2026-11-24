@@ -8778,6 +8778,16 @@ msgstr "Ange Besvärjelsepoäng:"
 msgid "View Spell Points Info"
 msgstr "Visa information för besvärjelsepoäng"
 
+#, fuzzy
+msgid "Sleep Mode"
+msgstr "Flodläge"
+
+msgid ""
+"The Hero is currently in sleep mode. When a Hero is in sleep mode, the "
+"player will not be reminded of any remaining movement points for this Hero "
+"when ending their turn."
+msgstr ""
+
 msgid "Set patrol radius in tiles:"
 msgstr "Ange patrullradie i antal rutor:"
 
@@ -12631,10 +12641,10 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Tillkallar närmsta lediga skepp till en strandplats som hjälten måste stå "
 "på. Bara skepp som du nyligen byggt eller var den senaste att kontrollera "
@@ -12864,40 +12874,3 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
-
-#~ msgid "(Rate: %{percent})"
-#~ msgstr "(Andel: %{percent} procent)"
-
-#~ msgid "Increases a unit's attack skill."
-#~ msgstr "Höjer en varelses Anfall."
-
-#~ msgid "Easy"
-#~ msgstr "Lätt"
-
-#~ msgid "Hard"
-#~ msgstr "Svår"
-
-#, fuzzy
-#~ msgid ""
-#~ "RESURRECTION\n"
-#~ "CAMPAIGN"
-#~ msgstr ""
-#~ "EXPANSIONS-\n"
-#~ "KAMPANJ"
-
-#~ msgid "Create a new map from scratch."
-#~ msgstr "Skapa en ny blank karta."
-
-#~ msgid ""
-#~ "Cell\n"
-#~ "Details"
-#~ msgstr "Rutdetaljer"
-
-#~ msgid "and many-many other contributors and supporters!"
-#~ msgstr "och många många andra som gett sitt stöd!"
-
-#~ msgid "AI"
-#~ msgstr "AI"
-
-#~ msgid "Click to set this hero to be AI-controlled."
-#~ msgstr "Klicka för att ange denna hjälte som AI-kontrollerad."
