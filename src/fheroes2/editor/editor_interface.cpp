@@ -1845,7 +1845,7 @@ namespace Interface
                             if ( le.isMouseWheelDown() && _editorPanel.setNextBrushType() ) {
                                 _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
                             }
-                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType()  ) {
+                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType() ) {
                                 _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
                             }
                         }
@@ -1869,7 +1869,7 @@ namespace Interface
                             if ( le.isMouseWheelDown() && _editorPanel.setNextBrushType() ) {
                                 _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
                             }
-                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType()  ) {
+                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType() ) {
                                 _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
                             }
                         }
