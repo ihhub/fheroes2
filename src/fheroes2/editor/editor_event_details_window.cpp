@@ -69,8 +69,8 @@ namespace
     class TroopDialogElement final : public fheroes2::DialogElement
     {
     public:
-        explicit TroopDialogElement( const Troop & troop )
-            : _troop( troop )
+        explicit TroopDialogElement( Troop troop )
+            : _troop( std::move( troop ) )
         {
             const fheroes2::Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
             _area = { sprite.width(), sprite.height() };
@@ -316,6 +316,7 @@ namespace Editor
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
             buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteArtifact.area() ) );
             buttonDeleteSecondarySkill.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteSecondarySkill.area() ) );
+            buttonDeleteMonster.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteMonster.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
