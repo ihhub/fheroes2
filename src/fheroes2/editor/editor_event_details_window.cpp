@@ -43,6 +43,7 @@
 #include "localevent.h"
 #include "map_format_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
