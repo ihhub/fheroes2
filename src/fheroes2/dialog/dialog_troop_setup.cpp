@@ -108,10 +108,9 @@ namespace Dialog
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        int32_t monsterType = troop.GetID();
         int32_t monsterCount = static_cast<int32_t>( troop.GetCount() );
 
-        const TroopSelectionDialogElement monsterUiElement{ monsterType, monsterCount };
+        const TroopSelectionDialogElement monsterUiElement{ troop.GetID(), monsterCount };
 
         const fheroes2::Text headerText( _( "Select monster:" ), fheroes2::FontType::normalWhite() );
         constexpr int32_t elementOffset{ 10 };
@@ -154,8 +153,6 @@ namespace Dialog
         const bool isEvilInterface = Settings::Get().isEvilInterfaceEnabled();
         fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
         fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
-
-        const fheroes2::Rect interactionElementsRect( fheroes2::getBoundaryRect( fheroes2::getBoundaryRect( buttonMin.area(), buttonMax.area() ), selectionBoxArea ) );
 
         switchMaxMinButtons( buttonMin, buttonMax, monsterCount, min );
 
