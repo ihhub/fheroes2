@@ -146,8 +146,6 @@ namespace Dialog
         valueSelectionElement.ignoreMouseWheelEventRoiCheck();
         valueSelectionElement.draw( display );
 
-        offsetY += valueSelectionSize.height + elementOffset;
-
         fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
         assert( btnGroups.getButtonsCount() == 2 );
 
