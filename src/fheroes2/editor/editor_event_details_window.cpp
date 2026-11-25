@@ -443,7 +443,7 @@ namespace Editor
             }
             else if ( le.MouseClickLeft( monsterRoi ) ) {
                 Troop troop( eventMetadata.monsterType, eventMetadata.monsterCount );
-                if ( Dialog::selectTroop( troop, 0, 500000 ) && ( troop.GetCount() > 0 ) && ( troop.GetID() != Monster::UNKNOWN ) ) {
+                if ( Dialog::selectTroop( troop, 0, 500000 ) && troop.isValid() ) {
                     eventMetadata.monsterType = troop.GetID();
                     eventMetadata.monsterCount = static_cast<int32_t>( troop.GetCount() );
 
