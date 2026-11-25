@@ -128,12 +128,10 @@ namespace Dialog
         constexpr int32_t elementOffset{ 10 };
         constexpr int32_t selectionAreaHeight{ 30 };
         const int32_t headerHeight = headerText.height( fheroes2::boxAreaWidthPx );
-        const int32_t topUiWidth = monsterUiElement.area().width;
-        const int32_t topUiHeight = monsterUiElement.area().height;
 
         int32_t offsetY = headerHeight + elementOffset;
 
-        const FrameBox box( offsetY + topUiHeight + selectionAreaHeight + elementOffset, true );
+        const FrameBox box( offsetY + monsterUiElement.area().height + selectionAreaHeight + elementOffset, true );
 
         const fheroes2::Rect & windowArea = box.GetArea();
 
@@ -141,9 +139,9 @@ namespace Dialog
         headerText.draw( windowArea.x, windowArea.y, fheroes2::boxAreaWidthPx, display );
 
         offsetY += windowArea.y;
-        const fheroes2::Point monsterUiOffset{ windowArea.x + ( windowArea.width - topUiWidth ) / 2, offsetY };
+        const fheroes2::Point monsterUiOffset{ windowArea.x + ( windowArea.width - monsterUiElement.area().width ) / 2, offsetY };
         monsterUiElement.draw( display, monsterUiOffset );
-        offsetY += elementOffset + topUiHeight;
+        offsetY += elementOffset + monsterUiElement.area().height;
 
         const fheroes2::Size valueSelectionSize{ fheroes2::ValueSelectionDialogElement::getArea() };
         const fheroes2::Rect selectionBoxArea{ windowArea.x + 38, offsetY, valueSelectionSize.width, valueSelectionSize.height };

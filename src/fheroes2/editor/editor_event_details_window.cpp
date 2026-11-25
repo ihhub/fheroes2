@@ -495,7 +495,7 @@ namespace Editor
                 fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteMonster.area() ) ) {
-                fheroes2::showStandardTextMessage( _( "Delete Monster" ), _( "Delete the Monster from the event." ), Dialog::ZERO );
+                fheroes2::showStandardTextMessage( _( "Delete Monsters" ), _( "Delete the monsters from the event." ), Dialog::ZERO );
             }
             else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.rect() ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
@@ -524,7 +524,7 @@ namespace Editor
                     monsterUI->showPopup( Dialog::ZERO );
                 }
                 else {
-                    fheroes2::showStandardTextMessage( _( "Monster" ), _( "No Monster will be given by the event." ), Dialog::ZERO );
+                    fheroes2::showStandardTextMessage( _( "Monsters" ), _( "No monster will be given by the event." ), Dialog::ZERO );
                 }
             }
 
