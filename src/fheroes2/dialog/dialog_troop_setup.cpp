@@ -31,6 +31,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "math_base.h"
+#include "monster.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -39,6 +40,11 @@
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_tool.h"
+
+namespace fheroes2
+{
+    class Image;
+}
 
 namespace
 {
