@@ -111,7 +111,7 @@ namespace Dialog
         int32_t monsterType = troop.GetID();
         int32_t monsterCount = static_cast<int32_t>( troop.GetCount() );
 
-        TroopSelectionDialogElement monsterUiElement{ monsterType, monsterCount };
+        const TroopSelectionDialogElement monsterUiElement{ monsterType, monsterCount };
 
         const fheroes2::Text headerText( _( "Select monster:" ), fheroes2::FontType::normalWhite() );
         constexpr int32_t elementOffset{ 10 };
