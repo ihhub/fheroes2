@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "game_string.h"
@@ -94,6 +95,7 @@ struct MapEvent final : public MapBaseObject
 
     Skill::Secondary secondarySkill;
     int32_t experience{ 0 };
+    Troop troop;
 };
 
 struct MapSphinx final : public MapBaseObject

@@ -2878,6 +2878,14 @@ namespace
             }
         }
 
+        std::unique_ptr<fheroes2::TroopDialogElement> troopUI;
+        if ( mapEvent->troop.isValid() && hero.GetArmy().CanJoinTroop( mapEvent->troop ) ) {
+            troopUI = std::make_unique<fheroes2::TroopDialogElement>( mapEvent->troop.GetID(), mapEvent->troop.GetCount() );
+            elementUI.emplace_back( troopUI.get() );
+
+            hero.GetArmy().JoinTroop( mapEvent->troop );
+        }
+
         std::unique_ptr<fheroes2::ExperienceDialogElement> experienceUI;
         if ( mapEvent->experience > 0 ) {
             experienceUI = std::make_unique<fheroes2::ExperienceDialogElement>( mapEvent->experience );

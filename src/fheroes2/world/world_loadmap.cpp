@@ -974,6 +974,7 @@ bool World::loadResurrectionMap( const std::string & filename )
                     eventObject->isSingleTimeEvent = !eventInfo.isRecurringEvent;
                     eventObject->secondarySkill = { eventInfo.secondarySkill, eventInfo.secondarySkillLevel };
                     eventObject->experience = eventInfo.experience;
+                    eventObject->troop = Troop( eventInfo.monsterType, eventInfo.monsterCount );
 
                     eventObject->setUIDAndIndex( static_cast<int32_t>( tileId ) );
 
