@@ -910,13 +910,14 @@ namespace fheroes2
 
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
-        Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
         if ( _monster.isValid() ) {
+            Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
             sprite._disableTransformLayer();
             renderMonsterFrame( _monster, sprite, { 6, 6 } );
             Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
         }
         else {
+            const Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
             Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
             const Sprite & background = Assets::getImage( ICN::STRIP, 2 );
             Copy( background, 0, 0, output, offset.x + 6, offset.y + 6, background.width(), background.height() );
@@ -939,6 +940,32 @@ namespace fheroes2
     {
         if ( _monster.isValid() ) {
             Dialog::ArmyInfo( Troop{ _monster, 0 }, buttons );
+        }
+    }
+
+    TroopDialogElement::TroopDialogElement( const Monster & monster, const uint32_t count )
+        : MonsterDialogElement( monster )
+        , _count( count )
+    {
+        // Do nothing.
+    }
+
+    void TroopDialogElement::draw( Image & output, const Point & offset ) const
+    {
+        MonsterDialogElement::draw( output, offset );
+
+        if ( _monster.isValid() ) {
+            const fheroes2::Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
+
+            const fheroes2::Text text{ std::to_string( _count ), fheroes2::FontType::normalWhite() };
+            text.draw( offset.x - 6 + sprite.width() - text.width() - 3, offset.y - 6 + sprite.height() - text.height() + 1, output );
+        }
+    }
+
+    void TroopDialogElement::showPopup( const int buttons ) const
+    {
+        if ( _monster.isValid() ) {
+            Dialog::ArmyInfo( Troop{ _monster, _count }, buttons );
         }
     }
 

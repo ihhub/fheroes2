@@ -345,7 +345,7 @@ namespace fheroes2
         mutable uint32_t _currentIndex;
     };
 
-    class MonsterDialogElement final : public DialogElement
+    class MonsterDialogElement : public DialogElement
     {
     public:
         explicit MonsterDialogElement( const Monster & monster );
@@ -358,8 +358,23 @@ namespace fheroes2
 
         void showPopup( const int buttons ) const override;
 
-    private:
-        const Monster _monster;
+    protected:
+        mutable Monster _monster;
+    };
+
+    class TroopDialogElement : public MonsterDialogElement
+    {
+    public:
+        explicit TroopDialogElement( const Monster & monster, const uint32_t count );
+
+        ~TroopDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void showPopup( const int buttons ) const override;
+
+    protected:
+        mutable uint32_t _count{ 0 };
     };
 
     class ValueSelectionDialogElement final

@@ -177,7 +177,7 @@ namespace Dialog
     class FrameBorder
     {
     public:
-        explicit FrameBorder( int v = fheroes2::borderWidthPx );
+        explicit FrameBorder( const int v = fheroes2::borderWidthPx );
 
         int BorderWidth() const
         {

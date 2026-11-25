@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "dialog_troop_setup.h"
 #include "editor_ui_helper.h"
 #include "game_assets.h"
 #include "game_hotkeys.h"
@@ -66,69 +67,6 @@ namespace
     const int32_t elementOffset{ 9 };
     const int32_t sectionWidth{ ( fheroes2::Display::DEFAULT_WIDTH - elementOffset * 3 ) / 2 };
     const fheroes2::Size messageArea{ sectionWidth, 207 };
-
-    class TroopDialogElement final : public fheroes2::DialogElement
-    {
-    public:
-        explicit TroopDialogElement( Troop troop )
-            : _troop( std::move( troop ) )
-        {
-            const fheroes2::Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
-            _area = { sprite.width(), sprite.height() };
-        }
-
-        ~TroopDialogElement() override = default;
-
-        void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
-        {
-            fheroes2::Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
-            if ( _troop.GetMonster().isValid() ) {
-                sprite._disableTransformLayer();
-                renderMonsterFrame( _troop, sprite, { 6, 6 } );
-                Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
-
-                const fheroes2::Text text{ std::to_string( _troop.GetCount() ), fheroes2::FontType::normalWhite() };
-                text.draw( offset.x - 6 + sprite.width() - text.width() - 3, offset.y - 6 + sprite.height() - text.height() + 1, output );
-            }
-            else {
-                Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
-                const fheroes2::Sprite & background = Assets::getImage( ICN::STRIP, 2 );
-                Copy( background, 0, 0, output, offset.x + 6, offset.y + 6, background.width(), background.height() );
-            }
-        }
-
-        void processEvents( const fheroes2::Point & offset ) const override
-        {
-            LocalEvent & le = LocalEvent::Get();
-            const fheroes2::Rect rect{ offset.x, offset.y, _area.width, _area.height };
-            if ( le.isMouseRightButtonPressedInArea( rect ) ) {
-                showPopup( Dialog::ZERO );
-            }
-            else if ( le.MouseClickLeft( rect ) ) {
-                showPopup( Dialog::BUTTONS );
-            }
-        }
-
-        void showPopup( const int /*buttons*/ ) const override
-        {
-            _updatedMonster = Dialog::selectMonster( _troop.GetID() );
-        }
-
-        bool update( fheroes2::Image & output, const fheroes2::Point & offset ) const override
-        {
-            if ( _updatedMonster != _troop.GetID() && _updatedMonster != Monster::UNKNOWN ) {
-                _troop = Troop( _updatedMonster, _troop.GetCount() );
-                draw( output, offset );
-                return true;
-            }
-
-            return false;
-        }
-
-    private:
-        mutable Troop _troop;
-        mutable Monster _updatedMonster;
-    };
 }
 
 namespace Editor
@@ -240,7 +178,7 @@ namespace Editor
         buttonDeleteSecondarySkill.draw();
 
         // Monster
-        auto monsterUI = std::make_unique<TroopDialogElement>( Troop( eventMetadata.monsterType, eventMetadata.monsterCount ) );
+        auto monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
         const fheroes2::Rect monsterRoi{ secondarySkillRoi.x + ( secondarySkillRoi.width - monsterUI->area().width ) / 2,
                                          messageRoi.y + messageRoi.height + elementOffset, monsterUI->area().width, monsterUI->area().height };
         monsterUI->draw( display, monsterRoi.getPosition() );
@@ -504,12 +442,24 @@ namespace Editor
                 display.render();
             }
             else if ( le.MouseClickLeft( monsterRoi ) ) {
-                auto monsterUiElement = std::make_unique<const TroopDialogElement>( Troop( eventMetadata.monsterType, eventMetadata.monsterCount ) );
+                Troop troop( eventMetadata.monsterType, eventMetadata.monsterCount );
+                if ( Dialog::selectTroop( troop, 0, 500000 ) && ( troop.GetCount() > 0 ) && ( troop.GetID() != Monster::UNKNOWN ) ) {
+                    eventMetadata.monsterType = troop.GetID();
+                    eventMetadata.monsterCount = troop.GetCount();
 
-                Dialog::SelectCount( "Meh", 0, 500000, eventMetadata.monsterCount, 1, monsterUiElement.get() );
+                    monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
+                    monsterUI->draw( display, monsterRoi.getPosition() );
+                    display.render( monsterRoi );
+                }
+            }
+            else if ( le.MouseClickLeft( buttonDeleteMonster.area() ) ) {
+                eventMetadata.monsterType = Monster::UNKNOWN;
+                eventMetadata.monsterCount = 0;
 
-                // The opened selectSecondarySkill() dialog might be bigger than this dialog so we render the whole screen.
-                display.render();
+                monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
+                monsterUI->draw( display, monsterRoi.getPosition() );
+
+                display.render( monsterRoi );
             }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
@@ -545,6 +495,9 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteMonster.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Delete Monster" ), _( "Delete the Monster from the event." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.rect() ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
             }
@@ -566,6 +519,14 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( messageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( monsterRoi ) ) {
+                if ( eventMetadata.monsterType != Monster::UNKNOWN ) {
+                    monsterUI->showPopup( Dialog::ZERO );
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Monster" ), _( "No Monster will be given by the event." ), Dialog::ZERO );
+                }
             }
 
             if ( isRedrawNeeded ) {
