@@ -20,19 +20,25 @@
 
 #include "dialog_troop_setup.h"
 
-#include <memory>
+#include <cassert>
+#include <optional>
+#include <string>
 
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game_assets.h"
 #include "icn.h"
-#include "math_tools.h"
+#include "localevent.h"
+#include "math_base.h"
+#include "screen.h"
 #include "settings.h"
 #include "translations.h"
+#include "ui_button.h"
+#include "ui_constants.h"
 #include "ui_dialog.h"
-#include "ui_monster.h"
+#include "ui_text.h"
+#include "ui_tool.h"
 
 namespace
 {

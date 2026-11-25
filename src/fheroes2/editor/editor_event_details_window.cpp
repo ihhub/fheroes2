@@ -55,7 +55,6 @@
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
-#include "ui_monster.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
