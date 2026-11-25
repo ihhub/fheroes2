@@ -243,7 +243,7 @@ namespace Dialog
             return false;
         }
 
-        troop = Troop( monsterUiElement.getMonsterType(), valueSelectionElement.getValue() );
+        troop = Troop( monsterUiElement.getMonsterType(), monsterCount );
 
         return true;
     }
