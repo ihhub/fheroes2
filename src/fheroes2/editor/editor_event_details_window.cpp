@@ -445,7 +445,7 @@ namespace Editor
                 Troop troop( eventMetadata.monsterType, eventMetadata.monsterCount );
                 if ( Dialog::selectTroop( troop, 0, 500000 ) && ( troop.GetCount() > 0 ) && ( troop.GetID() != Monster::UNKNOWN ) ) {
                     eventMetadata.monsterType = troop.GetID();
-                    eventMetadata.monsterCount = troop.GetCount();
+                    eventMetadata.monsterCount = static_cast<int32_t>( troop.GetCount() );
 
                     monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
                     monsterUI->draw( display, monsterRoi.getPosition() );

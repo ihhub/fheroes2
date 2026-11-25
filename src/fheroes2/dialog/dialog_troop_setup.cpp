@@ -109,7 +109,7 @@ namespace Dialog
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         int32_t monsterType = troop.GetID();
-        int32_t monsterCount = troop.GetCount();
+        int32_t monsterCount = static_cast<int32_t>( troop.GetCount() );
 
         TroopSelectionDialogElement monsterUiElement{ monsterType, monsterCount };
 
