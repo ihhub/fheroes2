@@ -910,15 +910,13 @@ namespace fheroes2
 
     void MonsterDialogElement::draw( Image & output, const Point & offset ) const
     {
+        const Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
+        Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+
         if ( _monster.isValid() ) {
-            Sprite sprite = Assets::getImage( ICN::STRIP, 12 );
-            sprite._disableTransformLayer();
-            renderMonsterFrame( _monster, sprite, { 6, 6 } );
-            Copy( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
+            renderMonsterFrame( _monster, output, { offset.x + 6, offset.y + 6 } );
         }
         else {
-            const Sprite & sprite = Assets::getImage( ICN::STRIP, 12 );
-            Blit( sprite, 0, 0, output, offset.x, offset.y, sprite.width(), sprite.height() );
             const Sprite & background = Assets::getImage( ICN::STRIP, 2 );
             Copy( background, 0, 0, output, offset.x + 6, offset.y + 6, background.width(), background.height() );
         }

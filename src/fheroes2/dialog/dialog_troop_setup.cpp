@@ -120,7 +120,7 @@ namespace Dialog
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-        int32_t monsterCount = static_cast<int32_t>( troop.GetCount() );
+        int32_t monsterCount = std::max<int32_t>( static_cast<int32_t>( troop.GetCount() ), 1 );
 
         const TroopSelectionDialogElement monsterUiElement{ troop.GetID(), monsterCount };
 
