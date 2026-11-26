@@ -2879,7 +2879,7 @@ namespace
         }
 
         std::unique_ptr<fheroes2::TroopDialogElement> troopUI;
-        if ( mapEvent->troop.isValid() && hero.GetArmy().CanJoinTroop( mapEvent->troop ) ) {
+        if ( mapEvent->troop.isValid() ) {
             troopUI = std::make_unique<fheroes2::TroopDialogElement>( mapEvent->troop.GetID(), mapEvent->troop.GetCount() );
             elementUI.emplace_back( troopUI.get() );
 
