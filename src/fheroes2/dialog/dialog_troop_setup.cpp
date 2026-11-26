@@ -20,6 +20,7 @@
 
 #include "dialog_troop_setup.h"
 
+#include <algorithm>
 #include <cassert>
 #include <optional>
 #include <string>
