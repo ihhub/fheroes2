@@ -2882,8 +2882,6 @@ namespace
         if ( mapEvent->troop.isValid() ) {
             troopUI = std::make_unique<fheroes2::TroopDialogElement>( mapEvent->troop.GetID(), mapEvent->troop.GetCount() );
             elementUI.emplace_back( troopUI.get() );
-
-            hero.GetArmy().JoinTroop( mapEvent->troop );
         }
 
         std::unique_ptr<fheroes2::ExperienceDialogElement> experienceUI;
@@ -2916,6 +2914,15 @@ namespace
         // PickupArtifact() has a built-in check for Artifact correctness, the presence of a magic book
         // and the fullness of the bag. It also displays appropriate text when an artifact cannot be picked up.
         hero.PickupArtifact( art );
+
+        if ( mapEvent->troop.isValid() && !hero.GetArmy().JoinTroop( mapEvent->troop ) ) {
+            assert( troopUI );
+
+            fheroes2::Text monsterBody( _( "The monsters cannot join your full army. Insulted by this, they run away." ), fheroes2::FontType::normalWhite(),
+                                              Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
+
+            fheroes2::showMessage( emptyText, std::move( monsterBody ), Dialog::OK, elementUI );
+        }
 
         if ( mapEvent->experience > 0 ) {
             hero.IncreaseExperience( static_cast<uint32_t>( mapEvent->experience ) );
