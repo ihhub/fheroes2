@@ -756,6 +756,72 @@ namespace Interface
         }
     }
 
+    bool EditorPanel::setNextBrushType()
+    {
+        if ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE ) {
+            return false;
+        }
+
+        switch ( _selectedBrushSize ) {
+        case BrushSize::SMALL:
+            _selectedBrushSize = BrushSize::MEDIUM;
+            break;
+        case BrushSize::MEDIUM:
+            _selectedBrushSize = BrushSize::LARGE;
+            break;
+        case BrushSize::LARGE:
+            _selectedBrushSize = BrushSize::AREA;
+            break;
+        case BrushSize::AREA:
+            _selectedBrushSize = BrushSize::SMALL;
+            break;
+        default:
+            // Have you added a new Brush size? Update the logic above!
+            assert( 0 );
+            return false;
+        }
+
+        // Redraw all brush size buttons.
+        for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+            _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
+        }
+
+        return true;
+    }
+
+    bool EditorPanel::setPreviousBrushType()
+    {
+        if ( _selectedInstrument != Instrument::TERRAIN && _selectedInstrument != Instrument::ERASE ) {
+            return false;
+        }
+
+        switch ( _selectedBrushSize ) {
+        case BrushSize::SMALL:
+            _selectedBrushSize = BrushSize::AREA;
+            break;
+        case BrushSize::MEDIUM:
+            _selectedBrushSize = BrushSize::SMALL;
+            break;
+        case BrushSize::LARGE:
+            _selectedBrushSize = BrushSize::MEDIUM;
+            break;
+        case BrushSize::AREA:
+            _selectedBrushSize = BrushSize::LARGE;
+            break;
+        default:
+            // Have you added a new Brush size? Update the logic above!
+            assert( 0 );
+            return false;
+        }
+
+        // Redraw all brush size buttons.
+        for ( size_t index = 0; index < _brushSizeButtonsRect.size(); ++index ) {
+            _brushSizeButtons[index].drawOnState( index == _selectedBrushSize );
+        }
+
+        return true;
+    }
+
     Maps::ObjectGroup EditorPanel::getSelectedObjectGroup() const
     {
         switch ( _selectedInstrument ) {
