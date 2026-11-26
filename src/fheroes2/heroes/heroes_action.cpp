@@ -2918,10 +2918,10 @@ namespace
         if ( mapEvent->troop.isValid() && !hero.GetArmy().JoinTroop( mapEvent->troop ) ) {
             assert( troopUI );
 
-            fheroes2::Text monsterBody( _( "The monsters cannot join your full army. Insulted by this, they run away." ), fheroes2::FontType::normalWhite(),
+            const fheroes2::Text monsterBody( _( "The monsters cannot join your full army. Insulted by this, they run away." ), fheroes2::FontType::normalWhite(),
                                               Settings::Get().getCurrentMapInfo().getSupportedLanguage() );
 
-            fheroes2::showMessage( emptyText, std::move( monsterBody ), Dialog::OK, elementUI );
+            fheroes2::showMessage( emptyText, monsterBody, Dialog::OK, elementUI );
         }
 
         if ( mapEvent->experience > 0 ) {
