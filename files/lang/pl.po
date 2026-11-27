@@ -3869,6 +3869,10 @@ msgstr "Osobowość:"
 msgid "Best Monster:"
 msgstr "Najlepszy potwór:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Wybierz potwora:"
+
 msgid "Random Castle Name"
 msgstr "Losowa nazwa zamku"
 
@@ -4048,14 +4052,11 @@ msgstr "Usuń istniejące zdarzenie."
 msgid "Effects:"
 msgstr "Efekty:"
 
-msgid "Conditions:"
-msgstr "Warunki:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Kolory komputerów otrzymujących zdarzenie:"
 
 msgid "Cancel event after first visit"
 msgstr "Usuń po pierwszej wizycie"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Kolory komputerów otrzymujących zdarzenie:"
 
 msgid "Set Experience value:"
 msgstr "Ustaw doświadczenie:"
@@ -4084,6 +4085,14 @@ msgstr "Usuń umiejętność poboczną"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Usuń umiejętność poboczną z tego zdarzenia."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Wybierz stworzenia:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Usuń umiejętność poboczną z tego zdarzenia."
+
 msgid "No resources will be part of this event."
 msgstr "Żadne zasoby nie zostaną przyznane przy tym zdarzeniu."
 
@@ -4098,6 +4107,10 @@ msgstr ""
 "Jeśli to pole jest zaznaczone, zdarzenie zostanie aktywowane tylko raz. W "
 "przeciwnym wypadku zdarzenie zostanie aktywowane za każdym razem, gdy jeden "
 "z wybranych graczy wejdzie na pole zdarzenia."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Żaden artefakt nie będzie częścią tego zdarzenia."
 
 msgid "Click to make selection."
 msgstr "Kliknij, aby dokonać wyboru."
@@ -8284,6 +8297,10 @@ msgid ""
 msgstr ""
 "Kapitan wzdycha. \"Nie masz dość pieniędzy, co? Nie myśl sobie, że oddam ci "
 "moje mapy za darmo!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12957,3 +12974,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Nieznana siła jest wskrzeszana…"
+
+#~ msgid "Conditions:"
+#~ msgstr "Warunki:"

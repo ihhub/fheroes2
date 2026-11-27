@@ -4028,6 +4028,10 @@ msgid "Best Monster:"
 msgstr "Beste krigerslag:"
 
 #, fuzzy
+msgid "Select monster:"
+msgstr "Velg monster:"
+
+#, fuzzy
 msgid "Random Castle Name"
 msgstr "Vilkårlig borg"
 
@@ -4234,16 +4238,10 @@ msgstr "Last inn et eksisterende kart."
 msgid "Effects:"
 msgstr "Lydeffekter"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Taps-\n"
-"vilkår"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4277,6 +4275,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Velg monster:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Last inn et eksisterende kart."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4287,6 +4293,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -8641,6 +8650,10 @@ msgid ""
 msgstr ""
 "Kapteinen sukker. \"Du har ikke nok penger, hva? Du kan ikke forvente at jeg "
 "skal gi fra meg kartet gratis!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -13454,3 +13467,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukjent styrke holder på å komme tilbake..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Taps-\n"
+#~ "vilkår"

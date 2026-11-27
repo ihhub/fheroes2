@@ -3967,6 +3967,10 @@ msgid "Best Monster:"
 msgstr "Най-добро чудовище:"
 
 #, fuzzy
+msgid "Select monster:"
+msgstr "Избери чудовище:"
+
+#, fuzzy
 msgid "Random Castle Name"
 msgstr "Случаен замък"
 
@@ -4173,16 +4177,10 @@ msgstr "Зареди съществуваща карта."
 msgid "Effects:"
 msgstr "Ефекти"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Условия за\n"
-"Загуба"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4216,6 +4214,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Избери чудовище:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Зареди съществуваща карта."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4226,6 +4232,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -8539,6 +8548,10 @@ msgid ""
 msgstr ""
 "Капитанът въздъхва. \"Нямаш достатъчно пари, а? Не можеш да очакваш от мен "
 "да дам картите си безплатно!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -13236,3 +13249,9 @@ msgstr "Той й каза: \"Яда, бля, дя...\" и тогава тя к�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Непозната сила възкръсва..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Условия за\n"
+#~ "Загуба"

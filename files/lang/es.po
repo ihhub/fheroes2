@@ -3898,6 +3898,10 @@ msgstr "Personalidad:"
 msgid "Best Monster:"
 msgstr "Mejor monstruo:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Seleccionar monstruo:"
+
 msgid "Random Castle Name"
 msgstr "Nombre de castillo aleatorio"
 
@@ -4082,14 +4086,11 @@ msgstr "Eliminar un evento existente."
 msgid "Effects:"
 msgstr "Efectos:"
 
-msgid "Conditions:"
-msgstr "Condiciones:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Colores de la IA que pueden activar el evento:"
 
 msgid "Cancel event after first visit"
 msgstr "Cancelar evento después de la primera visita"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Colores de la IA que pueden activar el evento:"
 
 msgid "Set Experience value:"
 msgstr "Establecer valor de experiencia:"
@@ -4118,6 +4119,14 @@ msgstr "Eliminar habilidad secundaria"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Elimina la habilidad secundaria del evento."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Seleccionar monstruos:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Elimina la habilidad secundaria del evento."
+
 msgid "No resources will be part of this event."
 msgstr "Este evento no contará con recursos propios."
 
@@ -4132,6 +4141,10 @@ msgstr ""
 "Si esta casilla está marcada, el evento se activará solo una vez. Si no está "
 "marcada, el evento se activará cada vez que uno de los jugadores "
 "especificados cruce la casilla del evento."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "El evento no entregará ningún objeto."
 
 msgid "Click to make selection."
 msgstr "Haz clic para seleccionar."
@@ -8389,6 +8402,10 @@ msgid ""
 msgstr ""
 "El Capitán suspira: \"No tienes suficiente dinero, ¿eh? No esperarás que te "
 "ofrezca mis mapas gratis\"."
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -13091,3 +13108,6 @@ msgstr "Él le dijo: Yada yada yada... y entonces ella dijo: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una fuerza desconocida está siendo resucitada..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Condiciones:"
