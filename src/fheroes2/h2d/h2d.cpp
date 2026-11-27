@@ -97,6 +97,8 @@ namespace
         "toggle-all-on-released.image",
         "townbkg2_fix.image",
         "twnsspec_fix.image",
+        "witch_doctor_hut_snow_bottom_part.image",
+        "witch_doctor_hut_snow_top_part.image",
         "wizard_bay_diff_to_twnzdock.image",
         "wizard_bay_diff_to_twnzdock_animation_0.image",
         "wizard_bay_diff_to_twnzdock_animation_1.image",

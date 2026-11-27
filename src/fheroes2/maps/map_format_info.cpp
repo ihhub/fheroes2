@@ -107,7 +107,7 @@ namespace
     constexpr uint16_t minimumSupportedVersion{ 2 };
 
     // Change the version when there is a need to expand map format functionality.
-    constexpr uint16_t currentSupportedVersion{ 13 };
+    constexpr uint16_t currentSupportedVersion{ 14 };
 
     void convertFromV2ToV3( Maps::Map_Format::MapFormat & map )
     {
@@ -435,6 +435,26 @@ namespace
         }
     }
 
+    void convertFromV13ToV14( Maps::Map_Format::MapFormat & map )
+    {
+        static_assert( minimumSupportedVersion <= 13, "Remove this function." );
+
+        if ( map.version > 13 ) {
+            return;
+        }
+
+        for ( Maps::Map_Format::TileInfo & tileInfo : map.tiles ) {
+            for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
+                if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
+                    if ( objInfo.index >= 13 ) {
+                        // Shift the objects in the Miscellaneous group because of new Witch Doctor's Hut variant.
+                        objInfo.index += 1;
+                    }
+                }
+            }
+        }
+    }
+
     bool saveToStream( OStreamBase & stream, const Maps::Map_Format::BaseMapFormat & map )
     {
         stream << currentSupportedVersion << map.isCampaign << map.difficulty << map.availablePlayerColors << map.humanPlayerColors << map.computerPlayerColors
@@ -579,6 +599,7 @@ namespace
 
         convertFromV11ToV12( map );
         convertFromV12ToV13( map );
+        convertFromV13ToV14( map );
 
         return !stream.fail();
     }

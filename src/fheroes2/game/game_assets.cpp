@@ -5319,6 +5319,25 @@ namespace
 
             break;
         }
+        case ICN::OBJNSNOW: {
+            if ( _icnVsSprite[id].size() == 211 ) {
+                _icnVsSprite[id].resize( 215 );
+
+                _icnVsSprite[id][211] = Assets::getImage( ICN::OBJNMULT, 66 );
+                _icnVsSprite[id][212] = Assets::getImage( ICN::OBJNMULT, 67 );
+                _icnVsSprite[id][213] = Assets::getImage( ICN::OBJNMULT, 68 );
+                _icnVsSprite[id][214] = Assets::getImage( ICN::OBJNMULT, 69 );
+
+                fheroes2::Sprite temp;
+
+                fheroes2::h2d::readImage( "witch_doctor_hut_snow_top_part.image", temp );
+                Blit( temp, _icnVsSprite[id][211] );
+
+                fheroes2::h2d::readImage( "witch_doctor_hut_snow_bottom_part.image", temp );
+                Blit( temp, _icnVsSprite[id][214] );
+            }
+            break;
+        }
         case ICN::OBJNMUL2: {
             auto & images = _icnVsSprite[id];
             if ( images.size() == 218 ) {
