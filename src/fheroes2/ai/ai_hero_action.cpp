@@ -1323,6 +1323,8 @@ namespace
             hero.IncreaseExperience( static_cast<uint32_t>( mapEvent->experience ) );
         }
 
+        hero.GetArmy().JoinTroop( mapEvent->troop );
+
         mapEvent->SetVisited();
 
         if ( mapEvent->isSingleTimeEvent ) {

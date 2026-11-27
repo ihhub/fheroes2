@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2025                                             *
+ *   Copyright (C) 2019 - 2026                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "color.h"
 #include "game_string.h"
@@ -94,6 +95,7 @@ struct MapEvent final : public MapBaseObject
 
     Skill::Secondary secondarySkill;
     int32_t experience{ 0 };
+    Troop troop;
 };
 
 struct MapSphinx final : public MapBaseObject

@@ -29,10 +29,12 @@
 #include <utility>
 #include <vector>
 
+#include "army_troop.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "dialog_troop_setup.h"
 #include "editor_ui_helper.h"
 #include "game_assets.h"
 #include "game_hotkeys.h"
@@ -42,6 +44,7 @@
 #include "localevent.h"
 #include "map_format_info.h"
 #include "math_base.h"
+#include "monster.h"
 #include "mp2.h"
 #include "resource.h"
 #include "screen.h"
@@ -173,28 +176,17 @@ namespace Editor
                                                      minibuttonIcnId, 17, 18 );
         buttonDeleteSecondarySkill.draw();
 
+        // Monster
+        auto monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
+        const fheroes2::Rect monsterRoi{ secondarySkillRoi.x + ( secondarySkillRoi.width - monsterUI->area().width ) / 2,
+                                         messageRoi.y + messageRoi.height + elementOffset, monsterUI->area().width, monsterUI->area().height };
+        monsterUI->draw( display, monsterRoi.getPosition() );
+
+        fheroes2::Button buttonDeleteMonster( monsterRoi.x + ( monsterRoi.width - buttonWidth ) / 2, monsterRoi.y + monsterRoi.height + 5, minibuttonIcnId, 17, 18 );
+        buttonDeleteMonster.draw();
+
         // Conditions
-        offsetY = messageRoi.y + messageRoi.height + 2 * elementOffset;
-
-        text.set( _( "Conditions:" ), fheroes2::FontType::normalWhite() );
-        text.draw( dialogRoi.x + ( dialogRoi.width - text.width() ) / 2, offsetY, display );
-
-        offsetY += text.height() + elementOffset;
-        const int32_t conditionSectionOffsetY = offsetY;
-
-        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY };
-
-        fheroes2::MovableSprite recurringEventCheckbox;
-        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
-                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
-        if ( eventMetadata.isRecurringEvent ) {
-            recurringEventCheckbox.hide();
-        }
-        else {
-            recurringEventCheckbox.show();
-        }
-
-        offsetY = conditionSectionOffsetY;
+        offsetY = messageRoi.y + messageRoi.height + elementOffset;
 
         text.set( _( "Player colors allowed to get event:" ), fheroes2::FontType::normalWhite() );
 
@@ -204,18 +196,18 @@ namespace Editor
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( messageRoi.x + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         const int32_t availablePlayersCount = Color::Count( humanPlayerColors | computerPlayerColors );
         const int32_t checkOffX = ( sectionWidth - availablePlayersCount * 32 ) / 2;
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> humanCheckboxes;
-        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+        createColorCheckboxes( humanCheckboxes, humanPlayerColors, eventMetadata.humanPlayerColors, messageRoi.x + checkOffX, offsetY, display );
 
         assert( humanCheckboxes.size() == static_cast<size_t>( Color::Count( humanPlayerColors ) ) );
 
-        offsetY += 35;
+        offsetY += 30;
 
         text.set( _( "Computer colors allowed to get the event:" ), fheroes2::FontType::normalWhite() );
 
@@ -226,13 +218,25 @@ namespace Editor
             textWidth = textWidth * 2 / 3;
         }
 
-        text.draw( secondColumnOffsetX + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
+        text.draw( messageRoi.x + ( sectionWidth - textWidth ) / 2, offsetY, textWidth, display );
 
         offsetY += 3 + text.height( textWidth );
         std::vector<std::unique_ptr<Checkbox>> computerCheckboxes;
-        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, secondColumnOffsetX + checkOffX, offsetY, display );
+        createColorCheckboxes( computerCheckboxes, computerPlayerColors, eventMetadata.computerPlayerColors, messageRoi.x + checkOffX, offsetY, display );
 
         assert( computerCheckboxes.size() == static_cast<size_t>( Color::Count( computerPlayerColors ) ) );
+
+        const fheroes2::Point recurringEventPos{ messageRoi.x + elementOffset, offsetY + computerCheckboxes.front()->getRect().height + 2 * elementOffset };
+
+        fheroes2::MovableSprite recurringEventCheckbox;
+        const fheroes2::Rect recurringEventArea = drawCheckboxWithText( recurringEventCheckbox, _( "Cancel event after first visit" ), display, recurringEventPos.x,
+                                                                        recurringEventPos.y, isEvilInterface, dialogRoi.width - 2 * elementOffset );
+        if ( eventMetadata.isRecurringEvent ) {
+            recurringEventCheckbox.hide();
+        }
+        else {
+            recurringEventCheckbox.show();
+        }
 
         // Window buttons
         fheroes2::Button buttonOk;
@@ -250,6 +254,7 @@ namespace Editor
             buttonCancel.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonCancel.area() ) );
             buttonDeleteArtifact.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteArtifact.area() ) );
             buttonDeleteSecondarySkill.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteSecondarySkill.area() ) );
+            buttonDeleteMonster.drawOnState( le.isMouseLeftButtonPressedAndHeldInArea( buttonDeleteMonster.area() ) );
 
             if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
                 return false;
@@ -435,6 +440,26 @@ namespace Editor
                 // The opened SelectCount() dialog might be bigger than this dialog so we render the whole screen.
                 display.render();
             }
+            else if ( le.MouseClickLeft( monsterRoi ) ) {
+                Troop troop( eventMetadata.monsterType, eventMetadata.monsterCount );
+                if ( Dialog::selectTroop( troop, 1, 500000 ) && troop.isValid() ) {
+                    eventMetadata.monsterType = troop.GetID();
+                    eventMetadata.monsterCount = static_cast<int32_t>( troop.GetCount() );
+
+                    monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
+                    monsterUI->draw( display, monsterRoi.getPosition() );
+                    display.render( monsterRoi );
+                }
+            }
+            else if ( le.MouseClickLeft( buttonDeleteMonster.area() ) ) {
+                eventMetadata.monsterType = Monster::UNKNOWN;
+                eventMetadata.monsterCount = 0;
+
+                monsterUI = std::make_unique<fheroes2::TroopDialogElement>( eventMetadata.monsterType, eventMetadata.monsterCount );
+                monsterUI->draw( display, monsterRoi.getPosition() );
+
+                display.render( monsterRoi );
+            }
             else if ( le.isMouseRightButtonPressedInArea( buttonCancel.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Cancel" ), _( "Exit this menu without doing anything." ), Dialog::ZERO );
             }
@@ -469,6 +494,9 @@ namespace Editor
             else if ( le.isMouseRightButtonPressedInArea( buttonDeleteSecondarySkill.area() ) ) {
                 fheroes2::showStandardTextMessage( _( "Delete Secondary Skill" ), _( "Delete the Secondary Skill from the event." ), Dialog::ZERO );
             }
+            else if ( le.isMouseRightButtonPressedInArea( buttonDeleteMonster.area() ) ) {
+                fheroes2::showStandardTextMessage( _( "Delete Monsters" ), _( "Delete the monsters from the event." ), Dialog::ZERO );
+            }
             else if ( le.isMouseRightButtonPressedInArea( experienceRoiRestorer.rect() ) ) {
                 experienceUI->showPopup( Dialog::ZERO );
             }
@@ -490,6 +518,14 @@ namespace Editor
             }
             else if ( le.isMouseRightButtonPressedInArea( messageRoi ) ) {
                 fheroes2::showStandardTextMessage( _( "Event Message Text" ), _( "Click here to change the event message." ), Dialog::ZERO );
+            }
+            else if ( le.isMouseRightButtonPressedInArea( monsterRoi ) ) {
+                if ( eventMetadata.monsterType != Monster::UNKNOWN ) {
+                    monsterUI->showPopup( Dialog::ZERO );
+                }
+                else {
+                    fheroes2::showStandardTextMessage( _( "Monsters" ), _( "No monster will be given by the event." ), Dialog::ZERO );
+                }
             }
 
             if ( isRedrawNeeded ) {
