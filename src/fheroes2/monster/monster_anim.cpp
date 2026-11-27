@@ -56,6 +56,9 @@ namespace fheroes2
         _addValidMove( Monster_Info::RANG_BOT );
         _addValidMove( Monster_Info::MOVING );
         _addValidMove( Monster_Info::MOVING );
+        _addValidMove( Monster_Info::SPECIAL_TOP );
+        _addValidMove( Monster_Info::SPECIAL_FRONT );
+        _addValidMove( Monster_Info::SPECIAL_BOTTOM );
         if ( includeDeathAnimation ) {
             // Getting a hit or death animation.
             _addValidMove( Monster_Info::WNCE );
@@ -119,6 +122,15 @@ namespace fheroes2
             }
             else if ( moveId == Monster_Info::KILL ) {
                 _pushFrames( Monster_Info::KILL );
+            }
+            else if ( moveId == Monster_Info::SPECIAL_TOP ) {
+                _pushFrames( Monster_Info::SPECIAL_TOP );
+            }
+            else if ( moveId == Monster_Info::SPECIAL_FRONT ) {
+                _pushFrames( Monster_Info::SPECIAL_FRONT );
+            }
+            else if ( moveId == Monster_Info::SPECIAL_BOTTOM ) {
+                _pushFrames( Monster_Info::SPECIAL_BOTTOM );
             }
 
             _pushFrames( Monster_Info::STATIC );
