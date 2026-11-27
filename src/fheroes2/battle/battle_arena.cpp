@@ -576,6 +576,14 @@ void Battle::Arena::Turns()
         bool towersActed = false;
         bool catapultActed = false;
 
+        const auto updateSiegeWeaponsInOrderOfUnits = [this, &towersActed, &catapultActed]() {
+            if ( _interface ) {
+                _interface->setSiegeWeaponsInOrderOfUnits( _catapult ? _attackingArmy->GetColor() : PlayerColor::NONE, catapultActed, towersActed );
+            }
+        };
+
+        updateSiegeWeaponsInOrderOfUnits();
+
         while ( BattleValid() ) {
             // We can get the nullptr here if there are no units left waiting for their turn
             _currentUnit = GetCurrentUnit( *_attackingArmy, *_defendingArmy, GetOppositeColor( _lastActiveUnitArmyColor ) );
@@ -598,6 +606,8 @@ void Battle::Arena::Turns()
                     CatapultAction();
 
                     catapultActed = true;
+
+                    updateSiegeWeaponsInOrderOfUnits();
                 }
 
                 // Castle towers act either during the turn of the first unit from the defending army, or at the end of
@@ -625,6 +635,8 @@ void Battle::Arena::Turns()
                     towerAction( 2 );
 
                     towersActed = true;
+
+                    updateSiegeWeaponsInOrderOfUnits();
 
                     // If the towers have killed the last enemy unit, the battle is over
                     if ( !BattleValid() ) {
