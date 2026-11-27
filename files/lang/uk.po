@@ -3848,6 +3848,10 @@ msgstr "Особистість:"
 msgid "Best Monster:"
 msgstr "Найсильніший монстр:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Оберіть монстра:"
+
 msgid "Random Castle Name"
 msgstr "Випадкова назва замку"
 
@@ -4029,14 +4033,11 @@ msgstr "Видалити існуючу подію."
 msgid "Effects:"
 msgstr "Ефекти:"
 
-msgid "Conditions:"
-msgstr "Умови:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
 msgid "Cancel event after first visit"
 msgstr "Скасувати подію після першого відвідування"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Кольори гравців-комп'ютерів, яким дозволено отримати подію:"
 
 msgid "Set Experience value:"
 msgstr "Задати кількість досвіду:"
@@ -4065,6 +4066,14 @@ msgstr "Видалити вторинне вміння"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Видалити вторинне вміння з події."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Оберіть монстрів:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Видалити вторинне вміння з події."
+
 msgid "No resources will be part of this event."
 msgstr "Жодні ресурси не будуть частиною цієї події."
 
@@ -4079,6 +4088,10 @@ msgstr ""
 "Якщо цей прапорець встановлено, подія спрацює лише один раз. Якщо прапорець "
 "не встановлено, подія спрацьовуватиме щоразу, коли один із зазначених "
 "гравців перетинатиме мітку події."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Жоден артефакт не буде виданий у події."
 
 msgid "Click to make selection."
 msgstr "Тицьніть, щоб зробити вибір."
@@ -8295,6 +8308,10 @@ msgid ""
 msgstr ""
 "Капітан зітхає. \"У вас не вистачає грошей, еге ж? Ви ж не очікуєте, що я "
 "віддам свої мапи безкоштовно!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12680,10 +12697,10 @@ msgstr "Виклик корабля"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Викликає найближчий дружній незайнятий корабель на розташовану поруч з "
 "героєм водойму. Корабель вважається дружнім, якщо він був збудований вами, "
@@ -12911,3 +12928,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невідома сила постає знов..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Умови:"

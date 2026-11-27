@@ -3945,6 +3945,10 @@ msgid "Best Monster:"
 msgstr "Quái vật Mạnh nhất:"
 
 #, fuzzy
+msgid "Select monster:"
+msgstr "Chọn Quái vật:"
+
+#, fuzzy
 msgid "Random Castle Name"
 msgstr "Ngẫu nhiên Lâu đài"
 
@@ -4151,16 +4155,10 @@ msgstr "Tải một bản đồ đã có."
 msgid "Effects:"
 msgstr "Hiệu ứng"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Điều kiện\n"
-"Thua"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4194,6 +4192,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Chọn Quái vật:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Tải một bản đồ đã có."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4204,6 +4210,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -8523,6 +8532,10 @@ msgid ""
 msgstr ""
 "Thuyền trưởng thở dài. \"Ngươi không có đủ tiền phải không? Ngươi không thể "
 "mong đợi tôi tặng bản đồ của mình miễn phí!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -13038,10 +13051,10 @@ msgstr "Triệu hồi Thuyền"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Triệu tập chiếc thuyền thân thiện, trống gần nhất đến vị trí bờ biển liền "
 "kề. Một chiếc thuyền thân thiện là chiếc thuyền mà ngươi vừa đóng hoặc là "
@@ -13269,3 +13282,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Một lực lượng bóng tối đang hồi sinh..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Điều kiện\n"
+#~ "Thua"

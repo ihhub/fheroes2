@@ -3847,6 +3847,10 @@ msgstr "Personlighet:"
 msgid "Best Monster:"
 msgstr "Bästa Varelse:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Välj Varelse:"
+
 msgid "Random Castle Name"
 msgstr "Slumpat Borgnamn"
 
@@ -4028,14 +4032,11 @@ msgstr "Radera en redan existerande händelse."
 msgid "Effects:"
 msgstr "Effekter:"
 
-msgid "Conditions:"
-msgstr "Villkor:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Datorfärger som kan få händelsen:"
 
 msgid "Cancel event after first visit"
 msgstr "Avbryt händelse efter första besök"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Datorfärger som kan få händelsen:"
 
 msgid "Set Experience value:"
 msgstr "Ange Erfarenhetspoäng:"
@@ -4064,6 +4065,14 @@ msgstr "Radera Sekundär Förmåga"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Radera den Sekundära förmågan från händelsen."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Välj Varelser:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Radera den Sekundära förmågan från händelsen."
+
 msgid "No resources will be part of this event."
 msgstr "Inga resurser kommer vara en del av denna händelsen."
 
@@ -4078,6 +4087,10 @@ msgstr ""
 "Om denna checkruta är ifylld så kommer händelsen bara aktiveras en gång. Om "
 "den inte är ifylld så kommer händelsen aktiveras när de valda spelarna "
 "kliver i rutan."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Ingen artefakt kommer att ges av händelsen."
 
 msgid "Click to make selection."
 msgstr "Klicka för att göra ett val."
@@ -8253,6 +8266,10 @@ msgid ""
 msgstr ""
 "Kaptenen suckar. \"Du har inte tillräckligt med pengar, va? Du kan inte "
 "förvänta mig att ge bort mina kartor gratis!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12641,10 +12658,10 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Tillkallar närmsta lediga skepp till en strandplats som hjälten måste stå "
 "på. Bara skepp som du nyligen byggt eller var den senaste att kontrollera "
@@ -12874,3 +12891,6 @@ msgstr "Han sa till henne: Jag bah... och hon svarade: Du bah..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "En okänd kraft återuppstår..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Villkor:"

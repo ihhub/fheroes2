@@ -31,7 +31,7 @@
 #include "screen.h"
 #include "settings.h"
 
-Dialog::FrameBorder::FrameBorder( int v )
+Dialog::FrameBorder::FrameBorder( const int v )
     : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( v )
 {}

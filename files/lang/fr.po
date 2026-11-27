@@ -3946,6 +3946,10 @@ msgstr "Personnalité :"
 msgid "Best Monster:"
 msgstr "Meilleure créature :"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Choisir créature :"
+
 msgid "Random Castle Name"
 msgstr "Nom du château aléatoire"
 
@@ -4140,16 +4144,10 @@ msgstr "Supprimer un événement existant."
 msgid "Effects:"
 msgstr "Effets"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Conditions\n"
-"de défaite"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4180,6 +4178,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Choisir créature :"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Supprimer un artefact d'un événement."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4190,6 +4196,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -8533,6 +8542,10 @@ msgid ""
 msgstr ""
 "Le capitaine soupire. \"Tu n'as pas assez d'argent, hein ? Tu ne peux pas "
 "attendre de moi que je donne mes cartes gratuitement !\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12985,10 +12998,10 @@ msgstr "Embarquement"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Invoque le bateau ami inoccupé le plus proche sur un emplacement côtier "
 "adjacent. Un bateau ami est un bateau que vous venez de construire ou que "
@@ -13222,3 +13235,9 @@ msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Conditions\n"
+#~ "de défaite"

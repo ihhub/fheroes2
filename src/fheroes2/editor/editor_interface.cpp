@@ -1841,6 +1841,13 @@ namespace Interface
                         }
                         else {
                             _brushTiles.clear();
+
+                            if ( le.isMouseWheelDown() && _editorPanel.setNextBrushType() ) {
+                                _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                            }
+                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType() ) {
+                                _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                            }
                         }
                     }
                     else if ( _editorPanel.isEraseMode() ) {
@@ -1858,6 +1865,13 @@ namespace Interface
                         }
                         else {
                             _brushTiles.clear();
+
+                            if ( le.isMouseWheelDown() && _editorPanel.setNextBrushType() ) {
+                                _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                            }
+                            else if ( le.isMouseWheelUp() && _editorPanel.setPreviousBrushType() ) {
+                                _redraw |= REDRAW_GAMEAREA | REDRAW_PANEL;
+                            }
                         }
                     }
                     else if ( _editorPanel.isRoadDraw() ) {

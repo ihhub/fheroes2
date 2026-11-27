@@ -3828,6 +3828,10 @@ msgid "Best Monster:"
 msgstr "Miglior Mostro:"
 
 #, fuzzy
+msgid "Select monster:"
+msgstr "Scegli mostro:"
+
+#, fuzzy
 msgid "Random Castle Name"
 msgstr "Castello casuale"
 
@@ -4026,16 +4030,10 @@ msgstr ""
 msgid "Effects:"
 msgstr "Effetti"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Condizioni\n"
-"Sconfitta"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4068,6 +4066,13 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Scegli mostro:"
+
+msgid "Delete the monsters from the event."
+msgstr ""
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4078,6 +4083,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -7982,6 +7990,10 @@ msgstr ""
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
+msgstr ""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
 msgstr ""
 
 msgid ""
@@ -11963,10 +11975,10 @@ msgstr "Richiama Nave"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Convoca una nave attualmente libera, amica e più vicina ad una costa "
 "adiacente. Una nave amica vuol dire o una che hai appena costruita, o una "
@@ -12201,3 +12213,9 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Condizioni\n"
+#~ "Sconfitta"

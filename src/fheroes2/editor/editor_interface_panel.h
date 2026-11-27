@@ -36,7 +36,7 @@ namespace Interface
 {
     class EditorInterface;
 
-    class EditorPanel
+    class EditorPanel final
     {
     public:
         explicit EditorPanel( EditorInterface & interface_ );
@@ -137,6 +137,9 @@ namespace Interface
 
         bool setNextSelectedObjectType();
         bool setPreviousSelectedObjectType();
+
+        bool setNextBrushType();
+        bool setPreviousBrushType();
 
         Maps::ObjectGroup getSelectedObjectGroup() const;
 

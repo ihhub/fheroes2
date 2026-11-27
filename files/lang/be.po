@@ -3885,6 +3885,10 @@ msgstr "Асабовасць:"
 msgid "Best Monster:"
 msgstr "Найлепшыя істоты:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Выберыце істоту:"
+
 msgid "Random Castle Name"
 msgstr "Выпадковая назва замка"
 
@@ -4061,13 +4065,10 @@ msgstr ""
 msgid "Effects:"
 msgstr "Эфекты:"
 
-msgid "Conditions:"
-msgstr "Умовы:"
-
-msgid "Cancel event after first visit"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Computer colors allowed to get the event:"
+msgid "Cancel event after first visit"
 msgstr ""
 
 #, fuzzy
@@ -4098,6 +4099,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Выберыце істот:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Выдаліць існуючы адказ на пытанне загадкі."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4108,6 +4117,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 msgid "Click to make selection."
@@ -8309,6 +8321,10 @@ msgid ""
 msgstr ""
 "Капітан уздыхае: \"Кажаш столькі грошай няма? І не думай, што я аддам свае "
 "карты задарма!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12751,10 +12767,10 @@ msgstr "Выкліканне вадаплава"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Выклікаюць найбліжэйшы вадаплаў, які належыць гульцу, у месцазнаходжанне "
 "героя, дзе б вадаплаў ні знаходзіўся. Герой павінен знаходзіцца на беразе. "
@@ -13000,3 +13016,6 @@ msgstr "А ён ёй... А яна яму... А ён ёй на тое..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Невядомая сіла ўваскрашаецца..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Умовы:"

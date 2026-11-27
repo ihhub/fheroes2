@@ -3943,6 +3943,10 @@ msgid "Best Monster:"
 msgstr "Najlepší bojovník:"
 
 #, fuzzy
+msgid "Select monster:"
+msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
 msgid "Random Castle Name"
 msgstr "Náhodný hrad"
 
@@ -4149,16 +4153,10 @@ msgstr "Načítať existujúcu mapu."
 msgid "Effects:"
 msgstr "Zvukové efekty"
 
-#, fuzzy
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
-"Podmienky\n"
-"prehry"
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 #, fuzzy
@@ -4192,6 +4190,14 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Zvoľ bojovníka:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Načítať existujúcu mapu."
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4202,6 +4208,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -8478,6 +8487,10 @@ msgid ""
 msgstr ""
 "Kapitán si vzdychne. \"Nemáš dosť peňazí, čo?  Nemôžeš predsa očakávať, že "
 "budem rozdávať svoje mapy zadarmo!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12906,10 +12919,10 @@ msgstr "Vyvolaj loď"
 
 #, fuzzy
 msgid ""
-"Summons the nearest unoccupied and either friendly or neutral boat to an "
+"Summons the nearest unoccupied boat that is either friendly or neutral to an "
 "adjacent shore location. A friendly boat is one which you just built or were "
 "the most recent player to occupy. A neutral boat is one which no player has "
-"occupied yet."
+"yet occupied."
 msgstr ""
 "Privolá najbližšiu neobsadenú priateľskú loď na priľahlé miesto na pobreží. "
 "Priateľská loď je loď, ktorú si práve postavil alebo si ju obsadil ako "
@@ -13139,3 +13152,9 @@ msgstr "Povedal jej: Jada jada jada... a ona na to že: Blá, blá, blá..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznáma sila je vzkriesená..."
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr ""
+#~ "Podmienky\n"
+#~ "prehry"
