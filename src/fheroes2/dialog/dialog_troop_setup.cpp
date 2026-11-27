@@ -55,8 +55,9 @@ namespace
         explicit TroopSelectionDialogElement( const int32_t monster, int32_t & troopCount )
             : TroopDialogElement( monster, troopCount )
             , _troopCount( troopCount )
+            , _updatedMonster( monster )
         {
-            _updatedMonster = monster;
+            // Do nothing.
         }
 
         ~TroopSelectionDialogElement() override = default;
