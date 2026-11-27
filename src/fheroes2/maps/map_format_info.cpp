@@ -447,7 +447,7 @@ namespace
             for ( Maps::Map_Format::TileObjectInfo & objInfo : tileInfo.objects ) {
                 if ( objInfo.group == Maps::ObjectGroup::ADVENTURE_POWER_UPS ) {
                     if ( objInfo.index >= 13 ) {
-                        // Shift the objects in the Miscellaneous group because of new Witch's Hut variant.
+                        // Shift the objects in the Miscellaneous group because of new Witch Doctor's Hut variant.
                         objInfo.index += 1;
                     }
                 }
