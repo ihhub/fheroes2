@@ -3878,6 +3878,10 @@ msgstr "Характер:"
 msgid "Best Monster:"
 msgstr "Лучший отряд:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Выберите существо:"
+
 msgid "Random Castle Name"
 msgstr "Случайное название замка"
 
@@ -4058,14 +4062,11 @@ msgstr "Удалить выбранное событие."
 msgid "Effects:"
 msgstr "Эффекты:"
 
-msgid "Conditions:"
-msgstr "Условия:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Событие происходит для следующих компьютерных игроков:"
 
 msgid "Cancel event after first visit"
 msgstr "Отменить после посещения"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Событие происходит для следующих компьютерных игроков:"
 
 msgid "Set Experience value:"
 msgstr "Введите величину опыта:"
@@ -4094,6 +4095,14 @@ msgstr "Удалить вторичный навык"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Удалить вторичный навык из события."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Выберите существ:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Удалить вторичный навык из события."
+
 msgid "No resources will be part of this event."
 msgstr "Данное событие не выдаёт никаких ресурсов."
 
@@ -4110,6 +4119,10 @@ msgstr ""
 "Если этот флажок установлен, событие произойдёт только один раз. Если флажок "
 "не установлен, событие будет происходить каждый раз, когда один из указанных "
 "игроков пересечёт клетку события."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Данное событие не выдаёт никакой артефакт."
 
 msgid "Click to make selection."
 msgstr "Нажмите, чтобы открыть диалог выбора."
@@ -8297,6 +8310,10 @@ msgid ""
 msgstr ""
 "Капитан вздыхает. \"Вам не хватает денег, да? Вы же не думаете, что я отдам "
 "свои карты задаром?!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12901,3 +12918,6 @@ msgstr "Он сказал ей: Бе бе бе... а потом она сказ�
 
 msgid "An unknown force is being resurrected..."
 msgstr "Возрождается неведомая сила..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Условия:"

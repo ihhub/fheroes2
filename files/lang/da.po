@@ -3915,6 +3915,10 @@ msgstr "Personlighed:"
 msgid "Best Monster:"
 msgstr "Bedste væsen:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Vælg væsen:"
+
 msgid "Random Castle Name"
 msgstr "Tilfældigt borgnavn"
 
@@ -4098,14 +4102,11 @@ msgstr "Ændr en eksisterende begivenhed."
 msgid "Effects:"
 msgstr "Effekter:"
 
-msgid "Conditions:"
-msgstr "Vilkår:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Computerfarver er tilladt for at få begivenheden:"
 
 msgid "Cancel event after first visit"
 msgstr "Aflys begivenheden efter første besøg"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Computerfarver er tilladt for at få begivenheden:"
 
 msgid "Set Experience value:"
 msgstr "Indstil erfaringspoint-værdi:"
@@ -4134,6 +4135,14 @@ msgstr "Fjern færdighed"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Fjern færdighed fra begivenheden."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Vælg væsener:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Fjern færdighed fra begivenheden."
+
 msgid "No resources will be part of this event."
 msgstr "Ingen ressourcer vil være en del af denne begivenhed."
 
@@ -4148,6 +4157,10 @@ msgstr ""
 "Hvis dette felt aktiveres, udløses begivenheden kun én gang; hvis ikke, "
 "udløses begivenheden hver gang en af de angivne spillere krydser "
 "begivenhedsfirkanten."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Der gives ingen artefakter ved begivenheden."
 
 msgid "Click to make selection."
 msgstr "Klik for at foretage et valg."
@@ -8346,6 +8359,10 @@ msgid ""
 msgstr ""
 "Kaptajnen sukker. \"Du har ikke penge nok, hva'? Du kan ikke forvente, at "
 "jeg giver mine søkort væk gratis!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12998,3 +13015,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "En ukendt styrke er ved at genopstå..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Vilkår:"

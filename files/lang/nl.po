@@ -3836,6 +3836,10 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Selecteer spreuk doelwit"
+
 msgid "Random Castle Name"
 msgstr ""
 
@@ -4031,14 +4035,10 @@ msgstr ""
 msgid "Effects:"
 msgstr ""
 
-#, fuzzy
-msgid "Conditions:"
-msgstr "Annexatie"
-
-msgid "Cancel event after first visit"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
 
-msgid "Computer colors allowed to get the event:"
+msgid "Cancel event after first visit"
 msgstr ""
 
 #, fuzzy
@@ -4069,6 +4069,13 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Selecteer spreuk doelwit"
+
+msgid "Delete the monsters from the event."
+msgstr ""
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -4079,6 +4086,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 #, fuzzy
@@ -7806,6 +7816,10 @@ msgstr ""
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
+msgstr ""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
 msgstr ""
 
 msgid ""
@@ -11833,3 +11847,7 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Conditions:"
+#~ msgstr "Annexatie"

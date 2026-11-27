@@ -3824,6 +3824,10 @@ msgstr "Osobnost:"
 msgid "Best Monster:"
 msgstr "Nejlepší jednotka:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Vybrat jednotku:"
+
 msgid "Random Castle Name"
 msgstr "Náhodný název hradu"
 
@@ -4003,14 +4007,11 @@ msgstr "Smazat stávající událost."
 msgid "Effects:"
 msgstr "Efekty:"
 
-msgid "Conditions:"
-msgstr "Podmínky:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Barvy počítače, kterým je povoleno získat událost:"
 
 msgid "Cancel event after first visit"
 msgstr "Zrušit událost po první návštěvě"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Barvy počítače, kterým je povoleno získat událost:"
 
 msgid "Set Experience value:"
 msgstr "Nastavit množství zkušeností:"
@@ -4039,6 +4040,14 @@ msgstr "Odstranit sekundární dovednost"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Odstranit sekundární dovednost z události."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Vybrat jednotky:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Odstranit sekundární dovednost z události."
+
 msgid "No resources will be part of this event."
 msgstr "Žádné suroviny nebudou součástí této události."
 
@@ -4053,6 +4062,10 @@ msgstr ""
 "Pokud je toto zaškrtávací políčko zaškrtnuto, událost se spustí pouze "
 "jednou. Pokud není zaškrtnuto, událost se spustí pokaždé, když některý z "
 "uvedených hráčů překročí políčko s událostí."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Událost neposkytne žádný artefakt."
 
 msgid "Click to make selection."
 msgstr "Kliknutím proveď výběr."
@@ -8167,6 +8180,10 @@ msgid ""
 msgstr ""
 "Kapitán si povzdechne. \"Nemáš dostatek peněz, co? Nemůžeš očekávat, že ti "
 "své mapy dám zadarmo!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12709,3 +12726,6 @@ msgstr "On jí řekl: Yada yada yada... ona pak řekla: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
 msgstr "Neznámá síla se probouzí..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Podmínky:"

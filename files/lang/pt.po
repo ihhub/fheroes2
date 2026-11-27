@@ -3870,6 +3870,10 @@ msgstr "Personalidade:"
 msgid "Best Monster:"
 msgstr "Melhor Criatura:"
 
+#, fuzzy
+msgid "Select monster:"
+msgstr "Selecionar Monstro:"
+
 msgid "Random Castle Name"
 msgstr "Nome Aleat. (Castelo)"
 
@@ -4051,14 +4055,11 @@ msgstr "Exclui um evento existente."
 msgid "Effects:"
 msgstr "Efeitos:"
 
-msgid "Conditions:"
-msgstr "Condições:"
+msgid "Computer colors allowed to get the event:"
+msgstr "Cores de computador permitidas para obter o evento:"
 
 msgid "Cancel event after first visit"
 msgstr "Cancelar evento após a primeira visita"
-
-msgid "Computer colors allowed to get the event:"
-msgstr "Cores de computador permitidas para obter o evento:"
 
 msgid "Set Experience value:"
 msgstr "Definir o valor da Experiência:"
@@ -4087,6 +4088,14 @@ msgstr "Excluir Habilidade Secundária"
 msgid "Delete the Secondary Skill from the event."
 msgstr "Excluir a Habilidade Secundária do evento."
 
+#, fuzzy
+msgid "Delete Monsters"
+msgstr "Selecionar Monstros:"
+
+#, fuzzy
+msgid "Delete the monsters from the event."
+msgstr "Excluir a Habilidade Secundária do evento."
+
 msgid "No resources will be part of this event."
 msgstr "Nenhum recurso fará parte deste evento."
 
@@ -4101,6 +4110,10 @@ msgstr ""
 "Se essa caixa de seleção estiver marcada, o evento será acionado apenas uma "
 "vez. Se não estiver marcada, o evento será acionado toda vez que um dos "
 "jogadores especificados cruzar o bloco do evento."
+
+#, fuzzy
+msgid "No monster will be given by the event."
+msgstr "Nenhum artefato será concedido pelo evento."
 
 msgid "Click to make selection."
 msgstr "Clique para fazer a seleção."
@@ -8321,6 +8334,10 @@ msgid ""
 msgstr ""
 "O capitão suspira. \"Você não tem dinheiro suficiente, né? Você não pode "
 "esperar que eu dê meus mapas de graça!\""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
+msgstr ""
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -12983,3 +13000,6 @@ msgstr ""
 
 msgid "An unknown force is being resurrected..."
 msgstr "Uma força misteriosa está ressuscitando..."
+
+#~ msgid "Conditions:"
+#~ msgstr "Condições:"

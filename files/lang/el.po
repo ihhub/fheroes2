@@ -3509,6 +3509,9 @@ msgstr ""
 msgid "Best Monster:"
 msgstr ""
 
+msgid "Select monster:"
+msgstr ""
+
 msgid "Random Castle Name"
 msgstr ""
 
@@ -3685,13 +3688,10 @@ msgstr ""
 msgid "Effects:"
 msgstr ""
 
-msgid "Conditions:"
+msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 msgid "Cancel event after first visit"
-msgstr ""
-
-msgid "Computer colors allowed to get the event:"
 msgstr ""
 
 msgid "Set Experience value:"
@@ -3721,6 +3721,12 @@ msgstr ""
 msgid "Delete the Secondary Skill from the event."
 msgstr ""
 
+msgid "Delete Monsters"
+msgstr ""
+
+msgid "Delete the monsters from the event."
+msgstr ""
+
 msgid "No resources will be part of this event."
 msgstr ""
 
@@ -3731,6 +3737,9 @@ msgid ""
 "If this checkbox is checked, the event will trigger only once. If not "
 "checked, the event will trigger every time one of the specified players "
 "crosses the event tile."
+msgstr ""
+
+msgid "No monster will be given by the event."
 msgstr ""
 
 msgid "Click to make selection."
@@ -7431,6 +7440,10 @@ msgstr ""
 msgid ""
 "The captain sighs. \"You don't have enough money, eh? You can't expect me to "
 "give my maps away for free!\""
+msgstr ""
+
+msgid ""
+"The monsters cannot join your full army. Insulted by this, they run away."
 msgstr ""
 
 msgid ""
