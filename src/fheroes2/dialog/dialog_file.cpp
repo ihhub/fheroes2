@@ -21,8 +21,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <vector>
+
+#include "campaign_data.h"
+#include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h" // IWYU pragma: associated
+#include "game.h"
 #include "game_exit.h"
 #include "game_hotkeys.h"
 #include "game_interface.h"
@@ -39,6 +45,27 @@
 
 namespace
 {
+    bool isRestartAvailable( const Settings & config )
+    {
+        if ( !config.isCampaignGameType() ) {
+            // As of now we support only campaign scenarios.
+            return false;
+        }
+
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int chosenCampaignID = campaignSaveData.getCampaignID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+        const Campaign::ScenarioInfoId & currentScenarioInfoId = campaignSaveData.getCurrentScenarioInfoId();
+        assert( currentScenarioInfoId.scenarioId >= 0 );
+
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+
+        assert( scenarios.size() > static_cast<size_t>( currentScenarioInfoId.scenarioId ) );
+        const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
+
+        return scenario.isMapFilePresent();
+    }
+
     fheroes2::GameMode selectFileOption()
     {
         // setup cursor
@@ -59,8 +86,9 @@ namespace
         const fheroes2::ButtonBase & quickSaveButton = optionButtons.button( 4 );
         const fheroes2::ButtonBase & quitButton = optionButtons.button( 5 );
 
-        // For now this button is disabled.
-        restartGameButton.disable();
+        if ( !isRestartAvailable( config ) ) {
+            restartGameButton.disable();
+        }
 
         background.renderSymmetricButtons( optionButtons, 0, false );
 
@@ -93,7 +121,18 @@ namespace
                 }
             }
             else if ( restartGameButton.isEnabled() && le.MouseClickLeft( restartGameButton.area() ) ) {
-                // TODO: restart the campaign here.
+                if ( config.isCampaignGameType() ) {
+                    if ( fheroes2::showStandardTextMessage( _( "Restart Game" ), _( "Are you sure you want to restart this scenario?" ), Dialog::YES | Dialog::NO )
+                         == Dialog::NO ) {
+                        continue;
+                    }
+
+                    const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+                    result = Game::startCampaignScenario( campaignSaveData.getDifficulty(), true, campaignSaveData.getCurrentScenarioBonusId() );
+                    break;
+                }
+
+                // TODO: restart the normal scenarios here.
                 fheroes2::showStandardTextMessage( _( "Restart Game" ), "This option is under construction.", Dialog::OK );
                 result = fheroes2::GameMode::CANCEL;
                 break;
