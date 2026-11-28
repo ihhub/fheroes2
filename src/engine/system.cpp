@@ -82,6 +82,8 @@ namespace
         return System::concatPath( "ux0:data", appName );
 #elif defined( TARGET_NINTENDO_SWITCH )
         return System::concatPath( "/switch", appName );
+#elif defined( __3DS__ )
+        return System::concatPath( "sdmc:/3ds", appName );
 #elif defined( ANDROID )
         (void)appName;
 
@@ -264,7 +266,7 @@ namespace
 
 bool System::isHandheldDevice()
 {
-#if defined( ANDROID ) || defined( __IPHONEOS__ )
+#if defined( ANDROID ) || defined( __IPHONEOS__ ) || defined( __3DS__ )
     return true;
 #else
     return false;
@@ -450,7 +452,7 @@ bool System::IsDirectory( const std::string_view path )
 
 bool System::GetCaseInsensitivePath( const std::string_view path, std::string & correctedPath )
 {
-#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA ) && !defined( __IPHONEOS__ )
+#if !defined( _WIN32 ) && !defined( ANDROID ) && !defined( TARGET_PS_VITA ) && !defined( __IPHONEOS__ ) && !defined( __3DS__ )
     // The following code is based on https://github.com/OneSadCookie/fcaseopen and assumes the use of POSIX IEEE Std 1003.1-2001 pathnames
     correctedPath.clear();
 

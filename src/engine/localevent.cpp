@@ -1033,7 +1033,11 @@ namespace EventProcessing
                 break;
             }
 
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( __3DS__ )
+            if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_LEFT_SHOULDER ) {
+                buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_GUIDE;
+            }
+#elif defined( TARGET_NINTENDO_SWITCH )
             // Custom button mapping for Nintendo Switch
             if ( buttonType == LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_A ) {
                 buttonType = LocalEvent::ControllerButtonType::CONTROLLER_BUTTON_B;
@@ -1075,6 +1079,12 @@ namespace EventProcessing
 
         static void onTouchEvent( LocalEvent & eventHandler, const SDL_TouchFingerEvent & event )
         {
+#if defined( __3DS__ )
+            // The lower-screen detail viewport needs its own touch-coordinate mapping in a follow-up.
+            (void)eventHandler;
+            (void)event;
+            return;
+#endif
 #if defined( TARGET_PS_VITA )
             {
                 // PS Vita has two touchpads: front and rear. The ID of the front touchpad must match the value of
